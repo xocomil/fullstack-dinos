@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -17,6 +17,8 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
 
   setupSwagger(app);
+
+  app.useGlobalPipes(new ValidationPipe({ enableDebugMessages: true }));
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
