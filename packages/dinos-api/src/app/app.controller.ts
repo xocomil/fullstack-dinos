@@ -1,6 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { DinoDto } from './dtos/dino.dto';
 import { GetHelloResponse } from './dtos/get-hello.dto';
 
 @Controller()
@@ -23,7 +33,28 @@ export class AppController {
   getHello(
     @Param('name')
     name = 'World',
-  ): { hello: string } {
+  ): GetHelloResponse {
     return this.appService.getHello(name);
+  }
+
+  @ApiOkResponse({ type: GetHelloResponse })
+  @Get('helloQuery')
+  getHelloQuery(
+    @Query('name') name: string,
+    @Query(
+      'age',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.I_AM_A_TEAPOT,
+      }),
+    )
+    age: number,
+  ): GetHelloResponse {
+    return this.appService.getHelloWithAge(name, age);
+  }
+
+  @ApiOkResponse({ type: DinoDto })
+  @Post('dino')
+  postDino(@Body() dino: DinoDto) {
+    return dino;
   }
 }
