@@ -1,5 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
+import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { AppService } from './app.service';
+import { GetHelloResponse } from './dtos/get-hello.dto';
 
 @Controller()
 export class AppController {
@@ -10,8 +12,18 @@ export class AppController {
     return this.appService.getData();
   }
 
-  @Get('/hello')
-  getHello(): string {
-    return 'Hello World!';
+  @ApiParam({
+    name: 'name',
+    required: true,
+    description: 'The name of the hello',
+    type: String,
+  })
+  @ApiOkResponse({ type: GetHelloResponse })
+  @Get('/hello/:name')
+  getHello(
+    @Param('name')
+    name = 'World',
+  ): { hello: string } {
+    return this.appService.getHello(name);
   }
 }
