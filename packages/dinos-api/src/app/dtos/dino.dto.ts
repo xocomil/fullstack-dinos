@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsTaxId } from 'class-validator';
+import { IsBoolean, IsDefined, IsTaxId } from 'class-validator';
 
 export class DinoDto {
   @ApiProperty({ description: 'Dino name', required: true, example: 'T-Rex' })
+  @IsDefined({ message: 'Dino name is required' })
   name: string;
 
   @ApiProperty({
@@ -10,7 +11,10 @@ export class DinoDto {
     required: true,
     example: 'true',
   })
-  @IsBoolean()
+  @IsBoolean({
+    message:
+      'Incorrect value for hasFeathers. It should be boolean true or false.',
+  })
   hasFeathers: boolean;
 
   @ApiProperty({
