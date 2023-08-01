@@ -1,0 +1,28 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Mutation {
+  updateTestDino(updateDinoInput: UpdateDinoInput!): TestDino!
+}
+
+type Query {
+  testDino(hasFeathers: Boolean): TestDino!
+}
+
+"""This represents a Dinosaur"""
+type TestDino {
+  """Does it have feathers?"""
+  hasFeathers: Boolean!
+
+  """This represents the id of the Dinosaur"""
+  id: ID
+
+  """This represents the name of the Dinosaur"""
+  name: String!
+}
+
+input UpdateDinoInput {
+  id: String!
+  name: String!
+}

@@ -8,6 +8,7 @@ import { TestGqlModule } from './test-gql/test-gql.module';
 
 @Module({
   imports: [
+    TestGqlModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,
