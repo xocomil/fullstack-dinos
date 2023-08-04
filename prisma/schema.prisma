@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dinosaur {
+  id String @default(uuid()) @id
+  name String @unique
+  genus String?
+  species String?
+  description String?
+  hasFeathers Boolean @default(true)
+  weightInKilos Float
+  heightInMeters Float
+  imageUrl String?
+  trivia String[]
+  updatedAt DateTime @updatedAt
+}
