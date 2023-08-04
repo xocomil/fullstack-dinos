@@ -25,6 +25,8 @@ async function bootstrap() {
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
   );
+  Logger.log(`Swagger is running on http://localhost:${port}/swagger`);
+  Logger.log(`Apollo is running on http://localhost:${port}/graphql`);
 }
 
 async function setupSwagger(app: NestExpressApplication) {

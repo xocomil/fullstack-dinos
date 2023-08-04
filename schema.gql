@@ -2,11 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Dinosaur {
+  description: String
+  genus: String!
+  hasFeathers: Boolean!
+  heightInMeters: Float!
+  id: String
+  imageUrl: String
+  name: String!
+  species: String!
+  trivia: [String!]
+  updatedAt: DateTime
+  weightInKilos: Float!
+}
+
+input DinosaurCreateInput {
+  genus: String!
+  hasFeathers: Boolean!
+  heightInMeters: Float!
+  name: String!
+  species: String!
+  weightInKilos: Float!
+}
+
 type Mutation {
+  createDino(dino: DinosaurCreateInput!): Dinosaur!
   updateTestDino(updateDinoInput: UpdateDinoInput!): TestDino!
 }
 
 type Query {
+  allDinosaurs: [Dinosaur!]
   testDino(hasFeathers: Boolean): TestDino!
 }
 
