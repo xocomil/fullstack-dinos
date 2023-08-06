@@ -13,6 +13,14 @@ import { Dinosaur } from '../models/dinosaur.model';
 import { DinosaurService } from '../services/dinosaur.service';
 
 @InputType()
+class DinosaurWhereUniqueInput {
+  @Field({ nullable: true })
+  id: string;
+  @Field({ nullable: true })
+  name: string;
+}
+
+@InputType()
 class DinosaurCreateInput implements Prisma.DinosaurCreateInput {
   @Field()
   name: string;
@@ -26,6 +34,28 @@ class DinosaurCreateInput implements Prisma.DinosaurCreateInput {
   heightInMeters: number;
   @Field()
   hasFeathers: boolean;
+  @Field({ nullable: true })
+  description: string;
+  @Field({ nullable: true })
+  imageUrl: string;
+  @Field(() => [String], { nullable: true })
+  trivia: string[];
+}
+
+@InputType()
+class DinosaurUpdateInput implements Prisma.DinosaurUpdateInput {
+  @Field(() => Float, { nullable: true })
+  weightInKilos?: number;
+  @Field(() => Float, { nullable: true })
+  heightInMeters?: number;
+  @Field({ nullable: true })
+  hasFeathers?: boolean;
+  @Field({ nullable: true })
+  description?: string;
+  @Field({ nullable: true })
+  imageUrl?: string;
+  @Field(() => [String], { nullable: true })
+  trivia?: string[];
 }
 
 @Resolver(Dinosaur)
@@ -33,6 +63,14 @@ export class DinosaurResolver {
   constructor(
     @Inject(DinosaurService) private readonly _dinoService: DinosaurService,
   ) {}
+
+  @Query(() => Dinosaur, { nullable: true })
+  async dinosaur(
+    @Args('where', { type: () => DinosaurWhereUniqueInput })
+    where: DinosaurWhereUniqueInput,
+  ): Promise<Dinosaur | null> {
+    return this._dinoService.dinosaur(where);
+  }
 
   @Query(() => [Dinosaur], { nullable: true })
   async allDinosaurs() {
@@ -44,5 +82,21 @@ export class DinosaurResolver {
     dino: Prisma.DinosaurCreateInput,
   ): Promise<Dinosaur> {
     return this._dinoService.createDinosaur(dino);
+  }
+
+  @Mutation(() => Dinosaur) async updateDino(
+    @Args('where', { type: () => DinosaurWhereUniqueInput })
+    where: Prisma.DinosaurWhereUniqueInput,
+    @Args('data', { type: () => DinosaurUpdateInput })
+    data: Prisma.DinosaurUpdateInput,
+  ) {
+    return this._dinoService.updateDinosaur({ where, data });
+  }
+
+  @Mutation(() => Dinosaur) async deleteDino(
+    @Args('where', { type: () => DinosaurWhereUniqueInput })
+    where: Prisma.DinosaurWhereUniqueInput,
+  ): Promise<Dinosaur> {
+    return this._dinoService.deleteDinosaur(where);
   }
 }
