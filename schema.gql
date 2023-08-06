@@ -22,21 +22,41 @@ type Dinosaur {
 }
 
 input DinosaurCreateInput {
+  description: String
   genus: String!
   hasFeathers: Boolean!
   heightInMeters: Float!
+  imageUrl: String
   name: String!
   species: String!
+  trivia: [String!]
   weightInKilos: Float!
+}
+
+input DinosaurUpdateInput {
+  description: String
+  hasFeathers: Boolean
+  heightInMeters: Float
+  imageUrl: String
+  trivia: [String!]
+  weightInKilos: Float
+}
+
+input DinosaurWhereUniqueInput {
+  id: String
+  name: String
 }
 
 type Mutation {
   createDino(dino: DinosaurCreateInput!): Dinosaur!
+  deleteDino(where: DinosaurWhereUniqueInput!): Dinosaur!
+  updateDino(data: DinosaurUpdateInput!, where: DinosaurWhereUniqueInput!): Dinosaur!
   updateTestDino(updateDinoInput: UpdateDinoInput!): TestDino!
 }
 
 type Query {
   allDinosaurs: [Dinosaur!]
+  dinosaur(where: DinosaurWhereUniqueInput!): Dinosaur
   testDino(hasFeathers: Boolean): TestDino!
 }
 
