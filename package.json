@@ -72,6 +72,8 @@
     "@nestjs/graphql": "^12.0.8",
     "@nestjs/platform-express": "^10.1.3",
     "@nestjs/swagger": "^7.1.7",
+    "@ngrx/component": "^16.2.0",
+    "@ngrx/eslint-plugin": "^16.2.0",
     "@prisma/client": "^5.1.1",
     "axios": "^1.4.0",
     "class-transformer": "^0.5.1",
