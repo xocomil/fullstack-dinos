@@ -1,6 +1,6 @@
 {
-  "/dinos-api": {
-    "target": "http://localhost:3333",
+  "/graphql": {
+    "target": "http://localhost:3000",
     "secure": false
   }
 }
