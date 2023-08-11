@@ -8,9 +8,9 @@ import { BaseDinosaur } from './models/dinosaur';
 export class DinosCrudService {
   readonly #apollo = inject(Apollo);
 
-  getDinosTable(): QueryRef<BaseDinosaur> {
+  getDinosTable(): QueryRef<BaseDinosaur[]> {
     return this.#apollo.watchQuery({
-      query: gql<BaseDinosaur, void>`
+      query: gql<BaseDinosaur[], void>`
         query AllDinosaurs {
           allDinosaurs {
             id
