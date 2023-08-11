@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
-import { Dinosaur } from './models/dinosaur';
+import { BaseDinosaur } from './models/dinosaur';
 
 @Injectable({
   providedIn: 'root',
@@ -8,18 +8,17 @@ import { Dinosaur } from './models/dinosaur';
 export class DinosCrudService {
   readonly #apollo = inject(Apollo);
 
-  getAllDinos(): QueryRef<Dinosaur> {
+  getDinosTable(): QueryRef<BaseDinosaur> {
     return this.#apollo.watchQuery({
-      query: gql<Dinosaur, void>`
+      query: gql<BaseDinosaur, void>`
         query AllDinosaurs {
           allDinosaurs {
-            genus
-            hasFeathers
             id
             name
+            genus
             species
+            hasFeathers
             description
-            trivia
           }
         }
       `,
