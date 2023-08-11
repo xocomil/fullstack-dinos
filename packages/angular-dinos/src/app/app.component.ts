@@ -1,24 +1,26 @@
 import { JsonPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { DinosCrudService } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { DinosCrudStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
 @Component({
   standalone: true,
   imports: [RouterModule, JsonPipe],
   selector: 'dino-root',
-  template: ` <pre>{{ dinos() | json }}</pre>
-    <router-outlet></router-outlet>`,
+  template: ` <h1>Welcome To DinoAPI</h1>
+    <button type="button" class="btn btn-primary" (click)="getDinos()">
+      Get Dinos</button
+    ><br />
+    <strong>Dinos:</strong><br />
+    <pre>{{ dinosStore.dinosaurs() | json }}</pre>
+    <router-outlet />`,
   styleUrls: ['./app.component.scss'],
+  providers: [DinosCrudStoreService],
 })
-export class AppComponent implements OnInit {
-  readonly #dinosCrudService = inject(DinosCrudService);
-  readonly #dinoQuery = this.#dinosCrudService.getAllDinos();
+export class AppComponent {
+  protected readonly dinosStore = inject(DinosCrudStoreService);
 
-  protected dinos = toSignal(this.#dinoQuery.valueChanges);
-
-  ngOnInit(): void {
-    this.#dinoQuery.startPolling(1000);
+  protected getDinos() {
+    this.dinosStore.getTableDinos();
   }
 }
