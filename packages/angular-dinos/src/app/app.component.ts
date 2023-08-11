@@ -1,13 +1,26 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { DinosCrudStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
 @Component({
   standalone: true,
   imports: [RouterModule, JsonPipe],
   selector: 'dino-root',
   template: ` <h1>Welcome To DinoAPI</h1>
-    <router-outlet></router-outlet>`,
+    <button type="button" class="btn btn-primary" (click)="getDinos()">
+      Get Dinos</button
+    ><br />
+    <strong>Dinos:</strong><br />
+    <pre>{{ dinosStore.dinosaurs() | json }}</pre>
+    <router-outlet />`,
   styleUrls: ['./app.component.scss'],
+  providers: [DinosCrudStoreService],
 })
-export class AppComponent {}
+export class AppComponent {
+  protected readonly dinosStore = inject(DinosCrudStoreService);
+
+  protected getDinos() {
+    this.dinosStore.getTableDinos();
+  }
+}

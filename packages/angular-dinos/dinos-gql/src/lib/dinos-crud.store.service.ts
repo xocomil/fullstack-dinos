@@ -17,7 +17,7 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly #crudService = inject(DinosCrudService);
   readonly #dinosTableQuery = this.#crudService.getDinosTable();
 
-  readonly dinosaurs$ = this.select(({ dinosaurs }) => dinosaurs);
+  readonly dinosaurs = this.selectSignal(({ dinosaurs }) => dinosaurs);
 
   constructor() {
     super(emptyState());
@@ -25,7 +25,7 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
 
   readonly getTableDinos = this.effect((getDinos$) =>
     getDinos$.pipe(
-      switchMap(() => this.#dinosTableQuery.valueChanges),
+      switchMap(() => this.#dinosTableQuery.refetch()),
       map((apolloResult) => apolloResult.data),
       tap((dinosaurs) => {
         this.patchState({ dinosaurs });

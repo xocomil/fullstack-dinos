@@ -5,7 +5,6 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { InMemoryCache } from '@apollo/client/core';
-import { DinosCrudService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { appRoutes } from './app.routes';
@@ -26,7 +25,6 @@ export const appConfig: ApplicationConfig = {
       },
       deps: [HttpLink],
     },
-    DinosCrudService,
     provideHttpClient(),
   ],
 };
