@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@fullstack-dinos/angular-dinos/dino-ui": [
+        "packages/angular-dinos/dino-ui/src/index.ts"
+      ],
       "@fullstack-dinos/angular-dinos/dinos-gql": [
         "packages/angular-dinos/dinos-gql/src/index.ts"
       ]

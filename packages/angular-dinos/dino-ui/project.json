@@ -1,0 +1,38 @@
+{
+  "name": "angular-dinos-dino-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/angular-dinos/dino-ui/src",
+  "prefix": "fullstack-dinos",
+  "tags": [],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "packages/angular-dinos/dino-ui/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "packages/angular-dinos/dino-ui/**/*.ts",
+          "packages/angular-dinos/dino-ui/**/*.html"
+        ]
+      }
+    }
+  }
+}
