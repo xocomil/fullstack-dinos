@@ -14,6 +14,9 @@ import { DinosCrudStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql'
     <strong>Dinos:</strong><br />
     <pre>{{ dinosStore.dinosaurs() | json }}</pre>
     <router-outlet />`,
+  host: {
+    class: 'prose container block px-8 py-4 min-w-full',
+  },
   styleUrls: ['./app.component.scss'],
   providers: [DinosCrudStoreService],
 })
