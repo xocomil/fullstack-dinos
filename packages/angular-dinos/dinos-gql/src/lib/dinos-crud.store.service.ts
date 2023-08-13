@@ -26,7 +26,7 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly getTableDinos = this.effect((getDinos$) =>
     getDinos$.pipe(
       switchMap(() => this.#dinosTableQuery.refetch()),
-      map((apolloResult) => apolloResult.data),
+      map((apolloResult) => apolloResult.data.allDinosaurs),
       tap((dinosaurs) => {
         this.patchState({ dinosaurs });
       }),

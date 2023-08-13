@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { AngularDinosDinoUiComponent } from './angular-dinos-dino-ui/angular-dinos-dino-ui.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const angularDinosDinoUiRoutes: Route[] = [
-  {path: '', component: AngularDinosDinoUiComponent}
+  { path: '', component: HomeComponent, pathMatch: 'full' },
 ];
