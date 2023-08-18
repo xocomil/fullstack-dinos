@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { DinosCrudStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { YesNoComponent } from '../yes-no/yes-no.component';
 
@@ -15,7 +16,11 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let dinosaur of dinosStore.dinosaurs()" class="hover">
+      <tr
+        *ngFor="let dinosaur of dinosStore.dinosaurs()"
+        class="hover hover:cursor-pointer"
+        [routerLink]="['/dinos', dinosaur.id]"
+      >
         <td>
           {{ dinosaur.name }}<br /><span class="text-xs italic opacity-50"
             >{{ dinosaur.genus }} {{ dinosaur.species }}</span
@@ -30,7 +35,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
   </table> `,
   styleUrls: ['./dinos-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, YesNoComponent],
+  imports: [CommonModule, YesNoComponent, RouterLink],
 })
 export class DinosTableComponent {
   protected readonly dinosStore = inject(DinosCrudStoreService);

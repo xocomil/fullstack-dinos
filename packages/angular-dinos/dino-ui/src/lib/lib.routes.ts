@@ -1,6 +1,18 @@
 import { Route } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
 
 export const angularDinosDinoUiRoutes: Route[] = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./components/home/home.component').then((c) => c.HomeComponent),
+    pathMatch: 'full',
+  },
+  {
+    path: ':dinoId',
+    loadComponent: () =>
+      import('./components/details/details.component').then(
+        (c) => c.DetailsComponent,
+      ),
+  },
+  { path: '**', redirectTo: '' },
 ];

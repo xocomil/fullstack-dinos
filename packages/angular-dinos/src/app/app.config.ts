@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import {
   provideRouter,
+  withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { InMemoryCache } from '@apollo/client/core';
@@ -12,7 +13,11 @@ import { appRoutes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(ApolloModule),
-    provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
+    provideRouter(
+      appRoutes,
+      withComponentInputBinding(),
+      withEnabledBlockingInitialNavigation(),
+    ),
     {
       provide: APOLLO_OPTIONS,
       useFactory(httpLink: HttpLink) {
