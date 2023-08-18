@@ -4,9 +4,7 @@ export const appRoutes: Route[] = [
   {
     path: 'dinos',
     loadChildren: () =>
-      import('@fullstack-dinos/angular-dinos/dino-ui').then(
-        (m) => m.angularDinosDinoUiRoutes,
-      ),
+      import('@dino-ui').then((m) => m.angularDinosDinoUiRoutes),
   },
   {
     path: '',
