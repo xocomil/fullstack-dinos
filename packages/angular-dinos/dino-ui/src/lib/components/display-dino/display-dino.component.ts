@@ -1,14 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
 @Component({
   selector: 'fullstack-dinos-display-dino',
   standalone: true,
   imports: [CommonModule],
-  template: `<h1 class="mb-1 text-blue-500">
-      {{ detailsStore.dinosaur().name }}
-    </h1>
+  template: `<div class="flex flex-1 gap-2">
+      <h1 class="mb-1 text-blue-500 flex-grow">
+        {{ detailsStore.dinosaur().name }}
+      </h1>
+      <button class="btn btn-outline flex-none" (click)="turnOnEditMode()">
+        Edit
+      </button>
+    </div>
     <div class="columns-2">
       <div class="text-2xl italic text-blue-500/70">
         {{ detailsStore.genusSpecies() }}
@@ -55,5 +61,10 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
   },
 })
 export class DisplayDinoComponent {
+  readonly #router = inject(Router);
   protected readonly detailsStore = inject(DetailsStoreService);
+
+  protected turnOnEditMode(): void {
+    void this.#router.navigate([], { queryParams: { editMode: true } });
+  }
 }
