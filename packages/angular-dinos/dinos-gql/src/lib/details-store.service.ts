@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
-import { Observable, filter, switchMap, tap } from 'rxjs';
+import { filter, Observable, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
-import { Dinosaur, createEmptyDino } from './models/dinosaur';
+import { createEmptyDino, Dinosaur } from './models/dinosaur';
 
 type DetailsState = {
   id: string | undefined;
@@ -27,6 +27,10 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   readonly genusSpecies = this.selectSignal(
     this.dinosaur,
     ({ genus, species }) => `${genus} ${species}`,
+  );
+  readonly displayTrivia = this.selectSignal(
+    this.dinosaur,
+    ({ trivia }) => trivia.length,
   );
 
   constructor() {
