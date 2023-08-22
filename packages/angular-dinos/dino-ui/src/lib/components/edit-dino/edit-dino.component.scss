@@ -1,4 +1,11 @@
-:host {
-  display: block;
+label {
+  @apply label text-secondary;
 }
 
+input {
+  @apply input input-bordered;
+}
+
+.error {
+  @apply border-error;
+}

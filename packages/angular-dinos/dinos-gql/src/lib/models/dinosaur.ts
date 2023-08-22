@@ -10,7 +10,7 @@ export type BaseDinosaur = {
 export type Dinosaur = BaseDinosaur & {
   heightInMeters: number;
   weightInKilos: number;
-  trivia?: string[];
+  trivia: string[];
   imageUrl?: string;
   updatedAt?: Date;
 };
