@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
@@ -8,28 +8,38 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
   selector: 'fullstack-dinos-edit-dino',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
+  host: { class: 'block' },
   template: `
-    <form class="columns-3 gap-4">
+    <pre>{{ detailsStore.errors() | json }}</pre>
+    <form
+      #dinoForm="ngForm"
+      class="columns-3 gap-4"
+      (ngSubmit)="onSubmit(dinoForm)"
+    >
       <div class="form-control">
-        <label class="label text-secondary">Name</label>
+        <label>Name</label>
         <input
           name="name"
-          class="input input-bordered"
+          [class.error]="detailsStore.errors().name"
           [ngModel]="detailsStore.dinosaur().name"
+          placeholder="Dinosaur's name"
         />
       </div>
       <div class="form-control">
-        <label class="label text-secondary">Species</label>
+        <label>Species</label>
         <input
           name="species"
-          class="input input-bordered"
+          [class.error]="detailsStore.errors().species"
           [ngModel]="detailsStore.dinosaur().species"
+          placeholder="Dinosaur's species"
         />
       </div>
+      <button type="submit" class="btn btn-primary">Save</button>
       <button
         type="button"
         class="btn btn-outline btn-secondary"
         [routerLink]="['/dinos', detailsStore.id()]"
+        (click)="cancel()"
       >
         Cancel
       </button>
@@ -39,4 +49,12 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 })
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DetailsStoreService);
+
+  protected onSubmit(dinoForm: NgForm): void {
+    this.detailsStore.updateDino(dinoForm.value);
+  }
+
+  protected cancel(): void {
+    this.detailsStore.clearErrors();
+  }
 }
