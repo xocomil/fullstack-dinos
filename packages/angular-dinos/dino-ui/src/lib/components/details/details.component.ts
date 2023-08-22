@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input as RouteInput } from '@angular/core';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { DisplayDinoComponent } from '../display-dino/display-dino.component';
 import { EditDinoComponent } from '../edit-dino/edit-dino.component';
@@ -22,11 +22,11 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
 export class DetailsComponent {
   protected readonly detailsStore = inject(DetailsStoreService);
 
-  @Input() set dinoId(id: string | undefined) {
+  @RouteInput() set dinoId(id: string | undefined) {
     this.detailsStore.setId(id);
   }
 
-  @Input() set editMode(editMode: boolean | undefined) {
+  @RouteInput() set editMode(editMode: boolean | undefined) {
     this.detailsStore.setEditMode(editMode);
   }
 }

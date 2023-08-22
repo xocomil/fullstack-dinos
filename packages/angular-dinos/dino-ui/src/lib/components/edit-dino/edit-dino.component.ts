@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
 @Component({
   selector: 'fullstack-dinos-edit-dino',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   template: `
     <form class="columns-3 gap-4">
       <div class="form-control">
@@ -25,6 +26,13 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
           [ngModel]="detailsStore.dinosaur().species"
         />
       </div>
+      <button
+        type="button"
+        class="btn btn-outline btn-secondary"
+        [routerLink]="['/dinos', detailsStore.id()]"
+      >
+        Cancel
+      </button>
     </form>
   `,
   styleUrls: ['./edit-dino.component.scss'],
