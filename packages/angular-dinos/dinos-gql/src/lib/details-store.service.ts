@@ -47,11 +47,11 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
         this.patchState({ id });
       }),
       switchMap((id) => this.#dinosCrudService.getDino(id)),
-      tap((apolloDino) => {
+      tap((dinosaur) => {
         // console.log('apolloDino', apolloDino);
 
         this.patchState({
-          dinosaur: apolloDino.data.dinosaur,
+          dinosaur,
         });
       }),
     ),
