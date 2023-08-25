@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "fullstack-dinos",
+            "prefix": "ui",
             "style": "kebab-case"
           }
         ]

@@ -88,17 +88,41 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   );
 }
 
+const hasValue = (value: string | undefined): boolean =>
+  !!value && value.length > 0;
+
+const UndefinedOrGreaterThanZero = (value: number | undefined): boolean => {
+  if (value == null) {
+    return true;
+  }
+
+  return value > 0;
+};
+
 const validateDino = (
   dino: Dinosaur,
 ): Partial<Record<keyof Dinosaur, string>> => {
   const errors: Partial<Record<keyof Dinosaur, string>> = {};
 
-  if (dino.name?.length < 1) {
+  if (!hasValue(dino.name)) {
     errors.name = 'Name is required';
   }
-  if (dino.species?.length < 1) {
+  if (!hasValue(dino.genus)) {
+    console.log('checking genus', dino.genus, dino.genus?.length);
+
+    errors.genus = 'Genus is required';
+  }
+  if (!hasValue(dino.species)) {
     errors.species = 'Species is required';
   }
+  if (!UndefinedOrGreaterThanZero(dino.heightInMeters)) {
+    errors.heightInMeters = 'Height must be greater than zero';
+  }
+  if (!UndefinedOrGreaterThanZero(dino.weightInKilos)) {
+    errors.weightInKilos = 'Weight must be greater than zero';
+  }
+
+  console.log('errors', errors);
 
   return errors;
 };

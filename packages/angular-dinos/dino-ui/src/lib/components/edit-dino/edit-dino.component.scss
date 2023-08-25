@@ -6,6 +6,12 @@ input {
   @apply input input-bordered;
 }
 
+span {
+  &.error {
+    @apply text-error italic;
+  }
+}
+
 .error {
   @apply border-error;
 }
