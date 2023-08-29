@@ -1,31 +1,23 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
+import { injectNgControl } from '../utilities/inject-ng-control';
 
 @Component({
   selector: 'ui-text-input',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <label *ngIf="labelText" [for]="inputId">{{ labelText }}</label>
+    <label *ngIf="labelText" [for]="id">{{ labelText }}</label>
     <input
-      [id]="inputId"
-      [name]="inputId"
+      [id]="id"
+      [name]="name"
       [class.error]="errorText"
-      [(ngModel)]="inputValue"
-      [placeholder]="placeHolderText"
-      [disabled]="disabled"
+      [formControl]="ngControl.control"
+      [placeholder]="placeholder"
+      [type]="type"
     />
     <span class="error" *ngIf="errorText">
       {{ errorText }}
@@ -34,55 +26,20 @@ import {
   styleUrls: ['./text-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'block form-control',
+    class: 'form-control',
   },
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: TextInputComponent,
-    },
-  ],
+  hostDirectives: [NoopValueAccessorDirective],
 })
-export class TextInputComponent implements ControlValueAccessor, OnChanges {
-  protected inputValue = '';
-  #onChange: (value: string) => void = () => {};
-  #onTouched = () => {};
+export class TextInputComponent {
+  protected readonly ngControl = injectNgControl();
 
-  #touched = false;
-
-  protected disabled = false;
-
-  @Input({ required: true }) inputId!: string;
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) name!: string;
+  @Input() type = 'text';
   @Input() labelText?: string;
   @Input() errorText?: string;
-  @Input() placeHolderText?: string;
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes);
-    this.markAsTouched();
-  }
-
-  writeValue(value: string): void {
-    this.inputValue = value;
-  }
-
-  registerOnChange(fn: (value: string) => void): void {
-    this.#onChange = fn;
-  }
-
-  registerOnTouched(onTouched: () => void) {
-    this.#onTouched = onTouched;
-  }
-
-  markAsTouched() {
-    if (!this.#touched) {
-      this.#onTouched();
-      this.#touched = true;
-    }
-  }
-
-  setDisabledState(disabled: boolean) {
-    this.disabled = disabled;
-  }
+  @Input({
+    transform: (value: unknown) => (typeof value === 'string' ? value : ''),
+  })
+  placeholder = '';
 }

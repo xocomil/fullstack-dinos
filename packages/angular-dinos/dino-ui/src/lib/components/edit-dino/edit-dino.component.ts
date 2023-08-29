@@ -15,71 +15,48 @@ import { TextInputComponent } from '@ui-components';
     <pre>{{ detailsStore.errors() | json }}</pre>
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
       <div class="grid grid-cols-3 gap-4 mb-4">
-        <!-- <ui-text-input
-          label="Name"
+        <ui-text-input
           id="name"
-          error="detailsStore.errors().name"
-          [ngModel]="detailsStore.dinosaur().name"
+          name="name"
           placeholder="Dinosaur's name"
-        /> -->
-
-        <ui-text-input inputId="name" />
-
-        <div class="form-control">
-          <label for="name">Name</label>
-          <input
-            id="name"
-            name="name"
-            [class.error]="detailsStore.errors().name"
-            [ngModel]="detailsStore.dinosaur().name"
-            placeholder="Dinosaur's name"
-          />
-          <span class="error" *ngIf="detailsStore.errors().name">
-            {{ detailsStore.errors().name }}
-          </span>
-        </div>
-        <div class="form-control">
-          <label for="genus">Genus</label>
-          <input
-            id="genus"
-            name="genus"
-            [class.error]="detailsStore.errors().genus"
-            [ngModel]="detailsStore.dinosaur().genus"
-            placeholder="Dinosaur's genus"
-          />
-        </div>
-        <div class="form-control">
-          <label for="species">Species</label>
-          <input
-            id="species"
-            name="species"
-            [class.error]="detailsStore.errors().species"
-            [ngModel]="detailsStore.dinosaur().species"
-            placeholder="Dinosaur's species"
-          />
-        </div>
-        <div class="form-control">
-          <label for="heightInMeters">Height (m)</label>
-          <input
-            id="heightInMeters"
-            name="heightInMeters"
-            type="number"
-            [class.error]="detailsStore.errors().heightInMeters"
-            [ngModel]="detailsStore.dinosaur().heightInMeters"
-            placeholder="Dinosaur's heightInMeters"
-          />
-        </div>
-        <div class="form-control">
-          <label for="weightInKilos">Weight (kg)</label>
-          <input
-            id="weightInKilos"
-            name="weightInKilos"
-            type="number"
-            [class.error]="detailsStore.errors().weightInKilos"
-            [ngModel]="detailsStore.dinosaur().weightInKilos"
-            placeholder="Dinosaur's weightInKilos"
-          />
-        </div>
+          labelText="Name"
+          [ngModel]="detailsStore.dinosaur().name"
+          [errorText]="detailsStore.errors().name"
+        />
+        <ui-text-input
+          id="genus"
+          name="genus"
+          placeholder="Dinosaur's genus"
+          labelText="Genus"
+          [ngModel]="detailsStore.dinosaur().genus"
+          [errorText]="detailsStore.errors().genus"
+        />
+        <ui-text-input
+          id="species"
+          name="species"
+          labelText="Species"
+          [errorText]="detailsStore.errors().species"
+          [ngModel]="detailsStore.dinosaur().species"
+          placeholder="Dinosaur's species"
+        />
+        <ui-text-input
+          id="heightInMeters"
+          name="heightInMeters"
+          labelText="Height (m)"
+          type="number"
+          [errorText]="detailsStore.errors().heightInMeters"
+          [ngModel]="detailsStore.dinosaur().heightInMeters"
+          placeholder="Dinosaur's heightInMeters"
+        />
+        <ui-text-input
+          id="weightInKilos"
+          name="weightInKilos"
+          labelText="Weight (kg)"
+          type="number"
+          [errorText]="detailsStore.errors().weightInKilos"
+          [ngModel]="detailsStore.dinosaur().weightInKilos"
+          placeholder="Dinosaur's weightInKilos"
+        />
       </div>
       <button type="submit" class="btn btn-primary">Save</button>
       <button

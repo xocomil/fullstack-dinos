@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "fullstackDinos",
+            "prefix": "ui",
             "style": "camelCase"
           }
         ],
