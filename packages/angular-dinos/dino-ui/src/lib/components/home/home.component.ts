@@ -1,5 +1,10 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+} from '@angular/core';
 import { DinosCrudStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { DinosTableComponent } from '../dinos-table/dinos-table.component';
 
@@ -16,8 +21,12 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DinosTableComponent, JsonPipe],
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   protected readonly dinosStore = inject(DinosCrudStoreService);
+
+  ngAfterViewInit(): void {
+    this.getDinos();
+  }
 
   protected getDinos() {
     this.dinosStore.getTableDinos();

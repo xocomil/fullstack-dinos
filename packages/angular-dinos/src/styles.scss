@@ -3,3 +3,20 @@
 @tailwind utilities;
 
 /* You can add global styles to this file, and also import other style files */
+label {
+  @apply label text-secondary;
+}
+
+input {
+  @apply input input-bordered;
+}
+
+span {
+  &.error {
+    @apply text-error italic;
+  }
+}
+
+.error {
+  @apply border-error;
+}
