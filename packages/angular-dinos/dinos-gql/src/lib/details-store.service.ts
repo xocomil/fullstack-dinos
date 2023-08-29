@@ -35,6 +35,9 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
     ({ trivia }) => trivia.length,
   );
   readonly errors = this.selectSignal(({ errors }) => errors);
+  readonly errorsArray = this.selectSignal(this.errors, (errors) =>
+    Object.values(errors),
+  );
 
   constructor() {
     super(emptyState());

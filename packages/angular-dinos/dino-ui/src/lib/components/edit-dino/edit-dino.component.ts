@@ -5,14 +5,17 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { TextInputComponent } from '@ui-components';
+import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 
 @Component({
   selector: 'fullstack-dinos-edit-dino',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, TextInputComponent],
   host: { class: 'block' },
   template: `
-    <pre>{{ detailsStore.errors() | json }}</pre>
+    <fullstack-dinos-dino-errors
+      *ngIf="detailsStore.errorsArray().length > 0"
+      [errors]="detailsStore.errorsArray()"
+    />
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
       <div class="grid grid-cols-3 gap-4 mb-4">
         <ui-text-input
@@ -70,6 +73,13 @@ import { TextInputComponent } from '@ui-components';
     </form>
   `,
   styleUrls: ['./edit-dino.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    TextInputComponent,
+    DinoErrorsComponent,
+  ],
 })
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DetailsStoreService);
