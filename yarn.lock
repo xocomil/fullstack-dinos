@@ -4334,11 +4334,11 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     picomatch "^2.0.4"
 
 apollo-angular@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-5.0.0.tgz#24ee1ba28561f22397e5099a099cbc0298d2b9fe"
-  integrity sha512-g98CvEGmRkrfBcXQS+HwIDuSsDnxqg/7RB+N/ICXbXfnnbBNIVzQ+xSaawz6kOo04Rx7jtLQAjda6/69fhHMDQ==
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-5.0.1.tgz#50bf1ceb14a4b3d128927f2ef52f0b9c2ab52d3f"
+  integrity sha512-Dc6w4cpXBMmYfqZ4WsaFTTI6WiubEI34tIHbkYvpS07+qDh6d6JnRwZ+2f7Y7SL3GOQUtsbapKmWibVdLVyNZw==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.6.2"
 
 append-field@^1.0.0:
   version "1.0.0"
