@@ -3,7 +3,7 @@ import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
 import { filter, Observable, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
-import { createEmptyDino, Dinosaur } from './models/dinosaur';
+import { createEmptyDino, dinoParser, Dinosaur } from './models/dinosaur';
 
 type DetailsState = {
   id: string | undefined;
@@ -91,41 +91,27 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   );
 }
 
-const hasValue = (value: string | undefined): boolean =>
-  !!value && value.length > 0;
-
-const UndefinedOrGreaterThanZero = (value: number | undefined): boolean => {
-  if (value == null) {
-    return true;
-  }
-
-  return value > 0;
-};
-
 const validateDino = (
   dino: Dinosaur,
 ): Partial<Record<keyof Dinosaur, string>> => {
-  const errors: Partial<Record<keyof Dinosaur, string>> = {};
+  console.log('dino', dino);
 
-  if (!hasValue(dino.name)) {
-    errors.name = 'Name is required';
-  }
-  if (!hasValue(dino.genus)) {
-    console.log('checking genus', dino.genus, dino.genus?.length);
+  const dinoResult = dinoParser.safeParse(dino);
 
-    errors.genus = 'Genus is required';
-  }
-  if (!hasValue(dino.species)) {
-    errors.species = 'Species is required';
-  }
-  if (!UndefinedOrGreaterThanZero(dino.heightInMeters)) {
-    errors.heightInMeters = 'Height must be greater than zero';
-  }
-  if (!UndefinedOrGreaterThanZero(dino.weightInKilos)) {
-    errors.weightInKilos = 'Weight must be greater than zero';
-  }
+  // console.log('dinoResult', dinoResult);
+  // if (!dinoResult.success) {
+  //   console.log('dinoResult.error.issues', dinoResult.error.issues);
+  //   console.log('dinoResult.error.formErrors', dinoResult.error.formErrors);
+  //   console.log('dinoResult.error.flatten', dinoResult.error.flatten());
+  //   console.log('dinoResult.error.formatted', dinoResult.error.format());
+  // }
 
-  console.log('errors', errors);
-
-  return errors;
+  return dinoResult.success
+    ? {}
+    : dinoResult.error.issues.reduce(
+        (acc, issue) => {
+          return { ...acc, [issue.path[0]]: issue.message };
+        },
+        {} as Partial<Record<keyof Dinosaur, string>>,
+      );
 };
