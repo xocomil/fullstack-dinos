@@ -1,19 +1,25 @@
-export type BaseDinosaur = {
-  id?: string;
-  name: string;
-  genus: string;
-  species: string;
-  hasFeathers: boolean;
-  description?: string;
-};
+import { z } from 'zod';
 
-export type Dinosaur = BaseDinosaur & {
-  heightInMeters: number;
-  weightInKilos: number;
-  trivia: string[];
-  imageUrl?: string;
-  updatedAt?: Date;
-};
+export const baseDinoParser = z.object({
+  id: z.string().optional(),
+  name: z.string().min(3),
+  genus: z.string().min(3),
+  species: z.string().min(3),
+  hasFeathers: z.boolean(),
+  description: z.string().optional(),
+});
+
+export type BaseDinosaur = z.infer<typeof baseDinoParser>;
+
+export const dinoParser = baseDinoParser.extend({
+  heightInMeters: z.number().gt(0).nullable(),
+  weightInKilos: z.number().gt(0).nullable(),
+  trivia: z.array(z.string()),
+  imageUrl: z.string().optional(),
+  updatedAt: z.date().optional(),
+});
+
+export type Dinosaur = z.infer<typeof dinoParser>;
 
 export const createEmptyDino = (): Dinosaur => ({
   name: '',
