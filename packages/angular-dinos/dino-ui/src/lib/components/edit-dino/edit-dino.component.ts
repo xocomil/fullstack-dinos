@@ -1,10 +1,9 @@
-/* eslint-disable @angular-eslint/no-host-metadata-property */
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
-import { TextInputComponent } from '@ui-components';
+import { TextInputComponent, ToggleComponent } from '@ui-components';
 import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 
 @Component({
@@ -42,6 +41,12 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
         />
+        <ui-toggle
+          id="hasFeathers"
+          name="hasFeathers"
+          labelText="Has Feathers?"
+          [ngModel]="detailsStore.dinosaur().hasFeathers"
+        />
         <ui-text-input
           id="heightInMeters"
           name="heightInMeters"
@@ -75,10 +80,11 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
   styleUrls: ['./edit-dino.component.scss'],
   imports: [
     CommonModule,
+    DinoErrorsComponent,
     FormsModule,
     RouterLink,
     TextInputComponent,
-    DinoErrorsComponent,
+    ToggleComponent,
   ],
 })
 export class EditDinoComponent {
