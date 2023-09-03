@@ -3,7 +3,11 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
-import { TextInputComponent, ToggleComponent } from '@ui-components';
+import {
+  TextInputComponent,
+  TextareaComponent,
+  ToggleComponent,
+} from '@ui-components';
 import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 
 @Component({
@@ -40,6 +44,13 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           [errorText]="detailsStore.errors().species"
           [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
+        />
+        <ui-textarea
+          id="description"
+          name="description"
+          labelText="Description"
+          altLabelText="Make it jazzy!"
+          [ngModel]="detailsStore.dinosaur().description"
         />
         <ui-toggle
           id="hasFeathers"
@@ -83,6 +94,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
     DinoErrorsComponent,
     FormsModule,
     RouterLink,
+    TextareaComponent,
     TextInputComponent,
     ToggleComponent,
   ],
