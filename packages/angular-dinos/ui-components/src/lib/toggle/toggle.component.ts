@@ -28,7 +28,7 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   hostDirectives: [NoopValueAccessorDirective],
 })
 export class ToggleComponent {
-  protected ngControl = injectNgControl();
+  protected readonly ngControl = injectNgControl();
 
   @Input({ required: true }) id!: string;
   @Input({ required: true }) name!: string;
