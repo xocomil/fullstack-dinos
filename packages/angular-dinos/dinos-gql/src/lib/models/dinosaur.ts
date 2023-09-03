@@ -12,8 +12,8 @@ export const baseDinoParser = z.object({
 export type BaseDinosaur = z.infer<typeof baseDinoParser>;
 
 export const dinoParser = baseDinoParser.extend({
-  heightInMeters: z.number().gt(0).nullable(),
-  weightInKilos: z.number().gt(0).nullable(),
+  heightInMeters: z.number().gt(0).nullable().optional(),
+  weightInKilos: z.number().gt(0).nullable().optional(),
   trivia: z.array(z.string()),
   imageUrl: z.string().optional(),
   updatedAt: z.date().optional(),
