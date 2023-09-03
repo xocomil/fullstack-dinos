@@ -24,7 +24,14 @@ export const baseDinoParser = z.object({
     invalid_type_error: 'Has feathers must be a boolean value.',
     required_error: 'Has feathers is required.',
   }),
-  description: z.string().optional(),
+  description: z
+    .string()
+    .min(3, {
+      message:
+        'Please provide a better description. It should be at least 3 characters!',
+    })
+    .or(z.string().max(0))
+    .nullish(),
 });
 
 export type BaseDinosaur = z.infer<typeof baseDinoParser>;
