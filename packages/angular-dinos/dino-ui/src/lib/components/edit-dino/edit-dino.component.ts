@@ -51,6 +51,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           labelText="Description"
           altLabelText="Make it jazzy!"
           [ngModel]="detailsStore.dinosaur().description"
+          [errorText]="detailsStore.errors().description"
         />
         <ui-toggle
           id="hasFeathers"
