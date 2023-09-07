@@ -60,7 +60,7 @@ export const dinoParser = baseDinoParser.extend({
   imageUrl: z
     .string({ invalid_type_error: 'Image URL must be a string.' })
     .url('Image URL is not a valid URL.')
-    .optional(),
+    .nullish(),
   updatedAt: z
     .date({ invalid_type_error: 'Updated At must be a date.' })
     .optional(),
