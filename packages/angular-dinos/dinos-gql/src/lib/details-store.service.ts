@@ -1,9 +1,15 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
-import { filter, Observable, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
-import { createEmptyDino, dinoParser, Dinosaur } from './models/dinosaur';
+import {
+  createEmptyDino,
+  Dinosaur,
+  updateDinoParser,
+  UpdateDinosaur,
+} from './models/dinosaur';
 
 type DetailsState = {
   id: string | undefined;
@@ -22,6 +28,7 @@ const emptyState = (): DetailsState => ({
 @Injectable()
 export class DetailsStoreService extends ComponentStore<DetailsState> {
   readonly #dinosCrudService = inject(DinosCrudService);
+  readonly #router = inject(Router);
 
   readonly dinosaur = this.selectSignal(({ dinosaur }) => dinosaur);
   readonly id = this.selectSignal(({ id }) => id);
@@ -67,18 +74,34 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       }),
   );
 
-  readonly updateDino = this.effect((dino$: Observable<Dinosaur>) =>
+  readonly updateDino = this.effect((dino$: Observable<UpdateDinosaur>) =>
     dino$.pipe(
-      tap((dino) => {
-        const errors = validateDino(dino);
+      switchMap((dino) => {
+        const errors = validateUpdateDino(dino);
 
         this.patchState({ errors });
 
         if (Object.keys(errors).length > 0) {
-          return;
+          return EMPTY;
         }
 
         console.log('Saving dino...', dino);
+
+        const id = this.id();
+
+        if (!id) {
+          console.error('No id found for dino', dino);
+          return EMPTY;
+        }
+
+        return this.#dinosCrudService.updateDino(dino, id);
+      }),
+      tap((result) => {
+        console.log('result', result);
+
+        if (result) {
+          this.#router.navigate(['dinos']);
+        }
       }),
     ),
   );
@@ -91,12 +114,12 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   );
 }
 
-const validateDino = (
-  dino: Dinosaur,
-): Partial<Record<keyof Dinosaur, string>> => {
+const validateUpdateDino = (
+  dino: UpdateDinosaur,
+): Partial<Record<keyof UpdateDinosaur, string>> => {
   console.log('dino', dino);
 
-  const dinoResult = dinoParser.safeParse(dino);
+  const dinoResult = updateDinoParser.safeParse(dino);
 
   // console.log('dinoResult', dinoResult);
   // if (!dinoResult.success) {

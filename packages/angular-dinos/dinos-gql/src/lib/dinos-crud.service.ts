@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Apollo, gql, QueryRef } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
-import { BaseDinosaur, Dinosaur } from './models/dinosaur';
+import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +49,32 @@ export class DinosCrudService {
         variables: { where: { id } },
       })
       .pipe(map((apolloDino) => apolloDino.data.dinosaur));
+  }
+
+  updateDino(
+    dino: UpdateDinosaur,
+    id: string,
+  ): Observable<string | null | undefined> {
+    return this.#apollo
+      .mutate({
+        mutation: gql<
+          string,
+          { data: UpdateDinosaur; where: { id?: string; name?: string } }
+        >`
+          mutation Mutation(
+            $data: DinosaurUpdateInput!
+            $where: DinosaurWhereUniqueInput!
+          ) {
+            updateDino(data: $data, where: $where) {
+              id
+            }
+          }
+        `,
+        variables: {
+          data: dino,
+          where: { id },
+        },
+      })
+      .pipe(map((mutationResult) => mutationResult.data));
   }
 }

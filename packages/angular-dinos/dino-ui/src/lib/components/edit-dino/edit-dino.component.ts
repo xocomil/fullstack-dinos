@@ -29,6 +29,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           labelText="Name"
           [ngModel]="detailsStore.dinosaur().name"
           [errorText]="detailsStore.errors().name"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="genus"
@@ -37,6 +38,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           labelText="Genus"
           [ngModel]="detailsStore.dinosaur().genus"
           [errorText]="detailsStore.errors().genus"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="species"
@@ -45,6 +47,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           [errorText]="detailsStore.errors().species"
           [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-textarea
           id="description"

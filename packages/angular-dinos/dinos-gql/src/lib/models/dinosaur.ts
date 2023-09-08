@@ -68,6 +68,14 @@ export const dinoParser = baseDinoParser.extend({
 
 export type Dinosaur = z.infer<typeof dinoParser>;
 
+export const updateDinoParser = baseDinoParser.omit({
+  name: true,
+  species: true,
+  genus: true,
+});
+
+export type UpdateDinosaur = z.infer<typeof updateDinoParser>;
+
 export const createEmptyDino = (): Dinosaur => ({
   name: '',
   genus: '',
