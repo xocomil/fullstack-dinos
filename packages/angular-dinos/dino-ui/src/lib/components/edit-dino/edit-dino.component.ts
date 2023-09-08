@@ -16,11 +16,12 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
   host: { class: 'block' },
   template: `
     <fullstack-dinos-dino-errors
+      class="hidden lg:block"
       *ngIf="detailsStore.errorsArray().length > 0"
       [errors]="detailsStore.errorsArray()"
     />
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
-      <div class="grid grid-cols-3 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         <ui-text-input
           id="name"
           name="name"
@@ -48,7 +49,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
         <ui-textarea
           id="description"
           name="description"
-          class="col-span-2"
+          class="md:col-span-2"
           labelText="Description"
           altLabelText="Make it jazzy!"
           [ngModel]="detailsStore.dinosaur().description"
