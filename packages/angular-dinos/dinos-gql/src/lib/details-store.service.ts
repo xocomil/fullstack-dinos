@@ -79,6 +79,8 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       switchMap((dino) => {
         const errors = validateUpdateDino(dino);
 
+        console.log('errors', errors);
+
         this.patchState({ errors });
 
         if (Object.keys(errors).length > 0) {

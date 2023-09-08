@@ -15,7 +15,6 @@ const emptyState = (): DinosCrudState => ({
 @Injectable()
 export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly #crudService = inject(DinosCrudService);
-  readonly #dinosTableQuery = this.#crudService.getDinosTable();
 
   readonly dinosaurs = this.selectSignal(({ dinosaurs }) => dinosaurs);
 
@@ -25,8 +24,8 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
 
   readonly getTableDinos = this.effect((getDinos$) =>
     getDinos$.pipe(
-      switchMap(() => this.#dinosTableQuery.refetch()),
-      map((apolloResult) => apolloResult.data.allDinosaurs),
+      switchMap(() => this.#crudService.getDinosTable()),
+      map((data) => data.allDinosaurs),
       tap((dinosaurs) => {
         this.patchState({ dinosaurs });
       }),
