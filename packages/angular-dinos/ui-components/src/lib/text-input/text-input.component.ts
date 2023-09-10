@@ -52,6 +52,7 @@ export class TextInputComponent {
   @Input({ required: true }) name!: string;
   @Input() type: AllowedHtmlTypes = 'text';
   @Input() labelText?: string;
+
   @Input() errorText?: string;
   @Input({
     transform: (value: unknown) => (typeof value === 'string' ? value : ''),

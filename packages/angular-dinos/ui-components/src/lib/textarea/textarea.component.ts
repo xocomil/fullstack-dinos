@@ -10,7 +10,8 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   selector: 'ui-textarea',
   standalone: true,
   imports: [NgIf, ReactiveFormsModule],
-  template: ` <label class="label">
+  template: `
+    <label class="label">
       <span>{{ labelText }}</span>
       <span *ngIf="altLabelText" class="label-text-alt">{{
         altLabelText
@@ -22,7 +23,12 @@ import { injectNgControl } from '../utilities/inject-ng-control';
       class="textarea textarea-bordered h-24"
       [placeholder]="placeholder"
       [formControl]="ngControl.control"
-    ></textarea>`,
+      [class.error]="errorText"
+    ></textarea>
+    <span class="error" *ngIf="errorText">
+      {{ errorText }}
+    </span>
+  `,
   styleUrls: ['./textarea.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -37,6 +43,8 @@ export class TextareaComponent {
   @Input({ required: true }) name!: string;
   @Input({ required: true }) labelText!: string;
   @Input() altLabelText?: string;
+  @Input() errorText?: string;
+
   @Input({
     transform: (value: unknown) => (typeof value === 'string' ? value : ''),
   })

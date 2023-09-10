@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Apollo, gql, QueryRef } from 'apollo-angular';
+import { Apollo, gql } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
-import { BaseDinosaur, Dinosaur } from './models/dinosaur';
+import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
 
 @Injectable({
   providedIn: 'root',
@@ -9,21 +9,23 @@ import { BaseDinosaur, Dinosaur } from './models/dinosaur';
 export class DinosCrudService {
   readonly #apollo = inject(Apollo);
 
-  getDinosTable(): QueryRef<{ allDinosaurs: BaseDinosaur[] }> {
-    return this.#apollo.watchQuery({
-      query: gql<{ allDinosaurs: BaseDinosaur[] }, void>`
-        query AllDinosaurs {
-          allDinosaurs {
-            id
-            name
-            genus
-            species
-            hasFeathers
-            description
+  getDinosTable(): Observable<{ allDinosaurs: BaseDinosaur[] }> {
+    return this.#apollo
+      .query({
+        query: gql<{ allDinosaurs: BaseDinosaur[] }, void>`
+          query AllDinosaurs {
+            allDinosaurs {
+              id
+              name
+              genus
+              species
+              hasFeathers
+              description
+            }
           }
-        }
-      `,
-    });
+        `,
+      })
+      .pipe(map((apolloDinos) => apolloDinos.data));
   }
 
   getDino(id: string): Observable<Dinosaur> {
@@ -49,5 +51,42 @@ export class DinosCrudService {
         variables: { where: { id } },
       })
       .pipe(map((apolloDino) => apolloDino.data.dinosaur));
+  }
+
+  updateDino(
+    dino: UpdateDinosaur,
+    id: string,
+  ): Observable<string | null | undefined> {
+    return this.#apollo
+      .mutate({
+        mutation: gql<
+          string,
+          { data: UpdateDinosaur; where: { id?: string; name?: string } }
+        >`
+          mutation Mutation(
+            $data: DinosaurUpdateInput!
+            $where: DinosaurWhereUniqueInput!
+          ) {
+            updateDino(data: $data, where: $where) {
+              id
+              description
+              genus
+              hasFeathers
+              heightInMeters
+              imageUrl
+              name
+              species
+              trivia
+              updatedAt
+              weightInKilos
+            }
+          }
+        `,
+        variables: {
+          data: dino,
+          where: { id },
+        },
+      })
+      .pipe(map((mutationResult) => mutationResult.data));
   }
 }

@@ -16,11 +16,12 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
   host: { class: 'block' },
   template: `
     <fullstack-dinos-dino-errors
+      class="hidden lg:block"
       *ngIf="detailsStore.errorsArray().length > 0"
       [errors]="detailsStore.errorsArray()"
     />
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
-      <div class="grid grid-cols-3 gap-4 mb-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         <ui-text-input
           id="name"
           name="name"
@@ -28,6 +29,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           labelText="Name"
           [ngModel]="detailsStore.dinosaur().name"
           [errorText]="detailsStore.errors().name"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="genus"
@@ -36,6 +38,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           labelText="Genus"
           [ngModel]="detailsStore.dinosaur().genus"
           [errorText]="detailsStore.errors().genus"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="species"
@@ -44,13 +47,16 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           [errorText]="detailsStore.errors().species"
           [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-textarea
           id="description"
           name="description"
+          class="md:col-span-2"
           labelText="Description"
           altLabelText="Make it jazzy!"
           [ngModel]="detailsStore.dinosaur().description"
+          [errorText]="detailsStore.errors().description"
         />
         <ui-toggle
           id="hasFeathers"
@@ -65,7 +71,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           type="number"
           [errorText]="detailsStore.errors().heightInMeters"
           [ngModel]="detailsStore.dinosaur().heightInMeters"
-          placeholder="Dinosaur's heightInMeters"
+          placeholder="Dinosaur's height in meters"
         />
         <ui-text-input
           id="weightInKilos"
@@ -74,9 +80,22 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
           type="number"
           [errorText]="detailsStore.errors().weightInKilos"
           [ngModel]="detailsStore.dinosaur().weightInKilos"
-          placeholder="Dinosaur's weightInKilos"
+          placeholder="Dinosaur's weight in kilograms"
+        />
+        <ui-text-input
+          id="imageUrl"
+          name="imageUrl"
+          labelText="URL to Image"
+          [errorText]="detailsStore.errors().imageUrl"
+          [ngModel]="detailsStore.dinosaur().imageUrl"
+          placeholder="URL to Image"
         />
       </div>
+      <input
+        type="hidden"
+        name="trivia"
+        [ngModel]="detailsStore.dinosaur().trivia"
+      />
       <button type="submit" class="btn btn-primary">Save</button>
       <button
         type="button"
