@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { extraDescriptionFromDino } from '../models/details.constants';
 
 @Component({
   selector: 'fullstack-dinos-display-dino',
@@ -33,11 +34,7 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
           <span *ngIf="detailsStore.dinosaur().description; let description">
             {{ description }}
           </span>
-          {{ detailsStore.dinosaur().name }} was around
-          {{ detailsStore.dinosaur().heightInMeters }} meters tall and weighed
-          around {{ detailsStore.dinosaur().weightInKilos | number }} kilograms.
-          {{ detailsStore.dinosaur().name }} did
-          {{ detailsStore.dinosaur().hasFeathers ? '' : 'not' }} have feathers.
+          {{ extraDescription }}
         </p>
       </div>
     </div>
@@ -63,6 +60,10 @@ import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
 export class DisplayDinoComponent {
   readonly #router = inject(Router);
   protected readonly detailsStore = inject(DetailsStoreService);
+
+  protected get extraDescription(): string {
+    return extraDescriptionFromDino(this.detailsStore.dinosaur());
+  }
 
   protected turnOnEditMode(): void {
     void this.#router.navigate([], { queryParams: { editMode: true } });
