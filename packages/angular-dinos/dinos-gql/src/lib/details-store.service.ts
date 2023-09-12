@@ -1,11 +1,13 @@
-import { inject, Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
 import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
+import { SafeParseReturnType } from 'zod';
 import { DinosCrudService } from './dinos-crud.service';
 import {
   createEmptyDino,
+  dinoParser,
   Dinosaur,
   updateDinoParser,
   UpdateDinosaur,
@@ -48,6 +50,10 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
 
   constructor() {
     super(emptyState());
+
+    inject(DestroyRef).onDestroy(() => {
+      console.warn('Destroying DetailsStoreService...');
+    });
   }
 
   readonly setId = this.effect((id$: Observable<string | undefined>) =>
@@ -74,7 +80,7 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       }),
   );
 
-  readonly updateDino = this.effect((dino$: Observable<UpdateDinosaur>) =>
+  readonly updateDino = this.effect((dino$: Observable<Dinosaur>) =>
     dino$.pipe(
       switchMap((dino) => {
         const errors = validateUpdateDino(dino);
@@ -108,6 +114,33 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
     ),
   );
 
+  readonly createDino = this.effect((dino$: Observable<Dinosaur>) =>
+    dino$.pipe(
+      switchMap((dino) => {
+        const errors = validateDino(dino);
+
+        console.log('errors', errors);
+
+        this.patchState({ errors });
+
+        if (Object.keys(errors).length > 0) {
+          return EMPTY;
+        }
+
+        console.log('Saving dino...', dino);
+
+        return this.#dinosCrudService.create(dino);
+      }),
+      tap((result) => {
+        console.log('result', result);
+
+        if (result) {
+          this.#router.navigate(['dinos']);
+        }
+      }),
+    ),
+  );
+
   readonly clearErrors = this.updater(
     (state): DetailsState =>
       create(state, (draft) => {
@@ -115,6 +148,26 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       }),
   );
 }
+
+const formatDinoErrors = <T, U>(parseResults: SafeParseReturnType<T, U>) =>
+  parseResults.success
+    ? {}
+    : parseResults.error.issues.reduce(
+        (acc, issue) => {
+          return { ...acc, [issue.path[0]]: issue.message };
+        },
+        {} as Partial<Record<keyof Dinosaur, string>>,
+      );
+
+const validateDino = (
+  dino: Dinosaur,
+): Partial<Record<keyof Dinosaur, string>> => {
+  console.log('dino', dino);
+
+  const dinoResult = dinoParser.safeParse(dino);
+
+  return formatDinoErrors(dinoResult);
+};
 
 const validateUpdateDino = (
   dino: UpdateDinosaur,
@@ -131,12 +184,5 @@ const validateUpdateDino = (
   //   console.log('dinoResult.error.formatted', dinoResult.error.format());
   // }
 
-  return dinoResult.success
-    ? {}
-    : dinoResult.error.issues.reduce(
-        (acc, issue) => {
-          return { ...acc, [issue.path[0]]: issue.message };
-        },
-        {} as Partial<Record<keyof Dinosaur, string>>,
-      );
+  return formatDinoErrors(dinoResult);
 };

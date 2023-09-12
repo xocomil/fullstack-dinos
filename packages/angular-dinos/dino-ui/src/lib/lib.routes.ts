@@ -8,6 +8,13 @@ export const angularDinosDinoUiRoutes: Route[] = [
     pathMatch: 'full',
   },
   {
+    path: 'add',
+    loadComponent: () =>
+      import('./components/add-dino/add-dino.component').then(
+        (c) => c.AddDinoComponent,
+      ),
+  },
+  {
     path: ':dinoId',
     loadComponent: () =>
       import('./components/details/details.component').then(

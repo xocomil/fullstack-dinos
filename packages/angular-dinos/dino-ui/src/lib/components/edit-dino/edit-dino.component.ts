@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
@@ -100,7 +100,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
       <button
         type="button"
         class="btn btn-outline btn-secondary"
-        [routerLink]="['/dinos', detailsStore.id()]"
+        [routerLink]="cancelLink()"
         (click)="cancel()"
       >
         Cancel
@@ -121,8 +121,23 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DetailsStoreService);
 
+  protected cancelLink = computed(() => {
+    const id = this.detailsStore.dinosaur().id;
+
+    if (this.detailsStore.editMode() && id) {
+      return ['/dinos', id];
+    }
+
+    return ['/dinos'];
+  });
+
   protected onSubmit(dinoForm: NgForm): void {
-    this.detailsStore.updateDino(dinoForm.value);
+    if (this.detailsStore.editMode()) {
+      this.detailsStore.updateDino(dinoForm.value);
+      return;
+    }
+
+    this.detailsStore.createDino(dinoForm.value);
   }
 
   protected cancel(): void {

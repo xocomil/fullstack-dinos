@@ -56,11 +56,11 @@ export class DinosCrudService {
   updateDino(
     dino: UpdateDinosaur,
     id: string,
-  ): Observable<string | null | undefined> {
+  ): Observable<Dinosaur | null | undefined> {
     return this.#apollo
       .mutate({
         mutation: gql<
-          string,
+          Dinosaur,
           { data: UpdateDinosaur; where: { id?: string; name?: string } }
         >`
           mutation Mutation(
@@ -85,6 +85,33 @@ export class DinosCrudService {
         variables: {
           data: dino,
           where: { id },
+        },
+      })
+      .pipe(map((mutationResult) => mutationResult.data));
+  }
+
+  create(dino: Dinosaur): Observable<Dinosaur | null | undefined> {
+    return this.#apollo
+      .mutate({
+        mutation: gql<Dinosaur, { dino: Dinosaur }>`
+          mutation CreateDino($dino: DinosaurCreateInput!) {
+            createDino(dino: $dino) {
+              description
+              genus
+              hasFeathers
+              heightInMeters
+              id
+              imageUrl
+              name
+              species
+              trivia
+              updatedAt
+              weightInKilos
+            }
+          }
+        `,
+        variables: {
+          dino: dino,
         },
       })
       .pipe(map((mutationResult) => mutationResult.data));
