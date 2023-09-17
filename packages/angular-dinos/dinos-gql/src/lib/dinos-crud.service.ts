@@ -3,6 +3,19 @@ import { Apollo, gql } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
 
+const allDinosQuery = gql<{ allDinosaurs: BaseDinosaur[] }, void>`
+  query AllDinosaurs {
+    allDinosaurs {
+      id
+      name
+      genus
+      species
+      hasFeathers
+      description
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,18 +25,7 @@ export class DinosCrudService {
   getDinosTable(): Observable<{ allDinosaurs: BaseDinosaur[] }> {
     return this.#apollo
       .query({
-        query: gql<{ allDinosaurs: BaseDinosaur[] }, void>`
-          query AllDinosaurs {
-            allDinosaurs {
-              id
-              name
-              genus
-              species
-              hasFeathers
-              description
-            }
-          }
-        `,
+        query: allDinosQuery,
       })
       .pipe(map((apolloDinos) => apolloDinos.data));
   }
@@ -113,6 +115,8 @@ export class DinosCrudService {
         variables: {
           dino: dino,
         },
+        refetchQueries: [{ query: allDinosQuery }],
+        awaitRefetchQueries: true,
       })
       .pipe(map((mutationResult) => mutationResult.data));
   }
