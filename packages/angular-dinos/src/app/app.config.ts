@@ -26,6 +26,7 @@ export const appConfig: ApplicationConfig = {
           link: httpLink.create({
             uri: 'http://localhost:4200/graphql',
           }),
+          connectToDevTools: true,
         };
       },
       deps: [HttpLink],
