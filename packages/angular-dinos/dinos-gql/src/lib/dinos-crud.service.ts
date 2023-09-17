@@ -16,6 +16,22 @@ const allDinosQuery = gql<{ allDinosaurs: BaseDinosaur[] }, void>`
   }
 `;
 
+const dinoDetailsFragment = gql`
+  fragment DinoDetails on Dinosaur {
+    id
+    name
+    genus
+    species
+    description
+    hasFeathers
+    heightInMeters
+    weightInKilos
+    imageUrl
+    trivia
+    updatedAt
+  }
+`;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -36,19 +52,10 @@ export class DinosCrudService {
         query: gql<{ dinosaur: Dinosaur }, { where: { id: string } }>`
           query Dino($where: DinosaurWhereUniqueInput!) {
             dinosaur(where: $where) {
-              id
-              name
-              genus
-              species
-              description
-              hasFeathers
-              heightInMeters
-              weightInKilos
-              imageUrl
-              trivia
-              updatedAt
+              ...DinoDetails
             }
           }
+          ${dinoDetailsFragment}
         `,
         variables: { where: { id } },
       })
@@ -70,19 +77,10 @@ export class DinosCrudService {
             $where: DinosaurWhereUniqueInput!
           ) {
             updateDino(data: $data, where: $where) {
-              id
-              description
-              genus
-              hasFeathers
-              heightInMeters
-              imageUrl
-              name
-              species
-              trivia
-              updatedAt
-              weightInKilos
+              ...DinoDetails
             }
           }
+          ${dinoDetailsFragment}
         `,
         variables: {
           data: dino,
@@ -98,17 +96,7 @@ export class DinosCrudService {
         mutation: gql<Dinosaur, { dino: Dinosaur }>`
           mutation CreateDino($dino: DinosaurCreateInput!) {
             createDino(dino: $dino) {
-              description
-              genus
-              hasFeathers
-              heightInMeters
               id
-              imageUrl
-              name
-              species
-              trivia
-              updatedAt
-              weightInKilos
             }
           }
         `,
