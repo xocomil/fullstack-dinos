@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
 import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
-import { SafeParseReturnType } from 'zod';
+import { SafeParseReturnType, z } from 'zod';
 import { DinosCrudService } from './dinos-crud.service';
 import {
   createEmptyDino,
@@ -18,6 +18,8 @@ type DetailsState = {
   editMode: boolean;
   dinosaur: Dinosaur;
   errors: Partial<Record<keyof Dinosaur, string>>;
+  savePending: boolean;
+  networkError: string | undefined;
 };
 
 const emptyState = (): DetailsState => ({
@@ -25,6 +27,8 @@ const emptyState = (): DetailsState => ({
   editMode: false,
   dinosaur: createEmptyDino(),
   errors: {},
+  savePending: false,
+  networkError: undefined,
 });
 
 @Injectable()
@@ -48,6 +52,11 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
     Object.values(errors),
   );
 
+  readonly showSaveSpinner = this.selectSignal(
+    ({ savePending }) => savePending,
+  );
+  readonly networkError = this.selectSignal(({ networkError }) => networkError);
+
   constructor() {
     super(emptyState());
 
@@ -63,12 +72,18 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
         this.patchState({ id });
       }),
       switchMap((id) => this.#dinosCrudService.getDino(id)),
-      tap((dinosaur) => {
+      tap((response) => {
         // console.log('apolloDino', apolloDino);
 
-        this.patchState({
-          dinosaur,
-        });
+        if (response.hasValue) {
+          this.patchState({
+            dinosaur: response.value,
+          });
+        }
+
+        if (response.hasError) {
+          console.log('response.error', response.error);
+        }
       }),
     ),
   );
@@ -104,11 +119,30 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
 
         return this.#dinosCrudService.updateDino(dino, id);
       }),
+      tap((saveStatus) => {
+        this.patchState({ savePending: saveStatus.pending });
+      }),
+      filter((saveStatus) => saveStatus.finalized),
+
       tap((result) => {
         console.log('result', result);
 
-        if (result) {
+        if (result.hasValue) {
           this.#router.navigate(['dinos']);
+        }
+
+        if (result.hasError) {
+          const errorWithMessage = errorParser.safeParse(result.error);
+
+          if (errorWithMessage.success) {
+            this.patchState({
+              networkError: errorWithMessage.data.message,
+            });
+
+            return;
+          }
+
+          this.patchState({ networkError: `Unknown error: ${result.error}` });
         }
       }),
     ),
@@ -131,11 +165,29 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
 
         return this.#dinosCrudService.create(dino);
       }),
+      tap((saveStatus) => {
+        this.patchState({ savePending: saveStatus.pending });
+      }),
+      filter((saveStatus) => saveStatus.finalized),
       tap((result) => {
         console.log('result', result);
 
-        if (result) {
+        if (result.hasValue) {
           this.#router.navigate(['dinos']);
+        }
+
+        if (result.hasError) {
+          const errorWithMessage = errorParser.safeParse(result.error);
+
+          if (errorWithMessage.success) {
+            this.patchState({
+              networkError: errorWithMessage.data.message,
+            });
+
+            return;
+          }
+
+          this.patchState({ networkError: `Unknown error: ${result.error}` });
         }
       }),
     ),
@@ -148,6 +200,10 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       }),
   );
 }
+
+const errorParser = z.object({
+  message: z.string(),
+});
 
 const formatDinoErrors = <T, U>(parseResults: SafeParseReturnType<T, U>) =>
   parseResults.success

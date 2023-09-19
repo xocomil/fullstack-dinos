@@ -9,6 +9,7 @@ import {
   ToggleComponent,
 } from '@ui-components';
 import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'fullstack-dinos-edit-dino',
@@ -96,7 +97,17 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
         name="trivia"
         [ngModel]="detailsStore.dinosaur().trivia"
       />
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="detailsStore.showSaveSpinner()"
+      >
+        <span
+          *ngIf="detailsStore.showSaveSpinner()"
+          class="loading loading-infinity loading-sm"
+        ></span>
+        Save
+      </button>
       <button
         type="button"
         class="btn btn-outline btn-secondary"
@@ -106,6 +117,10 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
         Cancel
       </button>
     </form>
+    <fullstack-dinos-toast *ngIf="detailsStore.networkError()"
+      ><strong>Error Saving!</strong
+      >{{ detailsStore.networkError() }}</fullstack-dinos-toast
+    >
   `,
   styleUrls: ['./edit-dino.component.scss'],
   imports: [
@@ -116,6 +131,7 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
     TextareaComponent,
     TextInputComponent,
     ToggleComponent,
+    ToastComponent,
   ],
 })
 export class EditDinoComponent {
