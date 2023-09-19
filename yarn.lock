@@ -2648,6 +2648,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@jscutlery/operators@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@jscutlery/operators/-/operators-2.1.2.tgz#eccf4da162aa406ad38206e0c0d00577ef3cdba6"
+  integrity sha512-eIDwK1R3c3RVLtpk3fDkb3Q784rplCijbv2t6eiaASY5kEQJrtBwE78EElcLhH6wyBmCCBiiDVAOUgLb4O9o8A==
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"

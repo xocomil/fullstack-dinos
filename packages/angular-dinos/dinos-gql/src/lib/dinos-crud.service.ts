@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { Suspense, suspensify } from '@jscutlery/operators';
 import { Apollo, gql } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
@@ -38,15 +39,18 @@ const dinoDetailsFragment = gql`
 export class DinosCrudService {
   readonly #apollo = inject(Apollo);
 
-  getDinosTable(): Observable<{ allDinosaurs: BaseDinosaur[] }> {
+  getDinosTable(): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
     return this.#apollo
       .query({
         query: allDinosQuery,
       })
-      .pipe(map((apolloDinos) => apolloDinos.data));
+      .pipe(
+        map((apolloDinos) => apolloDinos.data),
+        suspensify(),
+      );
   }
 
-  getDino(id: string): Observable<Dinosaur> {
+  getDino(id: string): Observable<Suspense<Dinosaur>> {
     return this.#apollo
       .query({
         query: gql<{ dinosaur: Dinosaur }, { where: { id: string } }>`
@@ -59,13 +63,16 @@ export class DinosCrudService {
         `,
         variables: { where: { id } },
       })
-      .pipe(map((apolloDino) => apolloDino.data.dinosaur));
+      .pipe(
+        map((apolloDino) => apolloDino.data.dinosaur),
+        suspensify(),
+      );
   }
 
   updateDino(
     dino: UpdateDinosaur,
     id: string,
-  ): Observable<Dinosaur | null | undefined> {
+  ): Observable<Suspense<Dinosaur | null | undefined>> {
     return this.#apollo
       .mutate({
         mutation: gql<
@@ -87,10 +94,13 @@ export class DinosCrudService {
           where: { id },
         },
       })
-      .pipe(map((mutationResult) => mutationResult.data));
+      .pipe(
+        map((mutationResult) => mutationResult.data),
+        suspensify(),
+      );
   }
 
-  create(dino: Dinosaur): Observable<Dinosaur | null | undefined> {
+  create(dino: Dinosaur): Observable<Suspense<Dinosaur | null | undefined>> {
     return this.#apollo
       .mutate({
         mutation: gql<Dinosaur, { dino: Dinosaur }>`
@@ -106,6 +116,9 @@ export class DinosCrudService {
         refetchQueries: [{ query: allDinosQuery }],
         awaitRefetchQueries: true,
       })
-      .pipe(map((mutationResult) => mutationResult.data));
+      .pipe(
+        map((mutationResult) => mutationResult.data),
+        suspensify(),
+      );
   }
 }

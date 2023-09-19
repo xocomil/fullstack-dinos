@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
+import { Suspense } from '@jscutlery/operators';
 import { ComponentStore } from '@ngrx/component-store';
-import { map, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
 import { BaseDinosaur } from './models/dinosaur';
 
@@ -25,10 +26,22 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly getTableDinos = this.effect((getDinos$) =>
     getDinos$.pipe(
       switchMap(() => this.#crudService.getDinosTable()),
-      map((data) => data.allDinosaurs),
+      tap((response) => {
+        if (response.hasError) {
+          console.error('Error getting data', response.error);
+        }
+      }),
+      filter(hasValue),
+      map((response) => response.value.allDinosaurs),
       tap((dinosaurs) => {
         this.patchState({ dinosaurs });
       }),
     ),
   );
 }
+
+const hasValue = <T>(
+  response: Suspense<T>,
+): response is Suspense<T> & { hasValue: true } => {
+  return response.hasValue;
+};
