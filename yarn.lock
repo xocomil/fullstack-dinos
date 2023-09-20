@@ -4336,9 +4336,9 @@ anymatch@^3.0.3, anymatch@~3.1.2:
     picomatch "^2.0.4"
 
 apollo-angular@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-5.0.1.tgz#50bf1ceb14a4b3d128927f2ef52f0b9c2ab52d3f"
-  integrity sha512-Dc6w4cpXBMmYfqZ4WsaFTTI6WiubEI34tIHbkYvpS07+qDh6d6JnRwZ+2f7Y7SL3GOQUtsbapKmWibVdLVyNZw==
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-angular/-/apollo-angular-5.0.2.tgz#a60797d935a1191149454c2925503de889476b55"
+  integrity sha512-U+ApPHhmdDirO95kovNJKt0Zd8kthOWALWY1t22zCI4LrT7tLZDDs0LJAzFXcvILN3FDkXWOE9R6Sa29jNOCIQ==
   dependencies:
     tslib "^2.6.2"
 
