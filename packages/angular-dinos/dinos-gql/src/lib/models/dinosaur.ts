@@ -87,3 +87,11 @@ export const createEmptyDino = (): Dinosaur => ({
   weightInKilos: 0,
   trivia: [],
 });
+
+export const createEmptyBaseDino = (): BaseDinosaur => ({
+  name: '',
+  genus: '',
+  species: '',
+  hasFeathers: false,
+  description: '',
+});
