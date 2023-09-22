@@ -121,4 +121,26 @@ export class DinosCrudService {
         suspensify(),
       );
   }
+
+  deleteDino(dinoId: string): Observable<Suspense<string | null | undefined>> {
+    return this.#apollo
+      .mutate({
+        mutation: gql<string, { where: { id: string } }>`
+          mutation DeleteDino($where: DinosaurWhereUniqueInput!) {
+            deleteDino(where: $where) {
+              id
+            }
+          }
+        `,
+        variables: {
+          where: { id: dinoId },
+        },
+        refetchQueries: [{ query: allDinosQuery }],
+        awaitRefetchQueries: true,
+      })
+      .pipe(
+        map((mutationResult) => mutationResult.data),
+        suspensify(),
+      );
+  }
 }

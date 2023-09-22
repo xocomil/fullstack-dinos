@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Suspense } from '@jscutlery/operators';
 import { ComponentStore } from '@ngrx/component-store';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { Observable, concatMap, filter, map, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
 import { BaseDinosaur } from './models/dinosaur';
 
@@ -38,7 +38,27 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
       }),
     ),
   );
+
+  readonly deleteDino = this.effect((deleteDino$: Observable<BaseDinosaur>) =>
+    deleteDino$.pipe(
+      map((dino) => dino.id),
+      filter(isString),
+      concatMap((dinoId) => this.#crudService.deleteDino(dinoId)),
+      tap((response) => {
+        if (response.hasError) {
+          console.error('Error deleting dino', response.error);
+
+          return;
+        }
+
+        this.getTableDinos();
+      }),
+    ),
+  );
 }
+
+const isString = (value: string | unknown | null): value is string =>
+  value != null;
 
 const hasValue = <T>(
   response: Suspense<T>,
