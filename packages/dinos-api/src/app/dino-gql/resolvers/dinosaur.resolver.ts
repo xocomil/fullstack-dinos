@@ -73,8 +73,11 @@ export class DinosaurResolver {
   }
 
   @Query(() => [Dinosaur], { nullable: true })
-  async allDinosaurs() {
-    return this._dinoService.dinosaurs();
+  async allDinosaurs(
+    @Args('direction', { type: () => String, nullable: true })
+    direction: 'asc' | 'desc' = 'asc',
+  ) {
+    return this._dinoService.dinosaurs({ orderBy: { name: direction } });
   }
 
   @Mutation(() => Dinosaur) async createDino(

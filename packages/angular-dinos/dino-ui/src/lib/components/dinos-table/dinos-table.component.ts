@@ -6,6 +6,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import {
   BaseDinosaur,
@@ -13,6 +14,7 @@ import {
 } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { DeleteButtonComponent } from '../delete-button/delete-button.component';
 import { DeleteDinoModalComponent } from '../delete-dino-modal/delete-dino-modal.component';
+import { SortButtonComponent } from '../sort-button/sort-button.component';
 import { YesNoComponent } from '../yes-no/yes-no.component';
 
 @Component({
@@ -21,7 +23,13 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
   template: `<table class="table table-zebra">
       <thead>
         <tr class="text-lg semi-bold">
-          <th scope="col" class="w-1/4">Dinosaur</th>
+          <th scope="col" class="w-1/4">
+            Dinosaur
+            <fullstack-dinos-sort-button
+              [direction]="sortDirection()"
+              (sortClick)="sortClick()"
+            />
+          </th>
           <th scope="col" class="w-3/4">Description</th>
           <th scope="col" class="w-[14ch]">Has Feathers?</th>
           <th scope="col" class="w-[14ch]">Actions</th>
@@ -58,6 +66,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
     DeleteButtonComponent,
     DeleteDinoModalComponent,
     RouterLink,
+    SortButtonComponent,
     YesNoComponent,
   ],
 })
@@ -65,6 +74,9 @@ export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })
   deleteDinoModal!: DeleteDinoModalComponent;
   protected readonly dinosStore = inject(DinosCrudStoreService);
+  protected readonly sortDirection = toSignal(this.dinosStore.sortDirection$, {
+    initialValue: 'asc' as const,
+  });
 
   ngOnInit(): void {
     this.dinosStore.deleteDino(this.deleteDinoModal.confirmDelete$);
@@ -76,7 +88,7 @@ export class DinosTableComponent implements OnInit {
     this.deleteDinoModal.open(dinosaur);
   }
 
-  protected confirmDelete(dinosaur: unknown) {
-    console.log('confirmDelete', dinosaur);
+  protected sortClick() {
+    this.dinosStore.toggleSortDirection();
   }
 }

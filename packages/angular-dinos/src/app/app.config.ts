@@ -5,7 +5,7 @@ import {
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
-import { InMemoryCache } from '@apollo/client/core';
+import { InMemoryCache } from '@apollo/client/cache';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { appRoutes } from './app.routes';
