@@ -1,16 +1,26 @@
 import { Injectable, inject } from '@angular/core';
 import { Suspense } from '@jscutlery/operators';
 import { ComponentStore } from '@ngrx/component-store';
-import { Observable, concatMap, filter, map, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  concatMap,
+  filter,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
 import { BaseDinosaur } from './models/dinosaur';
 
 type DinosCrudState = {
   dinosaurs: BaseDinosaur[];
+  sortAscending: boolean;
 };
 
 const emptyState = (): DinosCrudState => ({
   dinosaurs: [],
+  sortAscending: true,
 });
 
 @Injectable()
@@ -18,14 +28,19 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly #crudService = inject(DinosCrudService);
 
   readonly dinosaurs = this.selectSignal(({ dinosaurs }) => dinosaurs);
+  readonly sortDirection$ = this.select(({ sortAscending }) =>
+    sortAscending ? 'asc' : 'desc',
+  );
 
   constructor() {
     super(emptyState());
   }
 
   readonly getTableDinos = this.effect((getDinos$) =>
-    getDinos$.pipe(
-      switchMap(() => this.#crudService.getDinosTable()),
+    combineLatest([getDinos$, this.sortDirection$]).pipe(
+      switchMap(([, sortDirection]) =>
+        this.#crudService.getDinosTable(sortDirection),
+      ),
       tap((response) => {
         if (response.hasError) {
           console.error('Error getting data', response.error);
@@ -52,6 +67,16 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
         }
 
         this.getTableDinos();
+      }),
+    ),
+  );
+
+  readonly toggleSortDirection = this.effect((toggleSort$) =>
+    toggleSort$.pipe(
+      tap(() => {
+        this.patchState(({ sortAscending }) => ({
+          sortAscending: !sortAscending,
+        }));
       }),
     ),
   );

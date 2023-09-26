@@ -1,12 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { Suspense, suspensify } from '@jscutlery/operators';
 import { Apollo, gql } from 'apollo-angular';
-import { map, Observable } from 'rxjs';
+import { from, map, Observable, switchMap } from 'rxjs';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
 
-const allDinosQuery = gql<{ allDinosaurs: BaseDinosaur[] }, void>`
-  query AllDinosaurs {
-    allDinosaurs {
+const allDinosQuery = gql<
+  { allDinosaurs: BaseDinosaur[] },
+  { direction: 'asc' | 'desc' }
+>`
+  query AllDinosaurs($direction: String) {
+    allDinosaurs(direction: $direction) {
       id
       name
       genus
@@ -39,10 +42,13 @@ const dinoDetailsFragment = gql`
 export class DinosCrudService {
   readonly #apollo = inject(Apollo);
 
-  getDinosTable(): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
+  getDinosTable(
+    direction: 'asc' | 'desc',
+  ): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
     return this.#apollo
       .query({
         query: allDinosQuery,
+        variables: { direction },
       })
       .pipe(
         map((apolloDinos) => apolloDinos.data),
@@ -113,10 +119,11 @@ export class DinosCrudService {
         variables: {
           dino: dino,
         },
-        refetchQueries: [{ query: allDinosQuery }],
-        awaitRefetchQueries: true,
       })
       .pipe(
+        switchMap((response) =>
+          from(this.#apollo.client.resetStore()).pipe(map(() => response)),
+        ),
         map((mutationResult) => mutationResult.data),
         suspensify(),
       );
@@ -135,10 +142,11 @@ export class DinosCrudService {
         variables: {
           where: { id: dinoId },
         },
-        refetchQueries: [{ query: allDinosQuery }],
-        awaitRefetchQueries: true,
       })
       .pipe(
+        switchMap((response) =>
+          from(this.#apollo.client.resetStore()).pipe(map(() => response)),
+        ),
         map((mutationResult) => mutationResult.data),
         suspensify(),
       );
