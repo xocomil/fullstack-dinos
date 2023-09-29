@@ -36,8 +36,8 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
         </tr>
       </thead>
       <tbody>
+        @for (dinosaur of dinosStore.dinosaurs(); track dinosaur.id) {
         <tr
-          *ngFor="let dinosaur of dinosStore.dinosaurs()"
           class="hover hover:cursor-pointer"
           [routerLink]="['/dinos', dinosaur.id]"
         >
@@ -56,6 +56,11 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
             />
           </td>
         </tr>
+        } @empty {
+        <tr>
+          <td colspan="4" class="text-center">No dinosaurs found.</td>
+        </tr>
+        }
       </tbody>
     </table>
     <fullstack-dinos-delete-dino-modal />`,

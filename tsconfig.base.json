@@ -28,5 +28,8 @@
       "@ui-components": ["packages/angular-dinos/ui-components/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["node_modules", "tmp"],
+  "angularCompilerOptions": {
+    "_enabledBlockTypes": ["if", "for", "switch", "defer"]
+  }
 }
