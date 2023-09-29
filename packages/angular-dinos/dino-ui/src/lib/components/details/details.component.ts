@@ -8,12 +8,11 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    <fullstack-dinos-edit-dino
-      *ngIf="detailsStore.editMode(); else displayMode"
-    />
-    <ng-template #displayMode>
-      <fullstack-dinos-display-dino />
-    </ng-template>
+    @if (detailsStore.editMode()) { @defer ( on immediate) {
+    <fullstack-dinos-edit-dino />
+    } @placeholder { Click me... } } @else {
+    <fullstack-dinos-display-dino />
+    }
   `,
   styleUrls: ['./details.component.scss'],
   providers: [DetailsStoreService],
