@@ -13,9 +13,9 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   template: `
     <label class="label">
       <span>{{ labelText }}</span>
-      <span *ngIf="altLabelText" class="label-text-alt">{{
-        altLabelText
-      }}</span>
+      @if(altLabelText) {
+      <span class="label-text-alt">{{ altLabelText }}</span>
+      }
     </label>
     <textarea
       [id]="id"
@@ -25,9 +25,11 @@ import { injectNgControl } from '../utilities/inject-ng-control';
       [formControl]="ngControl.control"
       [class.error]="errorText"
     ></textarea>
-    <span class="error" *ngIf="errorText">
+    @if(errorText) {
+    <span class="error">
       {{ errorText }}
     </span>
+    }
   `,
   styleUrls: ['./textarea.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -13,9 +13,10 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    <label *ngIf="labelText" [for]="id">{{ labelText }}</label>
+    @if(labelText) {
+    <label [for]="id">{{ labelText }}</label>
+    } @if(type === 'number') {
     <input
-      *ngIf="type === 'number'; else textInput"
       [id]="id"
       [name]="name"
       [class.error]="errorText"
@@ -23,20 +24,20 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
       [placeholder]="placeholder"
       type="number"
     />
-    <ng-template #textInput>
-      <input
-        [id]="id"
-        [name]="name"
-        [class.error]="errorText"
-        [formControl]="ngControl.control"
-        [placeholder]="placeholder"
-        type="text"
-      />
-    </ng-template>
-
-    <span class="error" *ngIf="errorText">
+    } @else {
+    <input
+      [id]="id"
+      [name]="name"
+      [class.error]="errorText"
+      [formControl]="ngControl.control"
+      [placeholder]="placeholder"
+      type="text"
+    />
+    } @if(errorText) {
+    <span class="error">
       {{ errorText }}
     </span>
+    }
   `,
   styleUrls: ['./text-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
