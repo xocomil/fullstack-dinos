@@ -31,15 +31,15 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <div class="card-body">
         <h4 class="card-title">Description</h4>
         <p>
-          <span *ngIf="detailsStore.dinosaur().description; let description">
-            {{ description }}
-          </span>
+          @if(detailsStore.dinosaur().description; as description) {
+          {{ description }}
+          }
           {{ extraDescription }}
         </p>
       </div>
     </div>
+    @if (detailsStore.displayTrivia()) {
     <div
-      *ngIf="detailsStore.displayTrivia()"
       class="card card-compact glass mt-4 w-full bg-primary text-primary-content shadow-lg"
     >
       <div class="card-body">
@@ -50,7 +50,8 @@ import { extraDescriptionFromDino } from '../models/details.constants';
           }
         </ul>
       </div>
-    </div>`,
+    </div>
+    } `,
   styleUrls: ['./display-dino.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
