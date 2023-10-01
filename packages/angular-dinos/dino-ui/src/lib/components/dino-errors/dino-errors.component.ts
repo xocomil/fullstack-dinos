@@ -12,7 +12,9 @@ import { FormsModule } from '@angular/forms';
       <p class="m-0">The data has some errors. Please fix them to save.</p>
 
       <ul class="m-0">
-        <li *ngFor="let error of errors" class="my-1 mx-0 p-0">{{ error }}</li>
+        @for (error of errors; track error) {
+        <li class="my-1 mx-0 p-0">{{ error }}</li>
+        }
       </ul>
     </div>
   `,
