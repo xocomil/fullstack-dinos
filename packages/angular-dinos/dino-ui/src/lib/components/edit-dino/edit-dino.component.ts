@@ -16,11 +16,12 @@ import { ToastComponent } from '../toast/toast.component';
   standalone: true,
   host: { class: 'block' },
   template: `
+    @if(detailsStore.errorsArray().length > 0) {
     <fullstack-dinos-dino-errors
       class="hidden lg:block"
-      *ngIf="detailsStore.errorsArray().length > 0"
       [errors]="detailsStore.errorsArray()"
     />
+    }
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         <ui-text-input
@@ -102,11 +103,9 @@ import { ToastComponent } from '../toast/toast.component';
         class="btn btn-primary"
         [disabled]="detailsStore.showSaveSpinner()"
       >
-        <span
-          *ngIf="detailsStore.showSaveSpinner()"
-          class="loading loading-infinity loading-sm"
-        ></span>
-        Save
+        @if(detailsStore.showSaveSpinner()) {
+        <span class="loading loading-infinity loading-sm"></span>
+        } Save
       </button>
       <button
         type="button"
@@ -117,10 +116,12 @@ import { ToastComponent } from '../toast/toast.component';
         Cancel
       </button>
     </form>
-    <fullstack-dinos-toast *ngIf="detailsStore.networkError()"
+    @if(detailsStore.networkError()) {
+    <fullstack-dinos-toast
       ><strong>Error Saving!</strong
       >{{ detailsStore.networkError() }}</fullstack-dinos-toast
     >
+    }
   `,
   styleUrls: ['./edit-dino.component.scss'],
   imports: [

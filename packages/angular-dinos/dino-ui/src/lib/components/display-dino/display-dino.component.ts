@@ -31,26 +31,27 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <div class="card-body">
         <h4 class="card-title">Description</h4>
         <p>
-          <span *ngIf="detailsStore.dinosaur().description; let description">
-            {{ description }}
-          </span>
+          @if(detailsStore.dinosaur().description; as description) {
+          {{ description }}
+          }
           {{ extraDescription }}
         </p>
       </div>
     </div>
+    @if (detailsStore.displayTrivia()) {
     <div
-      *ngIf="detailsStore.displayTrivia()"
       class="card card-compact glass mt-4 w-full bg-primary text-primary-content shadow-lg"
     >
       <div class="card-body">
         <h2 class="card-title">Trivia</h2>
         <ul>
-          <li *ngFor="let item of detailsStore.dinosaur().trivia">
-            {{ item }}
-          </li>
+          @for (item of detailsStore.dinosaur().trivia; track item) {
+          <li>{{ item }}</li>
+          }
         </ul>
       </div>
-    </div>`,
+    </div>
+    } `,
   styleUrls: ['./display-dino.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
