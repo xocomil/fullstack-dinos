@@ -45,9 +45,9 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <div class="card-body">
         <h2 class="card-title">Trivia</h2>
         <ul>
-          <li *ngFor="let item of detailsStore.dinosaur().trivia">
-            {{ item }}
-          </li>
+          @for (item of detailsStore.dinosaur().trivia; track item) {
+          <li>{{ item }}</li>
+          }
         </ul>
       </div>
     </div>`,
