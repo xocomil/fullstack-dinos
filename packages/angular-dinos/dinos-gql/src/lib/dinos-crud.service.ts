@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Suspense, suspensify } from '@jscutlery/operators';
 import { Apollo, gql } from 'apollo-angular';
-import { from, map, Observable, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
 
 const allDinosQuery = gql<
@@ -112,18 +112,19 @@ export class DinosCrudService {
         mutation: gql<Dinosaur, { dino: Dinosaur }>`
           mutation CreateDino($dino: DinosaurCreateInput!) {
             createDino(dino: $dino) {
-              id
+              ...DinoDetails
             }
           }
+          ${dinoDetailsFragment}
         `,
         variables: {
           dino: dino,
         },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
+        },
       })
       .pipe(
-        switchMap((response) =>
-          from(this.#apollo.client.resetStore()).pipe(map(() => response)),
-        ),
         map((mutationResult) => mutationResult.data),
         suspensify(),
       );
@@ -142,11 +143,11 @@ export class DinosCrudService {
         variables: {
           where: { id: dinoId },
         },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
+        },
       })
       .pipe(
-        switchMap((response) =>
-          from(this.#apollo.client.resetStore()).pipe(map(() => response)),
-        ),
         map((mutationResult) => mutationResult.data),
         suspensify(),
       );

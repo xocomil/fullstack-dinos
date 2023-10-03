@@ -4,8 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
 import { injectNgControl } from '../utilities/inject-ng-control';
 
-// TODO: add error handling to this component
-
 @Component({
   selector: 'ui-textarea',
   standalone: true,
