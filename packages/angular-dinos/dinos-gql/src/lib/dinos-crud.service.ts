@@ -8,8 +8,8 @@ const allDinosQuery = gql<
   { allDinosaurs: BaseDinosaur[] },
   { direction: 'asc' | 'desc' }
 >`
-  query AllDinosaurs($direction: String) {
-    allDinosaurs(direction: $direction) {
+  query AllDinosaurs($direction: String, $hasFeathers: Boolean) {
+    allDinosaurs(direction: $direction, hasFeathers: $hasFeathers) {
       id
       name
       genus
@@ -44,11 +44,12 @@ export class DinosCrudService {
 
   getDinosTable(
     direction: 'asc' | 'desc',
+    hasFeathers: boolean | undefined,
   ): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
     return this.#apollo
       .query({
         query: allDinosQuery,
-        variables: { direction },
+        variables: { direction, hasFeathers },
       })
       .pipe(
         map((apolloDinos) => apolloDinos.data),
@@ -98,6 +99,9 @@ export class DinosCrudService {
         variables: {
           data: dino,
           where: { id },
+        },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
         },
       })
       .pipe(

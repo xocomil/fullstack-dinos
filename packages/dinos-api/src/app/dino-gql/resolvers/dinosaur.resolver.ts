@@ -76,8 +76,13 @@ export class DinosaurResolver {
   async allDinosaurs(
     @Args('direction', { type: () => String, nullable: true })
     direction: 'asc' | 'desc' = 'asc',
+    @Args('hasFeathers', { type: () => Boolean, nullable: true })
+    hasFeathers: boolean,
   ) {
-    return this._dinoService.dinosaurs({ orderBy: { name: direction } });
+    return this._dinoService.dinosaurs({
+      orderBy: { name: direction },
+      where: { hasFeathers },
+    });
   }
 
   @Mutation(() => Dinosaur) async createDino(

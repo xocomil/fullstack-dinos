@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Suspense } from '@jscutlery/operators';
 import { ComponentStore } from '@ngrx/component-store';
+import { create } from 'mutative';
 import {
   Observable,
   combineLatest,
@@ -16,11 +17,13 @@ import { BaseDinosaur } from './models/dinosaur';
 type DinosCrudState = {
   dinosaurs: BaseDinosaur[];
   sortAscending: boolean;
+  hasFeathersFilter?: '' | 'true' | 'false';
 };
 
 const emptyState = (): DinosCrudState => ({
   dinosaurs: [],
   sortAscending: true,
+  hasFeathersFilter: '',
 });
 
 @Injectable()
@@ -31,15 +34,25 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
   readonly sortDirection$ = this.select(({ sortAscending }) =>
     sortAscending ? 'asc' : 'desc',
   );
+  readonly hasFeathersFilter = this.selectSignal(
+    ({ hasFeathersFilter }) => hasFeathersFilter,
+  );
+  readonly #boolFeathersFilter$ = this.select(({ hasFeathersFilter }) =>
+    !hasFeathersFilter ? undefined : hasFeathersFilter === 'true',
+  );
 
   constructor() {
     super(emptyState());
   }
 
   readonly getTableDinos = this.effect((getDinos$) =>
-    combineLatest([getDinos$, this.sortDirection$]).pipe(
-      switchMap(([, sortDirection]) =>
-        this.#crudService.getDinosTable(sortDirection),
+    combineLatest([
+      getDinos$,
+      this.sortDirection$,
+      this.#boolFeathersFilter$,
+    ]).pipe(
+      switchMap(([, sortDirection, featherFilter]) =>
+        this.#crudService.getDinosTable(sortDirection, featherFilter),
       ),
       tap((response) => {
         if (response.hasError) {
@@ -71,14 +84,19 @@ export class DinosCrudStoreService extends ComponentStore<DinosCrudState> {
     ),
   );
 
-  readonly toggleSortDirection = this.effect((toggleSort$) =>
-    toggleSort$.pipe(
-      tap(() => {
-        this.patchState(({ sortAscending }) => ({
-          sortAscending: !sortAscending,
-        }));
+  readonly toggleSortDirection = this.updater(
+    (state): DinosCrudState =>
+      create(state, (draft) => {
+        draft.sortAscending = !state.sortAscending;
       }),
-    ),
+  );
+
+  readonly filterHasFeathers = this.updater(
+    (state, hasFeathers: string): DinosCrudState =>
+      create(state, (draft) => {
+        // console.log('filterHasFeathers', filter);
+        draft.hasFeathersFilter = hasFeathers as '' | 'true' | 'false';
+      }),
   );
 }
 
