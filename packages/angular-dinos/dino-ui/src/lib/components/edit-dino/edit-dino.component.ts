@@ -109,7 +109,7 @@ import { ToastComponent } from '../toast/toast.component';
       </button>
       <button
         type="button"
-        class="btn btn-outline btn-secondary"
+        class="btn btn-outline btn-secondary ml-4"
         [routerLink]="cancelLink()"
         (click)="cancel()"
       >
