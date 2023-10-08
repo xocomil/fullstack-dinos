@@ -55,7 +55,7 @@ type Mutation {
 }
 
 type Query {
-  allDinosaurs(direction: String): [Dinosaur!]
+  allDinosaurs(direction: String, hasFeathers: Boolean): [Dinosaur!]
   dinosaur(where: DinosaurWhereUniqueInput!): Dinosaur
   testDino(hasFeathers: Boolean): TestDino!
 }

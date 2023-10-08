@@ -47,7 +47,7 @@ export class DetailsComponent {
 
       setTimeout(() => {
         this.#cdr.markForCheck();
-      }, 40);
+      }, 42);
     });
   }
 
