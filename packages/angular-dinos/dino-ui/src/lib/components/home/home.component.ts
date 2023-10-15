@@ -29,6 +29,7 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AddButtonComponent, DinosTableComponent, JsonPipe],
+  providers: [DinosCrudStoreService],
   host: {
     class: 'mt-2',
   },
