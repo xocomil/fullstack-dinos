@@ -13,8 +13,10 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    @if (detailsStore.editMode()) { @defer (on timer(2s),
-    interaction(deferTrigger); prefetch on viewport(deferTrigger)) {
+    @defer (on immediate) {
+    <fullstack-dinos-edit-dino />
+    } @if (detailsStore.editMode()) { @defer (on timer(2s),
+    interaction(deferTrigger)) {
     <fullstack-dinos-edit-dino />
     } @placeholder (minimum 1s) {
     <button #deferTrigger type="button" class="btn">Click me...</button>
