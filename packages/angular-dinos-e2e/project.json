@@ -21,19 +21,13 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/angular-dinos-e2e/**/*.{js,ts}"
-        ]
+        "lintFilePatterns": ["packages/angular-dinos-e2e/**/*.{js,ts}"]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "angular-dinos"
-  ]
+  "implicitDependencies": ["angular-dinos"]
 }

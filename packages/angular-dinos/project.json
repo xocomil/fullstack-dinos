@@ -7,25 +7,19 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser-esbuild",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/angular-dinos",
         "index": "packages/angular-dinos/src/index.html",
-        "main": "packages/angular-dinos/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "browser": "packages/angular-dinos/src/main.ts",
+        "polyfills": ["zone.js"],
         "tsConfig": "packages/angular-dinos/tsconfig.app.json",
         "assets": [
           "packages/angular-dinos/src/favicon.ico",
           "packages/angular-dinos/src/assets"
         ],
-        "styles": [
-          "packages/angular-dinos/src/styles.scss"
-        ],
+        "styles": ["packages/angular-dinos/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -33,7 +27,6 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true
@@ -45,10 +38,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "angular-dinos:build:production"
+          "buildTarget": "angular-dinos:build:production"
         },
         "development": {
-          "browserTarget": "angular-dinos:build:development"
+          "buildTarget": "angular-dinos:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -59,14 +52,12 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "angular-dinos:build"
+        "buildTarget": "angular-dinos:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "packages/angular-dinos/**/*.ts",
@@ -76,9 +67,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "packages/angular-dinos/jest.config.ts",
         "passWithNoTests": true
