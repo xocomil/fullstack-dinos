@@ -13,14 +13,14 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    @defer (on immediate) {
+    @if (detailsStore.editMode()) { @defer (on timer(2s),
     <fullstack-dinos-edit-dino />
     } @if (detailsStore.editMode()) { @defer (on timer(2s),
     interaction(deferTrigger)) {
     <fullstack-dinos-edit-dino />
-    } @placeholder (minimum 1s) {
+    } @placeholder {
     <button #deferTrigger type="button" class="btn">Click me...</button>
-    } @loading (after 300ms; minimum 1s) {
+    } @loading {
     <h1>Loading... (wait for it!)</h1>
     } } @else {
     <fullstack-dinos-display-dino />
