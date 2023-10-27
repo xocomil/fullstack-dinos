@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   inject,
@@ -13,14 +14,10 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    @defer (on immediate) {
-    <fullstack-dinos-edit-dino />
-    } @if (detailsStore.editMode()) { @defer (on timer(2s),
-    interaction(deferTrigger)) {
-    <fullstack-dinos-edit-dino />
-    } @placeholder (minimum 1s) {
+    @if (detailsStore.editMode()) { @defer (on timer(2s),
+    interaction(deferTrigger)) { } @placeholder {
     <button #deferTrigger type="button" class="btn">Click me...</button>
-    } @loading (after 300ms; minimum 1s) {
+    } @loading {
     <h1>Loading... (wait for it!)</h1>
     } } @else {
     <fullstack-dinos-display-dino />
@@ -38,7 +35,9 @@ export class DetailsComponent {
     this.detailsStore.setId(id);
   }
 
-  @RouteInput() set editMode(editMode: boolean | undefined) {
+  @RouteInput({ transform: booleanAttribute }) set editMode(
+    editMode: boolean | undefined,
+  ) {
     this.detailsStore.setEditMode(editMode);
   }
 }
