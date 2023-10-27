@@ -13,6 +13,10 @@ import { DisplayDinoComponent } from '../display-dino/display-dino.component';
 import { DetailsComponent } from './details.component';
 
 describe('DetailsComponent', () => {
+  beforeEach(() => {
+    window.performance.mark = jest.fn();
+  });
+
   const editMode = signal(false);
   const dinosaur = signal<Dinosaur>(createEmptyDino());
   const genusSpecies = signal('');
@@ -69,6 +73,10 @@ describe('DetailsComponent', () => {
   describe('when in edit mode', () => {
     beforeEach(() => {
       editMode.set(true);
+    });
+
+    afterEach(() => {
+      editMode.set(false);
     });
 
     it('should show placeholder first', () => {
@@ -203,7 +211,7 @@ describe('DetailsComponent', () => {
       expect(detailsStore?.setId).toHaveBeenCalledWith(dinoId);
     });
 
-    it('should call detailsStore.setEditMode() when editMode is true', async () => {
+    it('should call detailsStore.setEditMode(true) when editMode is true', async () => {
       const dinoId = 'test-id-1234';
 
       const harness = await RouterTestingHarness.create();
@@ -219,6 +227,42 @@ describe('DetailsComponent', () => {
 
       expect(detailsStore?.setId).toHaveBeenCalledWith(dinoId);
       expect(detailsStore?.setEditMode).toHaveBeenCalledWith(true);
+    });
+
+    it('should call detailsStore.setEditMode(false) when editMode is false', async () => {
+      const dinoId = 'test-id-1234';
+
+      const harness = await RouterTestingHarness.create();
+
+      const activatedComponent = await harness.navigateByUrl(
+        `/details?dinoId=${dinoId}&editMode=false`,
+        DetailsComponent,
+      );
+      expect(activatedComponent).toBeInstanceOf(DetailsComponent);
+
+      const detailsStore =
+        harness.routeDebugElement?.injector.get(DetailsStoreService);
+
+      expect(detailsStore?.setId).toHaveBeenCalledWith(dinoId);
+      expect(detailsStore?.setEditMode).toHaveBeenCalledWith(false);
+    });
+
+    it('should call detailsStore.setEditMode(false) when editMode is not present', async () => {
+      const dinoId = 'test-id-1234';
+
+      const harness = await RouterTestingHarness.create();
+
+      const activatedComponent = await harness.navigateByUrl(
+        `/details?dinoId=${dinoId}`,
+        DetailsComponent,
+      );
+      expect(activatedComponent).toBeInstanceOf(DetailsComponent);
+
+      const detailsStore =
+        harness.routeDebugElement?.injector.get(DetailsStoreService);
+
+      expect(detailsStore?.setId).toHaveBeenCalledWith(dinoId);
+      expect(detailsStore?.setEditMode).toHaveBeenCalledWith(false);
     });
   });
 });
