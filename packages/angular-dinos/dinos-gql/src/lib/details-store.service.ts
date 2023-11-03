@@ -5,31 +5,13 @@ import { create } from 'mutative';
 import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
 import { SafeParseReturnType, z } from 'zod';
 import { DinosCrudService } from './dinos-crud.service';
+import { DetailsState, emptyState } from './models/details.state';
 import {
-  createEmptyDino,
   dinoParser,
   Dinosaur,
   updateDinoParser,
   UpdateDinosaur,
 } from './models/dinosaur';
-
-type DetailsState = {
-  id: string | undefined;
-  editMode: boolean;
-  dinosaur: Dinosaur;
-  errors: Partial<Record<keyof Dinosaur, string>>;
-  savePending: boolean;
-  networkError: string | undefined;
-};
-
-const emptyState = (): DetailsState => ({
-  id: undefined,
-  editMode: false,
-  dinosaur: createEmptyDino(),
-  errors: {},
-  savePending: false,
-  networkError: undefined,
-});
 
 @Injectable()
 export class DetailsStoreService extends ComponentStore<DetailsState> {
