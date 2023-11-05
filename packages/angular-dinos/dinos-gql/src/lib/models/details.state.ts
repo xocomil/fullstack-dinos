@@ -17,17 +17,3 @@ export const emptyState = (): DetailsState => ({
   savePending: false,
   networkError: undefined,
 });
-
-export const simpleDefaultState = (): {
-  test: Omit<Dinosaur, 'name'>;
-  name: string;
-  collision: { dinoName: string };
-  doICollide: { collision: { personName: string } };
-  editMode: boolean;
-} => ({
-  name: 'jason',
-  test: createEmptyDino(),
-  collision: { dinoName: 'jason' },
-  doICollide: { collision: { personName: 'jason' } },
-  editMode: false,
-});

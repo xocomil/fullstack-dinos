@@ -25,12 +25,12 @@ import { ToastComponent } from '../toast/toast.component';
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
         <ui-text-input
-          id="name"
-          name="name"
+          id="dinoName"
+          name="dinoName"
           placeholder="Dinosaur's name"
           labelText="Name"
-          [ngModel]="detailsStore.dinosaur().name"
-          [errorText]="detailsStore.errors().name"
+          [ngModel]="detailsStore.dinosaur().dinoName"
+          [errorText]="detailsStore.errors().dinoName"
           [disabled]="detailsStore.editMode()"
         />
         <ui-text-input

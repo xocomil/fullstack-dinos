@@ -2,10 +2,10 @@ import { z } from 'zod';
 
 export const baseDinoParser = z.object({
   id: z.string().optional(),
-  name: z
+  dinoName: z
     .string({
-      invalid_type_error: 'Name must be a string.',
-      required_error: 'Name is required.',
+      invalid_type_error: 'Dinosaur name must be a string.',
+      required_error: 'Dinosaur name is required.',
     })
     .min(3, { message: 'Name must be at least 3 characters long.' }),
   genus: z
@@ -70,28 +70,24 @@ export const dinoParser = baseDinoParser.extend({
 export type Dinosaur = z.infer<typeof dinoParser>;
 
 export const updateDinoParser = dinoParser.omit({
-  name: true,
+  dinoName: true,
   species: true,
   genus: true,
 });
 
 export type UpdateDinosaur = z.infer<typeof updateDinoParser>;
 
-export const createEmptyDino = (): Dinosaur => ({
-  name: '',
+export const createEmptyBaseDino = (): BaseDinosaur => ({
+  dinoName: '',
   genus: '',
   species: '',
   hasFeathers: false,
   description: '',
+});
+
+export const createEmptyDino = (): Dinosaur => ({
+  ...createEmptyBaseDino(),
   heightInMeters: 0,
   weightInKilos: 0,
   trivia: [],
-});
-
-export const createEmptyBaseDino = (): BaseDinosaur => ({
-  name: '',
-  genus: '',
-  species: '',
-  hasFeathers: false,
-  description: '',
 });

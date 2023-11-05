@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
         <h3 class="font-bold text-lg">Confirm delete!</h3>
         <p class="py-4">Are you sure you want to delete this dinosaur?</p>
         <p>
-          {{ dinoToDelete().name }} ({{ dinoToDelete().genus }}
+          {{ dinoToDelete().dinoName }} ({{ dinoToDelete().genus }}
           {{ dinoToDelete().species }})
         </p>
         <div class="modal-action">

@@ -2,10 +2,10 @@ import { Dinosaur } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { template } from '../../helpers/template-parser';
 
 export const dinoDetails = {
-  extraDescription: template`${'name'} was around
+  extraDescription: template`${'dinoName'} was around
   ${'heightInMeters'} meters tall and weighed
   around ${'weightInKilos'} kilograms.
-  ${'name'} did
+  ${'dinoName'} did
   ${'not'} have feathers.`,
 } as const;
 
