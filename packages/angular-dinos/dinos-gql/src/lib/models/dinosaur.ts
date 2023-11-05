@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const baseDinoParser = z.object({
-  id: z.string().optional(),
+  id: z.string().nullable().optional(),
   dinoName: z
     .string({
       invalid_type_error: 'Dinosaur name must be a string.',
