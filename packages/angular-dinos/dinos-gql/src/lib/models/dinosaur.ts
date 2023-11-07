@@ -39,12 +39,10 @@ export type BaseDinosaur = z.infer<typeof baseDinoParser>;
 export const dinoParser = baseDinoParser.extend({
   heightInMeters: z
     .number({ invalid_type_error: 'Height in meters must be a number.' })
-    .gt(0, { message: 'Height in meters must be greater than 0.' })
-    .nullish(),
+    .gt(0, { message: 'Height in meters must be greater than 0.' }),
   weightInKilos: z
     .number({ invalid_type_error: 'Weight in kilos must be a number.' })
-    .gt(0, { message: 'Weight in kilos must be greater than 0.' })
-    .nullish(),
+    .gt(0, { message: 'Weight in kilos must be greater than 0.' }),
   trivia: z.array(
     z
       .string({
