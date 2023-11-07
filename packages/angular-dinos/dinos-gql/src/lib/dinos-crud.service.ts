@@ -1,77 +1,59 @@
 import { inject, Injectable } from '@angular/core';
 import { Suspense, suspensify } from '@jscutlery/operators';
-import { Apollo, gql } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
+import {
+  AllDinosaursGQL,
+  CreateDinoGQL,
+  DeleteDinoGQL,
+  DinoGQL,
+  DinosaurCreateInput,
+  UpdateDinoGQL,
+} from './graphql/generated';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
-
-const allDinosQuery = gql<
-  { allDinosaurs: BaseDinosaur[] },
-  { direction: 'asc' | 'desc' }
->`
-  query AllDinosaurs($direction: String, $hasFeathers: Boolean) {
-    allDinosaurs(direction: $direction, hasFeathers: $hasFeathers) {
-      id
-      name
-      genus
-      species
-      hasFeathers
-      description
-    }
-  }
-`;
-
-const dinoDetailsFragment = gql`
-  fragment DinoDetails on Dinosaur {
-    id
-    name
-    genus
-    species
-    description
-    hasFeathers
-    heightInMeters
-    weightInKilos
-    imageUrl
-    trivia
-    updatedAt
-  }
-`;
 
 @Injectable({
   providedIn: 'root',
 })
 export class DinosCrudService {
-  readonly #apollo = inject(Apollo);
+  readonly #allDinosGql = inject(AllDinosaursGQL);
+  readonly #getDinoGql = inject(DinoGQL);
+  readonly #updateDinoGql = inject(UpdateDinoGQL);
+  readonly #createDinoGql = inject(CreateDinoGQL);
+  readonly #deleteDinoGql = inject(DeleteDinoGQL);
 
   getDinosTable(
     direction: 'asc' | 'desc',
     hasFeathers: boolean | undefined,
   ): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
-    return this.#apollo
-      .query({
-        query: allDinosQuery,
-        variables: { direction, hasFeathers },
+    return this.#allDinosGql
+      .fetch({
+        direction,
+        hasFeathers,
       })
       .pipe(
-        map((apolloDinos) => apolloDinos.data),
+        map((apolloDinos) => apolloDinos.data.allDinosaurs),
+        map((dinos) => dinos ?? []),
+        map((dinos) => ({
+          allDinosaurs: dinos.map(convertGqlDinoToBaseDinosaur),
+        })),
         suspensify(),
       );
   }
 
   getDino(id: string): Observable<Suspense<Dinosaur>> {
-    return this.#apollo
-      .query({
-        query: gql<{ dinosaur: Dinosaur }, { where: { id: string } }>`
-          query Dino($where: DinosaurWhereUniqueInput!) {
-            dinosaur(where: $where) {
-              ...DinoDetails
-            }
-          }
-          ${dinoDetailsFragment}
-        `,
-        variables: { where: { id } },
+    return this.#getDinoGql
+      .fetch({
+        where: { id },
       })
       .pipe(
         map((apolloDino) => apolloDino.data.dinosaur),
+        map((dino) => {
+          if (!dino) {
+            throw new Error(`Dinosaur with id ${id} not found.`);
+          }
+
+          return convertGqlDinoToDinosaur(dino);
+        }),
         suspensify(),
       );
   }
@@ -80,80 +62,94 @@ export class DinosCrudService {
     dino: UpdateDinosaur,
     id: string,
   ): Observable<Suspense<Dinosaur | null | undefined>> {
-    return this.#apollo
-      .mutate({
-        mutation: gql<
-          Dinosaur,
-          { data: UpdateDinosaur; where: { id?: string; name?: string } }
-        >`
-          mutation Mutation(
-            $data: DinosaurUpdateInput!
-            $where: DinosaurWhereUniqueInput!
-          ) {
-            updateDino(data: $data, where: $where) {
-              ...DinoDetails
-            }
-          }
-          ${dinoDetailsFragment}
-        `,
-        variables: {
+    return this.#updateDinoGql
+      .mutate(
+        {
           data: dino,
           where: { id },
         },
-        update(cache) {
-          cache.evict({ fieldName: 'allDinosaurs' });
+        {
+          update(cache) {
+            cache.evict({ fieldName: 'allDinosaurs' });
+          },
         },
-      })
+      )
       .pipe(
-        map((mutationResult) => mutationResult.data),
+        map((mutationResult) => mutationResult.data?.updateDino),
+        map((gqlDino) =>
+          gqlDino ? convertGqlDinoToDinosaur(gqlDino) : gqlDino,
+        ),
         suspensify(),
       );
   }
 
   create(dino: Dinosaur): Observable<Suspense<Dinosaur | null | undefined>> {
-    return this.#apollo
-      .mutate({
-        mutation: gql<Dinosaur, { dino: Dinosaur }>`
-          mutation CreateDino($dino: DinosaurCreateInput!) {
-            createDino(dino: $dino) {
-              ...DinoDetails
-            }
-          }
-          ${dinoDetailsFragment}
-        `,
-        variables: {
-          dino: dino,
+    return this.#createDinoGql
+      .mutate(
+        {
+          dino: convertDinosaurToCreateDino(dino),
         },
-        update(cache) {
-          cache.evict({ fieldName: 'allDinosaurs' });
+        {
+          update(cache) {
+            cache.evict({ fieldName: 'allDinosaurs' });
+          },
         },
-      })
+      )
       .pipe(
-        map((mutationResult) => mutationResult.data),
+        map((mutationResult) => mutationResult.data?.createDino),
+        map((gqlDino) =>
+          gqlDino ? convertGqlDinoToDinosaur(gqlDino) : gqlDino,
+        ),
         suspensify(),
       );
   }
 
   deleteDino(dinoId: string): Observable<Suspense<string | null | undefined>> {
-    return this.#apollo
-      .mutate({
-        mutation: gql<string, { where: { id: string } }>`
-          mutation DeleteDino($where: DinosaurWhereUniqueInput!) {
-            deleteDino(where: $where) {
-              id
-            }
-          }
-        `,
-        variables: {
+    return this.#deleteDinoGql
+      .mutate(
+        {
           where: { id: dinoId },
         },
-        update(cache) {
-          cache.evict({ fieldName: 'allDinosaurs' });
+        {
+          update(cache) {
+            cache.evict({ fieldName: 'allDinosaurs' });
+          },
         },
-      })
+      )
       .pipe(
-        map((mutationResult) => mutationResult.data),
+        map((mutationResult) => mutationResult.data?.deleteDino?.id),
         suspensify(),
       );
   }
+}
+
+type DbDino = Omit<Dinosaur, 'dinoName' | 'trivia'> & {
+  name: string;
+  trivia?: string[] | null | undefined;
+};
+type DbBaseDino = Omit<BaseDinosaur, 'dinoName'> & { name: string };
+
+function convertGqlDinoToDinosaur({ name, trivia, ...dino }: DbDino): Dinosaur {
+  return {
+    ...dino,
+    dinoName: name ?? '',
+    trivia: trivia ?? [],
+  };
+}
+
+function convertGqlDinoToBaseDinosaur({
+  name,
+  ...dino
+}: DbBaseDino): BaseDinosaur {
+  return {
+    ...dino,
+    dinoName: name ?? '',
+  };
+}
+
+function convertDinosaurToCreateDino({
+  dinoName: name,
+  ...dino
+}: Dinosaur): DinosaurCreateInput {
+  return { ...dino, name };
 }

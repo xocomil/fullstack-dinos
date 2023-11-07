@@ -10,7 +10,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
   imports: [CommonModule],
   template: `<div class="flex flex-1 gap-2">
       <h1 class="mb-1 text-blue-500 flex-grow">
-        {{ detailsStore.dinosaur().name }}
+        {{ detailsStore.dinosaur().dinoName }}
       </h1>
       <button class="btn btn-outline flex-none" (click)="turnOnEditMode()">
         Edit

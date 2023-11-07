@@ -42,7 +42,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
           [routerLink]="['/dinos', dinosaur.id]"
         >
           <td>
-            {{ dinosaur.name }}<br /><span class="text-xs italic opacity-50"
+            {{ dinosaur.dinoName }}<br /><span class="text-xs italic opacity-50"
               >{{ dinosaur.genus }} {{ dinosaur.species }}</span
             >
           </td>

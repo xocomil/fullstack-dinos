@@ -1,0 +1,51 @@
+fragment DinoDetails on Dinosaur {
+  id
+  name
+  genus
+  species
+  description
+  hasFeathers
+  heightInMeters
+  weightInKilos
+  imageUrl
+  trivia
+  updatedAt
+}
+
+query AllDinosaurs($direction: String, $hasFeathers: Boolean) {
+  allDinosaurs(direction: $direction, hasFeathers: $hasFeathers) {
+    id
+    name
+    genus
+    species
+    hasFeathers
+    description
+  }
+}
+
+query Dino($where: DinosaurWhereUniqueInput!) {
+  dinosaur(where: $where) {
+    ...DinoDetails
+  }
+}
+
+mutation CreateDino($dino: DinosaurCreateInput!) {
+  createDino(dino: $dino) {
+    ...DinoDetails
+  }
+}
+
+mutation UpdateDino(
+  $data: DinosaurUpdateInput!
+  $where: DinosaurWhereUniqueInput!
+) {
+  updateDino(data: $data, where: $where) {
+    ...DinoDetails
+  }
+}
+
+mutation DeleteDino($where: DinosaurWhereUniqueInput!) {
+  deleteDino(where: $where) {
+    id
+  }
+}
