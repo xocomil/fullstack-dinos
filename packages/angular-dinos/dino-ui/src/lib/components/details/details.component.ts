@@ -17,7 +17,12 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    <pre>editMode: {{ detailsSignalStore.editMode() }}</pre>
+    <!-- <pre>
+editMode: {{ detailsSignalStore.editMode() }}
+dino: {{ detailsSignalStore.dinosaur() | json }}
+id: {{ detailsSignalStore.id() }}
+    </pre
+    > -->
 
     @if (detailsSignalStore.editMode()) { @defer (on timer(2s),
     interaction(deferTrigger)) {
@@ -41,6 +46,7 @@ export class DetailsComponent {
 
   @RouteInput() set dinoId(id: string | undefined) {
     this.detailsStore.setId(id);
+    this.detailsSignalStore.setId(id);
   }
 
   @RouteInput({ transform: booleanAttribute }) set editMode(
