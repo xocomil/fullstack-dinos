@@ -33,7 +33,7 @@ DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=pub
 
 ```prisma
 datasource db {
-provider = "postgresql"    // You should only change this line
-url      = env("DATABASE_URL")
+  provider = "postgresql"    // You should only change this line
+  url      = env("DATABASE_URL")
 }
 ```
