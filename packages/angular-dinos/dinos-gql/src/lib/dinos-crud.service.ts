@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Suspense, suspensify } from '@jscutlery/operators';
 import { lastValueFrom, map, Observable } from 'rxjs';
-import { logObservable } from './../../../rxjs-operators/src/lib/log-observable/log-observable.operator';
 import {
   AllDinosaursGQL,
   CreateDinoGQL,
@@ -60,7 +59,6 @@ export class DinosCrudService {
           return convertGqlDinoToDinosaur(dino);
         }),
         suspensify(),
-        logObservable('suspensify'),
       );
   }
 
