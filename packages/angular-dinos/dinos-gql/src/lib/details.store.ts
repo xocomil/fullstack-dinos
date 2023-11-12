@@ -23,8 +23,6 @@ export const DetailsStore = signalStore(
         patchState(state, { editMode: editMode ?? false });
       },
       setId: async (id: string | undefined) => {
-        console.log('setId', id);
-
         if (id == null) {
           return;
         }
