@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import {
+  DetailsStore,
+  DetailsStoreService,
+} from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { EditDinoComponent } from '../edit-dino/edit-dino.component';
 
 @Component({
@@ -10,6 +13,6 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
   styleUrls: ['./add-dino.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, EditDinoComponent],
-  providers: [DetailsStoreService],
+  providers: [DetailsStoreService, DetailsStore],
 })
 export class AddDinoComponent {}
