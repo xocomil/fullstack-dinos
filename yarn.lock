@@ -3668,7 +3668,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ngrx/signals@^17.0.0-beta.0":
+"@ngrx/signals@17.0.0-beta.0":
   version "17.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-17.0.0-beta.0.tgz#1856dad12bbff10bbb889f60c1eb89f93d2ce1b2"
   integrity sha512-7e/cc+vRdeREkfM4N9x/j6gIeAl/HrkDGdRBkwa3qsMewUCoGRaAubM6h0G8nvdoajDdPmA2TW/HthI8iSSMGQ==
