@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { DetailsStoreService } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import {
+  DetailsStore,
+  DetailsStoreService,
+} from '@fullstack-dinos/angular-dinos/dinos-gql';
 import {
   TextInputComponent,
   TextareaComponent,
@@ -137,11 +140,12 @@ import { ToastComponent } from '../toast/toast.component';
 })
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DetailsStoreService);
+  protected readonly detailsSignalStore = inject(DetailsStore);
 
   protected cancelLink = computed(() => {
-    const id = this.detailsStore.dinosaur().id;
+    const id = this.detailsSignalStore.dinosaur().id;
 
-    if (this.detailsStore.editMode() && id) {
+    if (this.detailsSignalStore.editMode() && id) {
       return ['/dinos', id];
     }
 
