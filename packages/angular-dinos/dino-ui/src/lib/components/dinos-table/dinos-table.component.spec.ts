@@ -7,9 +7,8 @@ describe('DinosTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ DinosTableComponent ]
-    })
-    .compileComponents();
+      imports: [DinosTableComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DinosTableComponent);
     component = fixture.componentInstance;

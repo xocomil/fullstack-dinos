@@ -50,7 +50,10 @@ input DinosaurWhereUniqueInput {
 type Mutation {
   createDino(dino: DinosaurCreateInput!): Dinosaur!
   deleteDino(where: DinosaurWhereUniqueInput!): Dinosaur!
-  updateDino(data: DinosaurUpdateInput!, where: DinosaurWhereUniqueInput!): Dinosaur!
+  updateDino(
+    data: DinosaurUpdateInput!
+    where: DinosaurWhereUniqueInput!
+  ): Dinosaur!
   updateTestDino(updateDinoInput: UpdateDinoInput!): TestDino!
 }
 
@@ -60,15 +63,23 @@ type Query {
   testDino(hasFeathers: Boolean): TestDino!
 }
 
-"""This represents a Dinosaur"""
+"""
+This represents a Dinosaur
+"""
 type TestDino {
-  """Does it have feathers?"""
+  """
+  Does it have feathers?
+  """
   hasFeathers: Boolean!
 
-  """This represents the id of the Dinosaur"""
+  """
+  This represents the id of the Dinosaur
+  """
   id: ID
 
-  """This represents the name of the Dinosaur"""
+  """
+  This represents the name of the Dinosaur
+  """
   name: String!
 }
 

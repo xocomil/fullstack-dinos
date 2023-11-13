@@ -20,9 +20,10 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
 @Component({
   selector: 'fullstack-dinos-dinos-table',
   standalone: true,
-  template: `<table class="table table-zebra">
+  template: `
+    <table class="table-zebra table">
       <thead>
-        <tr class="text-lg semi-bold">
+        <tr class="semi-bold text-lg">
           <th scope="col" class="w-1/4">
             Dinosaur
             <fullstack-dinos-sort-button
@@ -37,33 +38,36 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
       </thead>
       <tbody>
         @for (dinosaur of dinosStore.dinosaurs(); track dinosaur.id) {
-        <tr
-          class="hover hover:cursor-pointer"
-          [routerLink]="['/dinos', dinosaur.id]"
-        >
-          <td>
-            {{ dinosaur.dinoName }}<br /><span class="text-xs italic opacity-50"
-              >{{ dinosaur.genus }} {{ dinosaur.species }}</span
-            >
-          </td>
-          <td>{{ dinosaur.description }}</td>
-          <td class="flex place-content-center">
-            <fullstack-dinos-yes-no [value]="dinosaur.hasFeathers" />
-          </td>
-          <td>
-            <fullstack-dinos-delete-button
-              (deleteClick)="deleteDino($event, dinosaur)"
-            />
-          </td>
-        </tr>
+          <tr
+            class="hover hover:cursor-pointer"
+            [routerLink]="['/dinos', dinosaur.id]"
+          >
+            <td>
+              {{ dinosaur.dinoName }}
+              <br />
+              <span class="text-xs italic opacity-50">
+                {{ dinosaur.genus }} {{ dinosaur.species }}
+              </span>
+            </td>
+            <td>{{ dinosaur.description }}</td>
+            <td class="flex place-content-center">
+              <fullstack-dinos-yes-no [value]="dinosaur.hasFeathers" />
+            </td>
+            <td>
+              <fullstack-dinos-delete-button
+                (deleteClick)="deleteDino($event, dinosaur)"
+              />
+            </td>
+          </tr>
         } @empty {
-        <tr>
-          <td colspan="4" class="text-center">No dinosaurs found.</td>
-        </tr>
+          <tr>
+            <td colspan="4" class="text-center">No dinosaurs found.</td>
+          </tr>
         }
       </tbody>
     </table>
-    <fullstack-dinos-delete-dino-modal />`,
+    <fullstack-dinos-delete-dino-modal />
+  `,
   styleUrls: ['./dinos-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [

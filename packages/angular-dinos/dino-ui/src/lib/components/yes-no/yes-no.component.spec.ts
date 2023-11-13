@@ -7,9 +7,8 @@ describe('YesNoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ YesNoComponent ]
-    })
-    .compileComponents();
+      imports: [YesNoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(YesNoComponent);
     component = fixture.componentInstance;

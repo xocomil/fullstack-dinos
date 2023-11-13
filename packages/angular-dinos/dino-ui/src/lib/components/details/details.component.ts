@@ -24,15 +24,17 @@ id: {{ detailsSignalStore.id() }}
     </pre
     > -->
 
-    @if (detailsSignalStore.editMode()) { @defer (on timer(2s),
+    @if (detailsSignalStore.editMode()) {
+      @defer (on timer(2s),
     interaction(deferTrigger)) {
-    <fullstack-dinos-edit-dino />
-    } @placeholder {
-    <button #deferTrigger type="button" class="btn">Click me...</button>
-    } @loading {
-    <h1>Loading... (wait for it!)</h1>
-    } } @else {
-    <fullstack-dinos-display-dino />
+        <fullstack-dinos-edit-dino />
+      } @placeholder {
+        <button #deferTrigger type="button" class="btn">Click me...</button>
+      } @loading {
+        <h1>Loading... (wait for it!)</h1>
+      }
+    } @else {
+      <fullstack-dinos-display-dino />
     }
   `,
   styleUrls: ['./details.component.scss'],
