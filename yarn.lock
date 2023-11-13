@@ -6450,7 +6450,7 @@ color-support@^1.1.3:
   resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
 
-colord@^2.9, colord@^2.9.1, colord@^2.9.3:
+colord@^2.9.1, colord@^2.9.3:
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/colord/-/colord-2.9.3.tgz#4f8ce919de456f1d5c1c368c307fe20f3e59fb43"
   integrity sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==
@@ -6959,6 +6959,11 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
+culori@^3:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/culori/-/culori-3.2.0.tgz#df6561503f0cc20e8e1c029f086466666c0ac62f"
+  integrity sha512-HIEbTSP7vs1mPq/2P9In6QyFE0Tkpevh0k9a+FkjhD+cwsYm9WRSbn4uMdW9O0yXlNYC3ppxL3gWWPOcvEl57w==
+
 cypress@^13.5.0:
   version "13.5.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.5.0.tgz#8c149074186130972f08b2cdce6ded41f014bacd"
@@ -7008,16 +7013,15 @@ cypress@^13.5.0:
     untildify "^4.0.0"
     yauzl "^2.10.0"
 
-daisyui@^3.9.4:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-3.9.4.tgz#84209bfce115505d7b502f7362b8ced6bb3a6cc5"
-  integrity sha512-fvi2RGH4YV617/6DntOVGcOugOPym9jTGWW2XySb5ZpvdWO4L7bEG77VHirrnbRUEWvIEVXkBpxUz2KFj0rVnA==
+daisyui@^4.0.0:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-4.0.3.tgz#2d63e9eae8aa0f06736ad25240aca712a064b60f"
+  integrity sha512-mG6PsdIA6MEHzdJwBlJxc1rqsIAAlcfhj2O8g0ol1uWg5y6C5zTcqfG8vKBqK4y2YfCxGIVgMsMWRTSm32N1Ow==
   dependencies:
-    colord "^2.9"
     css-selector-tokenizer "^0.8"
-    postcss "^8"
+    culori "^3"
+    picocolors "^1"
     postcss-js "^4"
-    tailwindcss "^3.1"
 
 dashdash@^1.12.0:
   version "1.14.1"
@@ -12109,7 +12113,7 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==
 
-picocolors@^1.0.0:
+picocolors@^1, picocolors@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.0.0.tgz#cb5bdc74ff3f51892236eaf79d68bc44564ab81c"
   integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
@@ -12518,7 +12522,7 @@ postcss@8.4.31, postcss@^8.4.28, postcss@^8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-postcss@^8, postcss@^8.2.14, postcss@^8.4.14, postcss@^8.4.21, postcss@^8.4.23, postcss@^8.4.24:
+postcss@^8.2.14, postcss@^8.4.14, postcss@^8.4.21, postcss@^8.4.23, postcss@^8.4.24:
   version "8.4.27"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.27.tgz#234d7e4b72e34ba5a92c29636734349e0d9c3057"
   integrity sha512-gY/ACJtJPSmUFPDCHtX78+01fHa64FaU4zaaWfuh1MhGJISufJAH4cun6k/8fwsHYeK4UQmENQK+tRLCFJE8JQ==
@@ -14094,34 +14098,6 @@ table@^6.8.1:
     slice-ansi "^4.0.0"
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
-
-tailwindcss@^3.1:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.3.3.tgz#90da807393a2859189e48e9e7000e6880a736daf"
-  integrity sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==
-  dependencies:
-    "@alloc/quick-lru" "^5.2.0"
-    arg "^5.0.2"
-    chokidar "^3.5.3"
-    didyoumean "^1.2.2"
-    dlv "^1.1.3"
-    fast-glob "^3.2.12"
-    glob-parent "^6.0.2"
-    is-glob "^4.0.3"
-    jiti "^1.18.2"
-    lilconfig "^2.1.0"
-    micromatch "^4.0.5"
-    normalize-path "^3.0.0"
-    object-hash "^3.0.0"
-    picocolors "^1.0.0"
-    postcss "^8.4.23"
-    postcss-import "^15.1.0"
-    postcss-js "^4.0.1"
-    postcss-load-config "^4.0.1"
-    postcss-nested "^6.0.1"
-    postcss-selector-parser "^6.0.11"
-    resolve "^1.22.2"
-    sucrase "^3.32.0"
 
 tailwindcss@^3.3.5:
   version "3.3.5"
