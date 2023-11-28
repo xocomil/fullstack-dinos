@@ -9,14 +9,14 @@ label {
 
 input:not([type='checkbox']):not([type='radio']) {
   @apply input input-bordered;
+
+  &.error {
+    @apply border-error;
+  }
 }
 
 span {
   &.error {
     @apply text-error italic;
   }
-}
-
-.error {
-  @apply border-error;
 }
