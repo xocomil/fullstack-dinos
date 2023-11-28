@@ -62,6 +62,13 @@ export class DinosCrudService {
       );
   }
 
+  updateDinoPromise(
+    dino: UpdateDinosaur,
+    id: string,
+  ): Promise<Suspense<Dinosaur | null | undefined>> {
+    return lastValueFrom(this.updateDino(dino, id));
+  }
+
   updateDino(
     dino: UpdateDinosaur,
     id: string,

@@ -19,11 +19,11 @@ import { ToastComponent } from '../toast/toast.component';
   standalone: true,
   host: { class: 'block' },
   template: `
-    @if(detailsStore.errorsArray().length > 0) {
-    <fullstack-dinos-dino-errors
-      class="hidden lg:block"
-      [errors]="detailsStore.errorsArray()"
-    />
+    @if (detailsSignalStore.errorsArray().length > 0) {
+      <fullstack-dinos-dino-errors
+        class="hidden lg:block"
+        [errors]="detailsSignalStore.errorsArray()"
+      />
     }
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
@@ -33,7 +33,7 @@ import { ToastComponent } from '../toast/toast.component';
           placeholder="Dinosaur's name"
           labelText="Name"
           [ngModel]="detailsStore.dinosaur().dinoName"
-          [errorText]="detailsStore.errors().dinoName"
+          [errorText]="detailsSignalStore.errors().dinoName"
           [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
@@ -42,14 +42,14 @@ import { ToastComponent } from '../toast/toast.component';
           placeholder="Dinosaur's genus"
           labelText="Genus"
           [ngModel]="detailsStore.dinosaur().genus"
-          [errorText]="detailsStore.errors().genus"
+          [errorText]="detailsSignalStore.errors().genus"
           [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="species"
           name="species"
           labelText="Species"
-          [errorText]="detailsStore.errors().species"
+          [errorText]="detailsSignalStore.errors().species"
           [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
           [disabled]="detailsStore.editMode()"
@@ -61,7 +61,7 @@ import { ToastComponent } from '../toast/toast.component';
           labelText="Description"
           altLabelText="Make it jazzy!"
           [ngModel]="detailsStore.dinosaur().description"
-          [errorText]="detailsStore.errors().description"
+          [errorText]="detailsSignalStore.errors().description"
         />
         <ui-toggle
           id="hasFeathers"
@@ -74,7 +74,7 @@ import { ToastComponent } from '../toast/toast.component';
           name="heightInMeters"
           labelText="Height (m)"
           type="number"
-          [errorText]="detailsStore.errors().heightInMeters"
+          [errorText]="detailsSignalStore.errors().heightInMeters"
           [ngModel]="detailsStore.dinosaur().heightInMeters"
           placeholder="Dinosaur's height in meters"
         />
@@ -83,7 +83,7 @@ import { ToastComponent } from '../toast/toast.component';
           name="weightInKilos"
           labelText="Weight (kg)"
           type="number"
-          [errorText]="detailsStore.errors().weightInKilos"
+          [errorText]="detailsSignalStore.errors().weightInKilos"
           [ngModel]="detailsStore.dinosaur().weightInKilos"
           placeholder="Dinosaur's weight in kilograms"
         />
@@ -91,7 +91,7 @@ import { ToastComponent } from '../toast/toast.component';
           id="imageUrl"
           name="imageUrl"
           labelText="URL to Image"
-          [errorText]="detailsStore.errors().imageUrl"
+          [errorText]="detailsSignalStore.errors().imageUrl"
           [ngModel]="detailsStore.dinosaur().imageUrl"
           placeholder="URL to Image"
         />
@@ -106,9 +106,10 @@ import { ToastComponent } from '../toast/toast.component';
         class="btn btn-primary"
         [disabled]="detailsStore.showSaveSpinner()"
       >
-        @if(detailsStore.showSaveSpinner()) {
-        <span class="loading loading-infinity loading-sm"></span>
-        } Save
+        @if (detailsStore.showSaveSpinner()) {
+          <span class="loading loading-infinity loading-sm"></span>
+        }
+        Save
       </button>
       <button
         type="button"
@@ -119,11 +120,11 @@ import { ToastComponent } from '../toast/toast.component';
         Cancel
       </button>
     </form>
-    @if(detailsStore.networkError()) {
-    <fullstack-dinos-toast
-      ><strong>Error Saving!</strong
-      >{{ detailsStore.networkError() }}</fullstack-dinos-toast
-    >
+    @if (detailsStore.networkError()) {
+      <fullstack-dinos-toast
+        ><strong>Error Saving!</strong
+        >{{ detailsStore.networkError() }}</fullstack-dinos-toast
+      >
     }
   `,
   styleUrls: ['./edit-dino.component.scss'],
@@ -153,8 +154,8 @@ export class EditDinoComponent {
   });
 
   protected onSubmit(dinoForm: NgForm): void {
-    if (this.detailsStore.editMode()) {
-      this.detailsStore.updateDino(dinoForm.value);
+    if (this.detailsSignalStore.editMode()) {
+      this.detailsSignalStore.updateDino(dinoForm.value);
       return;
     }
 

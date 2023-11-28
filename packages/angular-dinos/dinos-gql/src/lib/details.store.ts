@@ -8,12 +8,14 @@ import {
 } from '@ngrx/signals';
 import { DinosCrudService } from './dinos-crud.service';
 import { emptyState } from './models/details.state';
+import { Dinosaur, validateUpdateDino } from './models/dinosaur';
 
 export const DetailsStore = signalStore(
   withState(emptyState()),
-  withComputed(({ dinosaur }) => ({
+  withComputed(({ dinosaur, errors }) => ({
     genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
     displayTrivia: computed(() => dinosaur.trivia().length),
+    errorsArray: computed(() => Object.values(errors())),
   })),
   withMethods((state) => {
     const dinosCrudService = inject(DinosCrudService);
@@ -38,6 +40,15 @@ export const DetailsStore = signalStore(
         if (dino.hasError) {
           console.error('dino error', dino.error);
         }
+      },
+      updateDino: (dino: Dinosaur) => {
+        const errors = validateUpdateDino(dino);
+
+        console.log('errors', errors);
+
+        patchState(state, { errors });
+
+        console.log('success');
       },
     };
   }),

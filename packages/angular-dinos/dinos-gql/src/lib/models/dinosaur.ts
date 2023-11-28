@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { SafeParseReturnType, z } from 'zod';
 
 export const baseDinoParser = z.object({
   id: z.string().nullable().optional(),
@@ -89,3 +89,44 @@ export const createEmptyDino = (): Dinosaur => ({
   weightInKilos: 0,
   trivia: [],
 });
+
+const formatDinoErrors = <T, U>(parseResults: SafeParseReturnType<T, U>) =>
+  parseResults.success
+    ? {}
+    : parseResults.error.issues.reduce(
+        (acc, issue) => {
+          return { ...acc, [issue.path[0]]: issue.message };
+        },
+        {} as Partial<Record<keyof Dinosaur, string>>,
+      );
+
+export const validateUpdateDino = (
+  dino: UpdateDinosaur,
+): Partial<Record<keyof UpdateDinosaur, string>> => {
+  console.log('dino', dino);
+
+  const dinoResult = updateDinoParser.safeParse(dino);
+
+  // console.log('dinoResult', dinoResult);
+  // if (!dinoResult.success) {
+  //   console.log('dinoResult.error.issues', dinoResult.error.issues);
+  //   console.log('dinoResult.error.formErrors', dinoResult.error.formErrors);
+  //   console.log('dinoResult.error.flatten', dinoResult.error.flatten());
+  //   console.log('dinoResult.error.formatted', dinoResult.error.format());
+  // }
+  return formatDinoErrors(dinoResult);
+};
+
+export const errorParser = z.object({
+  message: z.string(),
+});
+
+export const validateDino = (
+  dino: Dinosaur,
+): Partial<Record<keyof Dinosaur, string>> => {
+  console.log('dino', dino);
+
+  const dinoResult = dinoParser.safeParse(dino);
+
+  return formatDinoErrors(dinoResult);
+};

@@ -3,14 +3,13 @@ import { Router } from '@angular/router';
 import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
 import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
-import { SafeParseReturnType, z } from 'zod';
 import { DinosCrudService } from './dinos-crud.service';
 import { DetailsState, emptyState } from './models/details.state';
 import {
-  dinoParser,
   Dinosaur,
-  updateDinoParser,
-  UpdateDinosaur,
+  errorParser,
+  validateDino,
+  validateUpdateDino,
 } from './models/dinosaur';
 
 @Injectable()
@@ -182,45 +181,3 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
       }),
   );
 }
-
-const errorParser = z.object({
-  message: z.string(),
-});
-
-const formatDinoErrors = <T, U>(parseResults: SafeParseReturnType<T, U>) =>
-  parseResults.success
-    ? {}
-    : parseResults.error.issues.reduce(
-        (acc, issue) => {
-          return { ...acc, [issue.path[0]]: issue.message };
-        },
-        {} as Partial<Record<keyof Dinosaur, string>>,
-      );
-
-const validateDino = (
-  dino: Dinosaur,
-): Partial<Record<keyof Dinosaur, string>> => {
-  console.log('dino', dino);
-
-  const dinoResult = dinoParser.safeParse(dino);
-
-  return formatDinoErrors(dinoResult);
-};
-
-const validateUpdateDino = (
-  dino: UpdateDinosaur,
-): Partial<Record<keyof UpdateDinosaur, string>> => {
-  console.log('dino', dino);
-
-  const dinoResult = updateDinoParser.safeParse(dino);
-
-  // console.log('dinoResult', dinoResult);
-  // if (!dinoResult.success) {
-  //   console.log('dinoResult.error.issues', dinoResult.error.issues);
-  //   console.log('dinoResult.error.formErrors', dinoResult.error.formErrors);
-  //   console.log('dinoResult.error.flatten', dinoResult.error.flatten());
-  //   console.log('dinoResult.error.formatted', dinoResult.error.format());
-  // }
-
-  return formatDinoErrors(dinoResult);
-};
