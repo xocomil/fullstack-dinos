@@ -102,7 +102,7 @@
     "gql": "graphql-codegen --config=\"./packages/angular-dinos/dinos-gql/codegen.ts\" --verbose"
   },
   "volta": {
-    "node": "18.17.1",
+    "node": "18.19.0",
     "yarn": "1.22.19"
   }
 }
