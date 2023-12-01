@@ -94,6 +94,12 @@ export class DinosCrudService {
       );
   }
 
+  createDinoPromise(
+    dino: Dinosaur,
+  ): Promise<Suspense<Dinosaur | null | undefined>> {
+    return lastValueFrom(this.create(dino));
+  }
+
   create(dino: Dinosaur): Observable<Suspense<Dinosaur | null | undefined>> {
     return this.#createDinoGql
       .mutate(

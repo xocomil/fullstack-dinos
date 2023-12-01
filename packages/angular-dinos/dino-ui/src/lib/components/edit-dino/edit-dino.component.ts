@@ -32,27 +32,27 @@ import { ToastComponent } from '../toast/toast.component';
           name="dinoName"
           placeholder="Dinosaur's name"
           labelText="Name"
-          [ngModel]="detailsStore.dinosaur().dinoName"
+          [ngModel]="detailsSignalStore.dinosaur().dinoName"
           [errorText]="detailsSignalStore.errors().dinoName"
-          [disabled]="detailsStore.editMode()"
+          [disabled]="detailsSignalStore.editMode()"
         />
         <ui-text-input
           id="genus"
           name="genus"
           placeholder="Dinosaur's genus"
           labelText="Genus"
-          [ngModel]="detailsStore.dinosaur().genus"
+          [ngModel]="detailsSignalStore.dinosaur().genus"
           [errorText]="detailsSignalStore.errors().genus"
-          [disabled]="detailsStore.editMode()"
+          [disabled]="detailsSignalStore.editMode()"
         />
         <ui-text-input
           id="species"
           name="species"
           labelText="Species"
           [errorText]="detailsSignalStore.errors().species"
-          [ngModel]="detailsStore.dinosaur().species"
+          [ngModel]="detailsSignalStore.dinosaur().species"
           placeholder="Dinosaur's species"
-          [disabled]="detailsStore.editMode()"
+          [disabled]="detailsSignalStore.editMode()"
         />
         <ui-textarea
           id="description"
@@ -60,14 +60,14 @@ import { ToastComponent } from '../toast/toast.component';
           class="md:col-span-2"
           labelText="Description"
           altLabelText="Make it jazzy!"
-          [ngModel]="detailsStore.dinosaur().description"
+          [ngModel]="detailsSignalStore.dinosaur().description"
           [errorText]="detailsSignalStore.errors().description"
         />
         <ui-toggle
           id="hasFeathers"
           name="hasFeathers"
           labelText="Has Feathers?"
-          [ngModel]="detailsStore.dinosaur().hasFeathers"
+          [ngModel]="detailsSignalStore.dinosaur().hasFeathers"
         />
         <ui-text-input
           id="heightInMeters"
@@ -75,7 +75,7 @@ import { ToastComponent } from '../toast/toast.component';
           labelText="Height (m)"
           type="number"
           [errorText]="detailsSignalStore.errors().heightInMeters"
-          [ngModel]="detailsStore.dinosaur().heightInMeters"
+          [ngModel]="detailsSignalStore.dinosaur().heightInMeters"
           placeholder="Dinosaur's height in meters"
         />
         <ui-text-input
@@ -84,7 +84,7 @@ import { ToastComponent } from '../toast/toast.component';
           labelText="Weight (kg)"
           type="number"
           [errorText]="detailsSignalStore.errors().weightInKilos"
-          [ngModel]="detailsStore.dinosaur().weightInKilos"
+          [ngModel]="detailsSignalStore.dinosaur().weightInKilos"
           placeholder="Dinosaur's weight in kilograms"
         />
         <ui-text-input
@@ -92,21 +92,21 @@ import { ToastComponent } from '../toast/toast.component';
           name="imageUrl"
           labelText="URL to Image"
           [errorText]="detailsSignalStore.errors().imageUrl"
-          [ngModel]="detailsStore.dinosaur().imageUrl"
+          [ngModel]="detailsSignalStore.dinosaur().imageUrl"
           placeholder="URL to Image"
         />
       </div>
       <input
         type="hidden"
         name="trivia"
-        [ngModel]="detailsStore.dinosaur().trivia"
+        [ngModel]="detailsSignalStore.dinosaur().trivia"
       />
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="detailsStore.showSaveSpinner()"
+        [disabled]="detailsSignalStore.showSaveSpinner()"
       >
-        @if (detailsStore.showSaveSpinner()) {
+        @if (detailsSignalStore.showSaveSpinner()) {
           <span class="loading loading-infinity loading-sm"></span>
         }
         Save
@@ -120,10 +120,10 @@ import { ToastComponent } from '../toast/toast.component';
         Cancel
       </button>
     </form>
-    @if (detailsStore.networkError()) {
+    @if (detailsSignalStore.networkError()) {
       <fullstack-dinos-toast
         ><strong>Error Saving!</strong
-        >{{ detailsStore.networkError() }}</fullstack-dinos-toast
+        >{{ detailsSignalStore.networkError() }}</fullstack-dinos-toast
       >
     }
   `,
@@ -159,10 +159,10 @@ export class EditDinoComponent {
       return;
     }
 
-    this.detailsStore.createDino(dinoForm.value);
+    this.detailsSignalStore.createDino(dinoForm.value);
   }
 
   protected cancel(): void {
-    this.detailsStore.clearErrors();
+    this.detailsSignalStore.clearErrors();
   }
 }
