@@ -2,10 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import {
-  DetailsStore,
-  DetailsStoreService,
-} from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { DetailsStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import {
   TextInputComponent,
   TextareaComponent,
@@ -19,10 +16,10 @@ import { ToastComponent } from '../toast/toast.component';
   standalone: true,
   host: { class: 'block' },
   template: `
-    @if (detailsSignalStore.errorsArray().length > 0) {
+    @if (detailsStore.errorsArray().length > 0) {
       <fullstack-dinos-dino-errors
         class="hidden lg:block"
-        [errors]="detailsSignalStore.errorsArray()"
+        [errors]="detailsStore.errorsArray()"
       />
     }
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
@@ -32,27 +29,27 @@ import { ToastComponent } from '../toast/toast.component';
           name="dinoName"
           placeholder="Dinosaur's name"
           labelText="Name"
-          [ngModel]="detailsSignalStore.dinosaur().dinoName"
-          [errorText]="detailsSignalStore.errors().dinoName"
-          [disabled]="detailsSignalStore.editMode()"
+          [ngModel]="detailsStore.dinosaur().dinoName"
+          [errorText]="detailsStore.errors().dinoName"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="genus"
           name="genus"
           placeholder="Dinosaur's genus"
           labelText="Genus"
-          [ngModel]="detailsSignalStore.dinosaur().genus"
-          [errorText]="detailsSignalStore.errors().genus"
-          [disabled]="detailsSignalStore.editMode()"
+          [ngModel]="detailsStore.dinosaur().genus"
+          [errorText]="detailsStore.errors().genus"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-text-input
           id="species"
           name="species"
           labelText="Species"
-          [errorText]="detailsSignalStore.errors().species"
-          [ngModel]="detailsSignalStore.dinosaur().species"
+          [errorText]="detailsStore.errors().species"
+          [ngModel]="detailsStore.dinosaur().species"
           placeholder="Dinosaur's species"
-          [disabled]="detailsSignalStore.editMode()"
+          [disabled]="detailsStore.editMode()"
         />
         <ui-textarea
           id="description"
@@ -60,22 +57,22 @@ import { ToastComponent } from '../toast/toast.component';
           class="md:col-span-2"
           labelText="Description"
           altLabelText="Make it jazzy!"
-          [ngModel]="detailsSignalStore.dinosaur().description"
-          [errorText]="detailsSignalStore.errors().description"
+          [ngModel]="detailsStore.dinosaur().description"
+          [errorText]="detailsStore.errors().description"
         />
         <ui-toggle
           id="hasFeathers"
           name="hasFeathers"
           labelText="Has Feathers?"
-          [ngModel]="detailsSignalStore.dinosaur().hasFeathers"
+          [ngModel]="detailsStore.dinosaur().hasFeathers"
         />
         <ui-text-input
           id="heightInMeters"
           name="heightInMeters"
           labelText="Height (m)"
           type="number"
-          [errorText]="detailsSignalStore.errors().heightInMeters"
-          [ngModel]="detailsSignalStore.dinosaur().heightInMeters"
+          [errorText]="detailsStore.errors().heightInMeters"
+          [ngModel]="detailsStore.dinosaur().heightInMeters"
           placeholder="Dinosaur's height in meters"
         />
         <ui-text-input
@@ -83,30 +80,30 @@ import { ToastComponent } from '../toast/toast.component';
           name="weightInKilos"
           labelText="Weight (kg)"
           type="number"
-          [errorText]="detailsSignalStore.errors().weightInKilos"
-          [ngModel]="detailsSignalStore.dinosaur().weightInKilos"
+          [errorText]="detailsStore.errors().weightInKilos"
+          [ngModel]="detailsStore.dinosaur().weightInKilos"
           placeholder="Dinosaur's weight in kilograms"
         />
         <ui-text-input
           id="imageUrl"
           name="imageUrl"
           labelText="URL to Image"
-          [errorText]="detailsSignalStore.errors().imageUrl"
-          [ngModel]="detailsSignalStore.dinosaur().imageUrl"
+          [errorText]="detailsStore.errors().imageUrl"
+          [ngModel]="detailsStore.dinosaur().imageUrl"
           placeholder="URL to Image"
         />
       </div>
       <input
         type="hidden"
         name="trivia"
-        [ngModel]="detailsSignalStore.dinosaur().trivia"
+        [ngModel]="detailsStore.dinosaur().trivia"
       />
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="detailsSignalStore.showSaveSpinner()"
+        [disabled]="detailsStore.showSaveSpinner()"
       >
-        @if (detailsSignalStore.showSaveSpinner()) {
+        @if (detailsStore.showSaveSpinner()) {
           <span class="loading loading-infinity loading-sm"></span>
         }
         Save
@@ -120,10 +117,10 @@ import { ToastComponent } from '../toast/toast.component';
         Cancel
       </button>
     </form>
-    @if (detailsSignalStore.networkError()) {
+    @if (detailsStore.networkError()) {
       <fullstack-dinos-toast
         ><strong>Error Saving!</strong
-        >{{ detailsSignalStore.networkError() }}</fullstack-dinos-toast
+        >{{ detailsStore.networkError() }}</fullstack-dinos-toast
       >
     }
   `,
@@ -140,13 +137,12 @@ import { ToastComponent } from '../toast/toast.component';
   ],
 })
 export class EditDinoComponent {
-  protected readonly detailsStore = inject(DetailsStoreService);
-  protected readonly detailsSignalStore = inject(DetailsStore);
+  protected readonly detailsStore = inject(DetailsStore);
 
   protected cancelLink = computed(() => {
-    const id = this.detailsSignalStore.dinosaur().id;
+    const id = this.detailsStore.dinosaur().id;
 
-    if (this.detailsSignalStore.editMode() && id) {
+    if (this.detailsStore.editMode() && id) {
       return ['/dinos', id];
     }
 
@@ -154,15 +150,15 @@ export class EditDinoComponent {
   });
 
   protected onSubmit(dinoForm: NgForm): void {
-    if (this.detailsSignalStore.editMode()) {
-      this.detailsSignalStore.updateDino(dinoForm.value);
+    if (this.detailsStore.editMode()) {
+      this.detailsStore.updateDino(dinoForm.value);
       return;
     }
 
-    this.detailsSignalStore.createDino(dinoForm.value);
+    this.detailsStore.createDino(dinoForm.value);
   }
 
   protected cancel(): void {
-    this.detailsSignalStore.clearErrors();
+    this.detailsStore.clearErrors();
   }
 }
