@@ -7,14 +7,14 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { DinosCrudService } from './dinos-crud.service';
-import { emptyState } from './models/details.state';
+import { DinosCrudService } from '../dinos-crud.service';
+import { emptyState } from '../models/details.state';
 import {
   Dinosaur,
   errorParser,
   validateDino,
   validateUpdateDino,
-} from './models/dinosaur';
+} from '../models/dinosaur';
 
 export const DetailsStore = signalStore(
   withState(emptyState()),
