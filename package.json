@@ -99,11 +99,11 @@
     "zone.js": "0.14.2"
   },
   "scripts": {
-    "gql": "graphql-codegen --config=\"./packages/angular-dinos/dinos-gql/codegen.ts\" --verbose"
+    "gql": "graphql-codegen --config=\"./packages/angular-dinos/dinos-gql/codegen.ts\" --verbose",
+    "start-frontend": "nx serve angular-dinos"
   },
   "volta": {
     "node": "18.17.1",
     "yarn": "1.22.19"
   }
 }
-
