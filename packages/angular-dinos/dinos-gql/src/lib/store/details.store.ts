@@ -15,11 +15,12 @@ import {
   validateDino,
   validateUpdateDino,
 } from '../models/dinosaur';
+import { updateDinoErrors, withErrors } from './with-dino-errors.store';
 
 export const DetailsStore = signalStore(
   withState(emptyState()),
-  withComputed(({ dinosaur, errors, savePending }) => ({
-    errorsArray: computed(() => Object.values(errors())),
+  withErrors<Dinosaur>(),
+  withComputed(({ dinosaur, savePending }) => ({
     displayTrivia: computed(() => dinosaur.trivia().length),
     genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
     showSaveSpinner: computed(() => savePending()),
@@ -54,7 +55,7 @@ export const DetailsStore = signalStore(
 
         console.log('errors', errors);
 
-        patchState(state, { errors });
+        patchState(state, updateDinoErrors(errors));
 
         if (Object.keys(errors).length) {
           return;
@@ -100,15 +101,12 @@ export const DetailsStore = signalStore(
           patchState(state, { networkError: `Unknown error: ${result.error}` });
         }
       },
-      clearErrors: () => {
-        patchState(state, { errors: {} });
-      },
       createDino: async (dino: Dinosaur) => {
         const errors = validateDino(dino);
 
         console.log('errors', errors);
 
-        patchState(state, { errors });
+        patchState(state, updateDinoErrors(errors));
 
         if (Object.keys(errors).length) {
           return;
