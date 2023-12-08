@@ -8,7 +8,7 @@ import {
 } from '@ngrx/signals';
 
 type DinoPropDict<T extends object> = Partial<Record<keyof T, string>>;
-type ErrorsSlice<T extends object> = { errors: DinoPropDict<T> };
+export type ErrorsSlice<T extends object> = { errors: DinoPropDict<T> };
 
 export function withErrors<T extends object>() {
   return signalStoreFeature(
@@ -16,7 +16,7 @@ export function withErrors<T extends object>() {
       errors: {},
     }),
     withComputed(({ errors }) => ({
-      errorsArray: computed(() => Object.values(errors())),
+      errorsArray: computed<string[]>(() => Object.values(errors())),
     })),
     withMethods((state) => ({
       clearErrors: () => {

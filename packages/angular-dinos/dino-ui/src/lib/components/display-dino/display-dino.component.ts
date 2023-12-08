@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { DetailsStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { extraDescriptionFromDino } from '../models/details.constants';
 
 @Component({
@@ -31,26 +31,26 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <div class="card-body">
         <h4 class="card-title">Description</h4>
         <p>
-          @if(detailsStore.dinosaur().description; as description) {
-          {{ description }}
+          @if (detailsStore.dinosaur().description; as description) {
+            {{ description }}
           }
           {{ extraDescription }}
         </p>
       </div>
     </div>
     @if (detailsStore.displayTrivia()) {
-    <div
-      class="card card-compact glass mt-4 w-full bg-primary text-primary-content shadow-lg"
-    >
-      <div class="card-body">
-        <h2 class="card-title">Trivia</h2>
-        <ul>
-          @for (item of detailsStore.dinosaur().trivia; track item) {
-          <li>{{ item }}</li>
-          }
-        </ul>
+      <div
+        class="card card-compact glass mt-4 w-full bg-primary text-primary-content shadow-lg"
+      >
+        <div class="card-body">
+          <h2 class="card-title">Trivia</h2>
+          <ul>
+            @for (item of detailsStore.dinosaur().trivia; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </div>
       </div>
-    </div>
     } `,
   styleUrls: ['./display-dino.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,7 +60,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
 })
 export class DisplayDinoComponent {
   readonly #router = inject(Router);
-  protected readonly detailsStore = inject(DetailsStore);
+  protected readonly detailsStore = inject(EditDinoStore);
 
   protected get extraDescription(): string {
     return extraDescriptionFromDino(this.detailsStore.dinosaur());

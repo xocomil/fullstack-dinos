@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { DetailsStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import {
   TextInputComponent,
   TextareaComponent,
@@ -137,7 +137,7 @@ import { ToastComponent } from '../toast/toast.component';
   ],
 })
 export class EditDinoComponent {
-  protected readonly detailsStore = inject(DetailsStore);
+  protected readonly detailsStore = inject(EditDinoStore);
 
   protected cancelLink = computed(() => {
     const id = this.detailsStore.dinosaur().id;
@@ -150,12 +150,14 @@ export class EditDinoComponent {
   });
 
   protected onSubmit(dinoForm: NgForm): void {
-    if (this.detailsStore.editMode()) {
-      this.detailsStore.updateDino(dinoForm.value);
-      return;
-    }
+    this.detailsStore.save(dinoForm.value);
 
-    this.detailsStore.createDino(dinoForm.value);
+    // if (this.detailsStore.editMode()) {
+    //   this.detailsStore.updateDino(dinoForm.value);
+    //   return;
+    // }
+
+    // this.detailsStore.createDino(dinoForm.value);
   }
 
   protected cancel(): void {

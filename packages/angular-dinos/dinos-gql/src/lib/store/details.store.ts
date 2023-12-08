@@ -16,6 +16,18 @@ import {
   validateUpdateDino,
 } from '../models/dinosaur';
 import { updateDinoErrors, withErrors } from './with-dino-errors.store';
+import { withEditDino } from './with-edit-dino.store';
+
+export const EditDinoStore = signalStore(
+  withState(emptyState()),
+  withErrors<Dinosaur>(),
+  withComputed(({ dinosaur, savePending }) => ({
+    displayTrivia: computed(() => dinosaur.trivia().length),
+    genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
+    showSaveSpinner: computed(() => savePending()),
+  })),
+  withEditDino(),
+);
 
 export const DetailsStore = signalStore(
   withState(emptyState()),
