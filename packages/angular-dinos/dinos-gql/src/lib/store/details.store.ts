@@ -7,19 +7,32 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { DinosCrudService } from './dinos-crud.service';
-import { emptyState } from './models/details.state';
+import { DinosCrudService } from '../dinos-crud.service';
+import { emptyState } from '../models/details.state';
 import {
   Dinosaur,
   errorParser,
   validateDino,
   validateUpdateDino,
-} from './models/dinosaur';
+} from '../models/dinosaur';
+import { updateDinoErrors, withErrors } from './with-dino-errors.store';
+import { withEditDino } from './with-edit-dino.store';
+
+export const EditDinoStore = signalStore(
+  withState(emptyState()),
+  withErrors<Dinosaur>(),
+  withComputed(({ dinosaur, savePending }) => ({
+    displayTrivia: computed(() => dinosaur.trivia().length),
+    genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
+    showSaveSpinner: computed(() => savePending()),
+  })),
+  withEditDino(),
+);
 
 export const DetailsStore = signalStore(
   withState(emptyState()),
-  withComputed(({ dinosaur, errors, savePending }) => ({
-    errorsArray: computed(() => Object.values(errors())),
+  withErrors<Dinosaur>(),
+  withComputed(({ dinosaur, savePending }) => ({
     displayTrivia: computed(() => dinosaur.trivia().length),
     genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
     showSaveSpinner: computed(() => savePending()),
@@ -54,7 +67,7 @@ export const DetailsStore = signalStore(
 
         console.log('errors', errors);
 
-        patchState(state, { errors });
+        patchState(state, updateDinoErrors(errors));
 
         if (Object.keys(errors).length) {
           return;
@@ -100,15 +113,12 @@ export const DetailsStore = signalStore(
           patchState(state, { networkError: `Unknown error: ${result.error}` });
         }
       },
-      clearErrors: () => {
-        patchState(state, { errors: {} });
-      },
       createDino: async (dino: Dinosaur) => {
         const errors = validateDino(dino);
 
         console.log('errors', errors);
 
-        patchState(state, { errors });
+        patchState(state, updateDinoErrors(errors));
 
         if (Object.keys(errors).length) {
           return;

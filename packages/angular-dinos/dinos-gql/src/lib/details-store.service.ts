@@ -4,13 +4,20 @@ import { ComponentStore } from '@ngrx/component-store';
 import { create } from 'mutative';
 import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
-import { DetailsState, emptyState } from './models/details.state';
+import {
+  emptyState,
+  DetailsState as OriginalState,
+} from './models/details.state';
 import {
   Dinosaur,
   errorParser,
   validateDino,
   validateUpdateDino,
 } from './models/dinosaur';
+
+type DetailsState = OriginalState & {
+  errors: Record<string, string>;
+};
 
 @Injectable()
 export class DetailsStoreService extends ComponentStore<DetailsState> {
@@ -39,7 +46,7 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   readonly networkError = this.selectSignal(({ networkError }) => networkError);
 
   constructor() {
-    super(emptyState());
+    super({ ...emptyState(), errors: {} });
 
     inject(DestroyRef).onDestroy(() => {
       console.warn('Destroying DetailsStoreService...');
