@@ -1,4 +1,4 @@
-import { computed, inject } from '@angular/core';
+import { InjectionToken, Provider, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   patchState,
@@ -9,12 +9,7 @@ import {
 } from '@ngrx/signals';
 import { DinosCrudService } from '../dinos-crud.service';
 import { emptyState } from '../models/details.state';
-import {
-  Dinosaur,
-  errorParser,
-  validateDino,
-  validateUpdateDino,
-} from '../models/dinosaur';
+import { Dinosaur, errorParser, validateDino } from '../models/dinosaur';
 import { updateDinoErrors, withErrors } from './with-dino-errors.store';
 import { withEditDino } from './with-edit-dino.store';
 
@@ -29,12 +24,10 @@ export const EditDinoStore = signalStore(
   withEditDino(),
 );
 
-export const DetailsStore = signalStore(
+export const AddDinoStore = signalStore(
   withState(emptyState()),
   withErrors<Dinosaur>(),
-  withComputed(({ dinosaur, savePending }) => ({
-    displayTrivia: computed(() => dinosaur.trivia().length),
-    genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
+  withComputed(({ savePending }) => ({
     showSaveSpinner: computed(() => savePending()),
   })),
   withMethods((state) => {
@@ -42,78 +35,7 @@ export const DetailsStore = signalStore(
     const router = inject(Router);
 
     return {
-      setEditMode: (editMode: boolean | undefined) => {
-        patchState(state, { editMode: editMode ?? false });
-      },
-      setId: async (id: string | undefined) => {
-        if (id == null) {
-          return;
-        }
-
-        patchState(state, { id });
-
-        const dino = await dinosCrudService.getDinoPromise(id);
-
-        if (dino.hasValue) {
-          patchState(state, { dinosaur: dino.value });
-        }
-
-        if (dino.hasError) {
-          console.error('dino error', dino.error);
-        }
-      },
-      updateDino: async (dino: Dinosaur) => {
-        const errors = validateUpdateDino(dino);
-
-        console.log('errors', errors);
-
-        patchState(state, updateDinoErrors(errors));
-
-        if (Object.keys(errors).length) {
-          return;
-        }
-        console.log('Saving dino...', dino);
-
-        console.log('Current state', state.dinosaur().id);
-
-        const id = state.dinosaur().id;
-
-        if (!id) {
-          console.error('No id found for dino', dino);
-          return;
-        }
-
-        const result = await dinosCrudService.updateDinoPromise(dino, id);
-
-        console.log('save result', result);
-
-        patchState(state, { savePending: result.pending });
-
-        if (!result.finalized) {
-          return;
-        }
-
-        if (result.hasValue) {
-          router.navigate(['dinos']);
-
-          return;
-        }
-
-        if (result.hasError) {
-          const errorWithMessage = errorParser.safeParse(result.error);
-
-          if (errorWithMessage.success) {
-            patchState(state, {
-              networkError: errorWithMessage.data.message,
-            });
-
-            return;
-          }
-
-          patchState(state, { networkError: `Unknown error: ${result.error}` });
-        }
-      },
-      createDino: async (dino: Dinosaur) => {
+      save: async (dino: Dinosaur) => {
         const errors = validateDino(dino);
 
         console.log('errors', errors);
@@ -157,3 +79,38 @@ export const DetailsStore = signalStore(
     };
   }),
 );
+
+type EditStoreType = InstanceType<typeof EditDinoStore>;
+type AddStoreType = InstanceType<typeof AddDinoStore>;
+
+type DinoStore = EditStoreType | AddStoreType;
+
+export const DINO_STORE = new InjectionToken<DinoStore>('DINO_STORE');
+
+export const provideEditDinoStore = (): Provider => {
+  return [
+    {
+      provide: DINO_STORE,
+      useClass: EditDinoStore,
+    },
+    {
+      provide: EditDinoStore,
+      useFactory: () => inject(DINO_STORE),
+      dependsOn: [DINO_STORE],
+    },
+  ];
+};
+
+export const provideAddDinoStore = (): Provider => {
+  return [
+    {
+      provide: DINO_STORE,
+      useClass: AddDinoStore,
+    },
+    {
+      provide: AddDinoStore,
+      useFactory: () => inject(DINO_STORE),
+      dependsOn: [DINO_STORE],
+    },
+  ];
+};

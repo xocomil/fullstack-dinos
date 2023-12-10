@@ -1,22 +1,21 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { patchState, signalStoreFeature, withMethods } from '@ngrx/signals';
+import {
+  patchState,
+  signalStoreFeature,
+  type,
+  withMethods,
+} from '@ngrx/signals';
 import { DinosCrudService } from '../dinos-crud.service';
+import { DetailsState } from '../models/details.state';
 import { Dinosaur, errorParser, validateUpdateDino } from '../models/dinosaur';
-import { declareState } from './declare-state';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withEditDino() {
   return signalStoreFeature(
-    declareState<
-      {
-        dinosaur: Dinosaur;
-        networkError: string;
-        savePending: boolean;
-        editMode: boolean;
-        id: string;
-      } & ErrorsSlice<Dinosaur>
-    >(),
+    {
+      state: type<DetailsState & ErrorsSlice<Dinosaur>>(),
+    },
     withMethods((state) => {
       const dinosCrudService = inject(DinosCrudService);
       const router = inject(Router);
