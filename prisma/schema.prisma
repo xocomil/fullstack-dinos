@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Dinosaur {
-  id String @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id String @id @default(dbgenerated("gen_random_uuid()"))
   name String @unique
   genus String?
   species String?
