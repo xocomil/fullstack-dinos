@@ -1,4 +1,4 @@
-import { computed, inject } from '@angular/core';
+import { InjectionToken, Provider, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   patchState,
@@ -27,9 +27,7 @@ export const EditDinoStore = signalStore(
 export const AddDinoStore = signalStore(
   withState(emptyState()),
   withErrors<Dinosaur>(),
-  withComputed(({ dinosaur, savePending }) => ({
-    displayTrivia: computed(() => dinosaur.trivia().length),
-    genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
+  withComputed(({ savePending }) => ({
     showSaveSpinner: computed(() => savePending()),
   })),
   withMethods((state) => {
@@ -81,3 +79,38 @@ export const AddDinoStore = signalStore(
     };
   }),
 );
+
+type EditStoreType = InstanceType<typeof EditDinoStore>;
+type AddStoreType = InstanceType<typeof AddDinoStore>;
+
+type DinoStore = EditStoreType | AddStoreType;
+
+export const DINO_STORE = new InjectionToken<DinoStore>('DINO_STORE');
+
+export const provideEditDinoStore = (): Provider => {
+  return [
+    {
+      provide: DINO_STORE,
+      useClass: EditDinoStore,
+    },
+    {
+      provide: EditDinoStore,
+      useFactory: () => inject(DINO_STORE),
+      dependsOn: [DINO_STORE],
+    },
+  ];
+};
+
+export const provideAddDinoStore = (): Provider => {
+  return [
+    {
+      provide: DINO_STORE,
+      useClass: AddDinoStore,
+    },
+    {
+      provide: AddDinoStore,
+      useFactory: () => inject(DINO_STORE),
+      dependsOn: [DINO_STORE],
+    },
+  ];
+};

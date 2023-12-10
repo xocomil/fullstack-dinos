@@ -6,7 +6,10 @@ import {
   inject,
   Input as RouteInput,
 } from '@angular/core';
-import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import {
+  EditDinoStore,
+  provideEditDinoStore,
+} from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { DisplayDinoComponent } from '../display-dino/display-dino.component';
 import { EditDinoComponent } from '../edit-dino/edit-dino.component';
 
@@ -35,7 +38,7 @@ id: {{ detailsStore.id() }}
     }
   `,
   styleUrls: ['./details.component.scss'],
-  providers: [EditDinoStore],
+  providers: [provideEditDinoStore()],
   imports: [CommonModule, DisplayDinoComponent, EditDinoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
