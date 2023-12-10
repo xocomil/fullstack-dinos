@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { DetailsStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { extraDescriptionFromDino } from '../models/details.constants';
 
 @Component({
@@ -62,7 +62,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
 })
 export class DisplayDinoComponent {
   readonly #router = inject(Router);
-  protected readonly detailsStore = inject(DetailsStore);
+  protected readonly detailsStore = inject(EditDinoStore);
 
   protected get extraDescription(): string {
     return extraDescriptionFromDino(this.detailsStore.dinosaur());
