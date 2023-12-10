@@ -13,7 +13,8 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
 @Component({
   selector: 'fullstack-dinos-home',
   standalone: true,
-  template: `<div class="flex justify-end gap-4">
+  template: `
+    <div class="flex justify-end gap-4">
       <select
         class="select select-bordered select-sm w-1/4"
         (change)="filterHasFeathers($event)"
@@ -25,7 +26,8 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
       </select>
       <fullstack-dinos-add-button (click)="addDino()" />
     </div>
-    <fullstack-dinos-dinos-table /> `,
+    <fullstack-dinos-dinos-table />
+  `,
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AddButtonComponent, DinosTableComponent, JsonPipe],

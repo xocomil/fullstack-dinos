@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 
       <ul class="m-0">
         @for (error of errors; track error) {
-        <li class="my-1 mx-0 p-0">{{ error }}</li>
+          <li class="mx-0 my-1 p-0">{{ error }}</li>
         }
       </ul>
     </div>

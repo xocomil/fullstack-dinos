@@ -7,9 +7,8 @@ describe('EditDinoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ EditDinoComponent ]
-    })
-    .compileComponents();
+      imports: [EditDinoComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(EditDinoComponent);
     component = fixture.componentInstance;

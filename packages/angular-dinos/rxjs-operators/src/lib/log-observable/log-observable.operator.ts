@@ -42,7 +42,7 @@ export const logObservable = <T>(tag: string) => {
   const completeBackgroundColor = randomColor(completeBackgroundColors);
 
   const messageKey = (Math.floor(Math.random() * 10000) + Date.now()).toString(
-    36
+    36,
   );
 
   return tap<T>({
@@ -50,20 +50,20 @@ export const logObservable = <T>(tag: string) => {
       console.log(
         `%c[${tag} [${messageKey}]: Next]`,
         `background: #${backgroundColor}; color: #fff; padding: 3px; font-size: 9px;`,
-        value
+        value,
       );
     },
     error(error) {
       console.log(
         `%c[${tag} [${messageKey}]: Error]`,
         `background: #${errorBackgroundColor}; color: #fff; padding: 3px; font-size: 9px;`,
-        error
+        error,
       );
     },
     complete() {
       console.log(
         `%c[${tag}  [${messageKey}]]: Complete`,
-        `background: #${completeBackgroundColor}; color: #fff; padding: 3px; font-size: 9px;`
+        `background: #${completeBackgroundColor}; color: #fff; padding: 3px; font-size: 9px;`,
       );
     },
   });

@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
   template: `
     <dialog #dialog class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Confirm delete!</h3>
+        <h3 class="text-lg font-bold">Confirm delete!</h3>
         <p class="py-4">Are you sure you want to delete this dinosaur?</p>
         <p>
           {{ dinoToDelete().dinoName }} ({{ dinoToDelete().genus }}

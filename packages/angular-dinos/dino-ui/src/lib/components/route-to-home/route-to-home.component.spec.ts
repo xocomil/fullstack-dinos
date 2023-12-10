@@ -7,9 +7,8 @@ describe('RouteToHomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ RouteToHomeComponent ]
-    })
-    .compileComponents();
+      imports: [RouteToHomeComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RouteToHomeComponent);
     component = fixture.componentInstance;

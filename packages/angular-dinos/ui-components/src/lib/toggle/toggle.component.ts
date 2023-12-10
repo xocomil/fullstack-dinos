@@ -10,7 +10,7 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   imports: [ReactiveFormsModule],
   template: `
     <label class="label cursor-pointer">
-      <span class="text-lg font-semi-bold">{{ labelText }}</span>
+      <span class="font-semi-bold text-lg">{{ labelText }}</span>
       <input
         [id]="id"
         [name]="name"

@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
   selector: 'fullstack-dinos-route-to-home',
   standalone: true,
   imports: [RouterLink],
-  template: `<a [routerLink]="['/']">Dinos</a>`,
+  template: `
+    <a [routerLink]="['/']">Dinos</a>
+  `,
 })
 export class RouteToHomeComponent {}

@@ -23,7 +23,7 @@ import { ToastComponent } from '../toast/toast.component';
       />
     }
     <form #dinoForm="ngForm" (ngSubmit)="onSubmit(dinoForm)">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <ui-text-input
           id="dinoName"
           name="dinoName"
@@ -118,10 +118,10 @@ import { ToastComponent } from '../toast/toast.component';
       </button>
     </form>
     @if (detailsStore.networkError()) {
-      <fullstack-dinos-toast
-        ><strong>Error Saving!</strong
-        >{{ detailsStore.networkError() }}</fullstack-dinos-toast
-      >
+      <fullstack-dinos-toast>
+        <strong>Error Saving!</strong>
+        {{ detailsStore.networkError() }}
+      </fullstack-dinos-toast>
     }
   `,
   styleUrls: ['./edit-dino.component.scss'],
