@@ -7,7 +7,7 @@ label {
   @apply label text-secondary;
 }
 
-input:not([type='checkbox']):not([type='radio']) {
+input:not([type='checkbox'], [type='radio']) {
   @apply input input-bordered;
 
   &.error {
