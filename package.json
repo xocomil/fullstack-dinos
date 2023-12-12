@@ -96,6 +96,7 @@
     "mutative": "^0.7.3",
     "reflect-metadata": "^0.1.14",
     "rxjs": "^7.8.1",
+    "stylelint-config-tailwindcss": "^0.0.7",
     "tslib": "^2.6.2",
     "zod": "^3.22.4",
     "zone.js": "0.14.2"
@@ -109,4 +110,3 @@
     "yarn": "1.22.21"
   }
 }
-
