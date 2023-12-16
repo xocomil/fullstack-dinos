@@ -11430,9 +11430,9 @@ multicast-dns@^7.2.5:
     thunky "^1.0.2"
 
 mutative@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/mutative/-/mutative-0.7.3.tgz#ab6c4c020e6012f5547f9ffbb704fb2522e1b811"
-  integrity sha512-aDkmke2FAnWu8gG6W+mLpMbGRErPL/Sa0qXUNcSfpNAeQuiDnJWPO0fVHxNzdPruxyqU1vDiMpyY1i2MnpYSKQ==
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/mutative/-/mutative-0.7.4.tgz#0dd6f13c1bc4d8aa69c5466a183576e4342444f8"
+  integrity sha512-DfycgdnmgnPSDPUZQtvjbCqj2/KXibec2Ua//QoMQEVJdgqOgmaUEGsTDQf5AmMCjBaez0xZOJwdNfzWSDphTQ==
 
 mute-stream@0.0.8:
   version "0.0.8"
