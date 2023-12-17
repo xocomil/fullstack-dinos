@@ -3616,15 +3616,15 @@
   dependencies:
     tslib "2.6.2"
 
-"@ngneat/spectator@^15.0.1":
-  version "15.0.1"
-  resolved "https://registry.yarnpkg.com/@ngneat/spectator/-/spectator-15.0.1.tgz#b5699d419db54fa163b8eb0902abbe4d199bceb2"
-  integrity sha512-rcIWYco6KngfLHBTShhU0fTgjMD4b9Gfx8tEbnML+URApTjyXqVaNu9YLiA8PVxUTRO1EOTsF9gOCIbIJA8lTA==
+"@ngneat/spectator@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@ngneat/spectator/-/spectator-16.0.0.tgz#baf4756650681d3741557ce30080375638bb60ed"
+  integrity sha512-AKo8WYnu0Vl2HEBciw6LUOe114oNsBRPUwqaVIvVtZTJdfecEEI2ools6vLCeEm/MSuPeZapbTmPeV06TfK3uA==
   dependencies:
     "@testing-library/dom" "^8.11.0"
-    jquery "3.6.0"
+    jquery "3.6.4"
     replace-in-file "6.2.0"
-    tslib "^2.1.0"
+    tslib "^2.6.2"
 
 "@ngrx/component-store@17.0.1":
   version "17.0.1"
@@ -10496,10 +10496,10 @@ jose@^5.0.0:
   resolved "https://registry.yarnpkg.com/jose/-/jose-5.1.0.tgz#b4dcfa037b3b30ad9d64949b51bc6f173cbd61cf"
   integrity sha512-H+RVqxA6apaJ0rcQYupKYhos7uosAiF42gUcWZiwhICWMphDULFj/CRr1R0tV/JCv9DEeJaSyYYpc9luHHNT4g==
 
-jquery@3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
-  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
+jquery@3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.4.tgz#ba065c188142100be4833699852bf7c24dc0252f"
+  integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

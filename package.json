@@ -19,7 +19,7 @@
     "@graphql-codegen/typescript-operations": "^4.0.1",
     "@nestjs/schematics": "^10.0.3",
     "@nestjs/testing": "^10.2.10",
-    "@ngneat/spectator": "^15.0.1",
+    "@ngneat/spectator": "^16.0.0",
     "@nx/angular": "17.2.1",
     "@nx/cypress": "17.2.1",
     "@nx/eslint": "17.2.1",
