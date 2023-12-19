@@ -115,63 +115,6 @@ export function withEditDino() {
             }),
           ),
         ),
-        saveAsync: async (dino: Dinosaur) => {
-          const errors = validateUpdateDino(dino);
-
-          console.log('errors', errors);
-
-          patchState(state, updateDinoErrors(errors));
-
-          if (Object.keys(errors).length) {
-            return;
-          }
-          console.log('Saving dino...', dino);
-
-          console.log('Current state', state.dinosaur().id);
-
-          const id = state.dinosaur().id;
-
-          if (!id) {
-            console.error('No id found for dino', dino);
-            return;
-          }
-
-          const result = await dinosCrudService.updateDinoPromise(dino, id);
-
-          console.log('save result', result);
-
-          patchState(state, setLoading());
-
-          if (!result.finalized) {
-            return;
-          }
-
-          if (result.hasValue) {
-            patchState(state, setLoaded());
-
-            void router.navigate(['dinos']);
-
-            return;
-          }
-
-          if (result.hasError) {
-            const errorWithMessage = errorParser.safeParse(result.error);
-
-            if (errorWithMessage.success) {
-              patchState(state, {
-                networkError: errorWithMessage.data.message,
-              });
-
-              patchState(state, setError(errorWithMessage.data.message));
-
-              return;
-            }
-
-            patchState(state, {
-              networkError: `Unknown error: ${result.error}`,
-            });
-          }
-        },
       };
     }),
   );
