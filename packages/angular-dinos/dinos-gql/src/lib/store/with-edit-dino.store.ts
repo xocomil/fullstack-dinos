@@ -7,15 +7,23 @@ import {
   withComputed,
   withMethods,
 } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { EMPTY, filter, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from '../dinos-crud.service';
 import { EditDinoState } from '../models/details.state';
 import { Dinosaur, errorParser, validateUpdateDino } from '../models/dinosaur';
+import {
+  CallStateSlice,
+  setError,
+  setLoaded,
+  setLoading,
+} from './with-call-state.store';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withEditDino() {
   return signalStoreFeature(
     {
-      state: type<EditDinoState & ErrorsSlice<Dinosaur>>(),
+      state: type<EditDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
     },
     withComputed(({ dinosaur, id }) => ({
       displayTrivia: computed(() => dinosaur.trivia().length),
@@ -47,59 +55,66 @@ export function withEditDino() {
             console.error('dino error', dino.error);
           }
         },
-        save: async (dino: Dinosaur) => {
-          const errors = validateUpdateDino(dino);
+        save: rxMethod<Dinosaur>((dino$) =>
+          dino$.pipe(
+            switchMap((dino) => {
+              const errors = validateUpdateDino(dino);
 
-          console.log('errors', errors);
+              console.log('errors', errors);
 
-          patchState(state, updateDinoErrors(errors));
+              patchState(state, updateDinoErrors(errors));
 
-          if (Object.keys(errors).length) {
-            return;
-          }
-          console.log('Saving dino...', dino);
+              if (Object.keys(errors).length > 0) {
+                return EMPTY;
+              }
 
-          console.log('Current state', state.dinosaur().id);
+              console.log('Saving dino...', dino);
 
-          const id = state.dinosaur().id;
+              const id = state.dinosaur().id;
 
-          if (!id) {
-            console.error('No id found for dino', dino);
-            return;
-          }
+              if (!id) {
+                console.error('No id found for dino', dino);
+                return EMPTY;
+              }
 
-          const result = await dinosCrudService.updateDinoPromise(dino, id);
+              return dinosCrudService.updateDino(dino, id);
+            }),
+            tap((saveStatus) => {
+              patchState(state, setLoading());
+            }),
+            filter((saveStatus) => saveStatus.finalized),
 
-          console.log('save result', result);
+            tap((result) => {
+              console.log('result', result);
 
-          patchState(state, { savePending: result.pending });
+              if (result.hasValue) {
+                patchState(state, setLoaded());
 
-          if (!result.finalized) {
-            return;
-          }
+                void router.navigate(['dinos']);
+              }
 
-          if (result.hasValue) {
-            router.navigate(['dinos']);
+              if (result.hasError) {
+                const errorWithMessage = errorParser.safeParse(result.error);
 
-            return;
-          }
+                if (errorWithMessage.success) {
+                  patchState(state, {
+                    networkError: errorWithMessage.data.message,
+                  });
 
-          if (result.hasError) {
-            const errorWithMessage = errorParser.safeParse(result.error);
+                  patchState(state, setError(errorWithMessage.data.message));
 
-            if (errorWithMessage.success) {
-              patchState(state, {
-                networkError: errorWithMessage.data.message,
-              });
+                  return;
+                }
 
-              return;
-            }
+                patchState(state, setError(`Unknown error: ${result.error}`));
 
-            patchState(state, {
-              networkError: `Unknown error: ${result.error}`,
-            });
-          }
-        },
+                patchState(state, {
+                  networkError: `Unknown error: ${result.error}`,
+                });
+              }
+            }),
+          ),
+        ),
       };
     }),
   );

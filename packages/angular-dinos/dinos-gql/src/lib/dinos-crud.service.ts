@@ -62,13 +62,6 @@ export class DinosCrudService {
       );
   }
 
-  updateDinoPromise(
-    dino: UpdateDinosaur,
-    id: string,
-  ): Promise<Suspense<Dinosaur | null | undefined>> {
-    return lastValueFrom(this.updateDino(dino, id));
-  }
-
   updateDino(
     dino: UpdateDinosaur,
     id: string,
@@ -92,12 +85,6 @@ export class DinosCrudService {
         ),
         suspensify(),
       );
-  }
-
-  createDinoPromise(
-    dino: Dinosaur,
-  ): Promise<Suspense<Dinosaur | null | undefined>> {
-    return lastValueFrom(this.create(dino));
   }
 
   create(dino: Dinosaur): Observable<Suspense<Dinosaur | null | undefined>> {

@@ -7,15 +7,23 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { EMPTY, filter, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from '../dinos-crud.service';
 import { AddDinoState } from '../models/details.state';
 import { Dinosaur, errorParser, validateDino } from '../models/dinosaur';
+import {
+  CallStateSlice,
+  setError,
+  setLoaded,
+  setLoading,
+} from './with-call-state.store';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withAddDino() {
   return signalStoreFeature(
     {
-      state: type<AddDinoState & ErrorsSlice<Dinosaur>>(),
+      state: type<AddDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
     },
     withState(() => ({ cancelLink: ['/dinos'], editMode: false })),
     withMethods((state) => {
@@ -23,49 +31,58 @@ export function withAddDino() {
       const router = inject(Router);
 
       return {
-        save: async (dino: Dinosaur) => {
-          const errors = validateDino(dino);
+        save: rxMethod<Dinosaur>((dino$) =>
+          dino$.pipe(
+            switchMap((dino) => {
+              const errors = validateDino(dino);
 
-          console.log('errors', errors);
+              console.log('errors', errors);
 
-          patchState(state, updateDinoErrors(errors));
+              patchState(state, updateDinoErrors(errors));
 
-          if (Object.keys(errors).length) {
-            return;
-          }
+              if (Object.keys(errors).length > 0) {
+                return EMPTY;
+              }
 
-          console.log('Saving dino...', dino);
+              console.log('Saving dino...', dino);
 
-          const result = await dinosCrudService.createDinoPromise(dino);
+              return dinosCrudService.create(dino);
+            }),
+            tap((saveStatus) => {
+              patchState(state, setLoading());
+            }),
+            filter((saveStatus) => saveStatus.finalized),
+            tap((result) => {
+              console.log('result', result);
 
-          patchState(state, { savePending: result.pending });
+              if (result.hasValue) {
+                patchState(state, setLoaded());
 
-          if (!result.finalized) {
-            return;
-          }
+                void router.navigate(['dinos']);
+              }
 
-          console.log('result', result);
+              if (result.hasError) {
+                const errorWithMessage = errorParser.safeParse(result.error);
 
-          if (result.hasValue) {
-            router.navigate(['dinos']);
-          }
+                if (errorWithMessage.success) {
+                  patchState(state, {
+                    networkError: errorWithMessage.data.message,
+                  });
 
-          if (result.hasError) {
-            const errorWithMessage = errorParser.safeParse(result.error);
+                  patchState(state, setError(errorWithMessage.data.message));
 
-            if (errorWithMessage.success) {
-              patchState(state, {
-                networkError: errorWithMessage.data.message,
-              });
+                  return;
+                }
 
-              return;
-            }
+                patchState(state, {
+                  networkError: `Unknown error: ${result.error}`,
+                });
 
-            patchState(state, {
-              networkError: `Unknown error: ${result.error}`,
-            });
-          }
-        },
+                patchState(state, setError(`Unknown error: ${result.error}`));
+              }
+            }),
+          ),
+        ),
       };
     }),
   );
