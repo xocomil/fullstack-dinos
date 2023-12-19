@@ -6,7 +6,7 @@ import { EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from './dinos-crud.service';
 import {
   emptyState,
-  DetailsState as OriginalState,
+  DetailsState as OriginalState, emptyEditDino,
 } from './models/details.state';
 import {
   Dinosaur,
@@ -46,7 +46,7 @@ export class DetailsStoreService extends ComponentStore<DetailsState> {
   readonly networkError = this.selectSignal(({ networkError }) => networkError);
 
   constructor() {
-    super({ ...emptyState(), errors: {} });
+    super({ ...emptyEditDino(), errors: {} });
 
     inject(DestroyRef).onDestroy(() => {
       console.warn('Destroying DetailsStoreService...');

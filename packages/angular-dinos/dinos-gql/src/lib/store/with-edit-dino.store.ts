@@ -10,12 +10,18 @@ import {
 import { DinosCrudService } from '../dinos-crud.service';
 import { EditDinoState } from '../models/details.state';
 import { Dinosaur, errorParser, validateUpdateDino } from '../models/dinosaur';
+import {
+  CallStateSlice,
+  setError,
+  setLoaded,
+  setLoading,
+} from './with-call-state.store';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withEditDino() {
   return signalStoreFeature(
     {
-      state: type<EditDinoState & ErrorsSlice<Dinosaur>>(),
+      state: type<EditDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
     },
     withComputed(({ dinosaur, id }) => ({
       displayTrivia: computed(() => dinosaur.trivia().length),
@@ -72,14 +78,16 @@ export function withEditDino() {
 
           console.log('save result', result);
 
-          patchState(state, { savePending: result.pending });
+          patchState(state, setLoading());
 
           if (!result.finalized) {
             return;
           }
 
           if (result.hasValue) {
-            router.navigate(['dinos']);
+            patchState(state, setLoaded());
+
+            void router.navigate(['dinos']);
 
             return;
           }
@@ -91,6 +99,8 @@ export function withEditDino() {
               patchState(state, {
                 networkError: errorWithMessage.data.message,
               });
+
+              patchState(state, setError(errorWithMessage.data.message));
 
               return;
             }

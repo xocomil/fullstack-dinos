@@ -1,26 +1,28 @@
-import { InjectionToken, Provider, computed, inject } from '@angular/core';
-import { signalStore, withComputed, withState } from '@ngrx/signals';
-import { emptyAddDino, emptyEditDino } from '../models/details.state';
+import { inject, InjectionToken, Provider } from '@angular/core';
+import { signalStore, withState } from '@ngrx/signals';
+import {
+  AddDinoState,
+  EditDinoState,
+  emptyAddDino,
+  emptyEditDino,
+} from '../models/details.state';
 import { Dinosaur } from '../models/dinosaur';
 import { withAddDino } from './with-add-dino.store';
+import { withCallState } from './with-call-state.store';
 import { withErrors } from './with-dino-errors.store';
 import { withEditDino } from './with-edit-dino.store';
 
 export const EditDinoStore = signalStore(
-  withState(emptyEditDino()),
+  withState<EditDinoState>(emptyEditDino()),
+  withCallState(),
   withErrors<Dinosaur>(),
-  withComputed(({ savePending }) => ({
-    showSaveSpinner: computed(() => savePending()),
-  })),
   withEditDino(),
 );
 
 export const AddDinoStore = signalStore(
-  withState(emptyAddDino()),
+  withState<AddDinoState>(emptyAddDino()),
   withErrors<Dinosaur>(),
-  withComputed(({ savePending }) => ({
-    showSaveSpinner: computed(() => savePending()),
-  })),
+  withCallState(),
   withAddDino(),
 );
 

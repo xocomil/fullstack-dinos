@@ -4,8 +4,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DINO_STORE } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import {
-  TextInputComponent,
   TextareaComponent,
+  TextInputComponent,
   ToggleComponent,
 } from '@ui-components';
 import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
@@ -101,9 +101,9 @@ import { ToastComponent } from '../toast/toast.component';
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="detailsStore.showSaveSpinner()"
+        [disabled]="detailsStore.loading()"
       >
-        @if (detailsStore.showSaveSpinner()) {
+        @if (detailsStore.loading()) {
           <span class="loading loading-infinity loading-sm"></span>
         }
         Save

@@ -10,12 +10,18 @@ import {
 import { DinosCrudService } from '../dinos-crud.service';
 import { AddDinoState } from '../models/details.state';
 import { Dinosaur, errorParser, validateDino } from '../models/dinosaur';
+import {
+  CallStateSlice,
+  setError,
+  setLoaded,
+  setLoading,
+} from './with-call-state.store';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withAddDino() {
   return signalStoreFeature(
     {
-      state: type<AddDinoState & ErrorsSlice<Dinosaur>>(),
+      state: type<AddDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
     },
     withState(() => ({ cancelLink: ['/dinos'], editMode: false })),
     withMethods((state) => {
@@ -38,7 +44,7 @@ export function withAddDino() {
 
           const result = await dinosCrudService.createDinoPromise(dino);
 
-          patchState(state, { savePending: result.pending });
+          patchState(state, setLoading());
 
           if (!result.finalized) {
             return;
@@ -47,7 +53,11 @@ export function withAddDino() {
           console.log('result', result);
 
           if (result.hasValue) {
-            router.navigate(['dinos']);
+            patchState(state, setLoaded());
+
+            void router.navigate(['dinos']);
+
+            return;
           }
 
           if (result.hasError) {
@@ -58,12 +68,16 @@ export function withAddDino() {
                 networkError: errorWithMessage.data.message,
               });
 
+              patchState(state, setError(errorWithMessage.data.message));
+
               return;
             }
 
             patchState(state, {
               networkError: `Unknown error: ${result.error}`,
             });
+
+            patchState(state, setError(`Unknown error: ${result.error}`));
           }
         },
       };
