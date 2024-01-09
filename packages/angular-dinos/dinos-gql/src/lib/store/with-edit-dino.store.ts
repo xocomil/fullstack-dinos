@@ -29,6 +29,12 @@ export function withEditDino() {
       displayTrivia: computed(() => dinosaur.trivia().length),
       genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
       cancelLink: computed(() => ['/dinos', id()]),
+      openAiObject: computed(() => {
+        const { __typename, id, imageUrl, updatedAt, ...openAiObject } =
+          dinosaur() as Dinosaur & { __typename: unknown };
+
+        return openAiObject;
+      }),
     })),
     withMethods((state) => {
       const dinosCrudService = inject(DinosCrudService);
@@ -37,6 +43,9 @@ export function withEditDino() {
       return {
         setEditMode: (editMode: boolean | undefined) => {
           patchState(state, { editMode: editMode ?? false });
+        },
+        newOpenAiMode: (openAiMode: boolean | undefined) => {
+          patchState(state, { openAiMode: openAiMode ?? false });
         },
         setId: async (id: string | undefined) => {
           if (id == null) {
@@ -79,7 +88,7 @@ export function withEditDino() {
 
               return dinosCrudService.updateDino(dino, id);
             }),
-            tap((saveStatus) => {
+            tap(() => {
               patchState(state, setLoading());
             }),
             filter((saveStatus) => saveStatus.finalized),

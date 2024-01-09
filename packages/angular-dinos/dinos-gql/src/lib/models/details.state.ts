@@ -13,6 +13,7 @@ export const emptyAddDino = (): AddDinoState => ({
 export type EditDinoState = {
   id: string;
   editMode: boolean;
+  openAiMode: boolean;
   dinosaur: Dinosaur;
   networkError: string | undefined;
 };
@@ -20,6 +21,7 @@ export type EditDinoState = {
 export const emptyEditDino = (): EditDinoState => ({
   id: '',
   editMode: false,
+  openAiMode: false,
   dinosaur: createEmptyDino(),
   networkError: undefined,
 });
