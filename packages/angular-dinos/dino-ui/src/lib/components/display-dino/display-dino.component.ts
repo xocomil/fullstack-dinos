@@ -13,6 +13,12 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <h1 class="mb-1 flex-grow text-blue-500">
         {{ detailsStore.dinosaur().dinoName }}
       </h1>
+      <button
+        class="btn btn-outline btn-secondary flex-none"
+        (click)="turnOnOpenAiMode()"
+      >
+        OpenAI
+      </button>
       <button class="btn btn-outline flex-none" (click)="turnOnEditMode()">
         Edit
       </button>
@@ -70,5 +76,9 @@ export class DisplayDinoComponent {
 
   protected turnOnEditMode(): void {
     void this.#router.navigate([], { queryParams: { editMode: true } });
+  }
+
+  turnOnOpenAiMode() {
+    void this.#router.navigate([], { queryParams: { openAiMode: true } });
   }
 }
