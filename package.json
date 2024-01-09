@@ -94,6 +94,7 @@
     "class-validator": "^0.14.0",
     "graphql": "^16.8.1",
     "mutative": "^1.0.0",
+    "openai": "^4.24.1",
     "reflect-metadata": "^0.2.1",
     "rxjs": "^7.8.1",
     "stylelint-config-tailwindcss": "^0.0.7",
@@ -110,4 +111,3 @@
     "yarn": "1.22.21"
   }
 }
-
