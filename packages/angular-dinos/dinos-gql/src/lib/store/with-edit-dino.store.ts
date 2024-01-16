@@ -33,7 +33,7 @@ export function withEditDino() {
         const { __typename, id, imageUrl, updatedAt, ...openAiObject } =
           dinosaur() as Dinosaur & { __typename: unknown };
 
-        return openAiObject;
+        return { ...openAiObject, lengthInMeters: 0 };
       }),
     })),
     withMethods((state) => {
