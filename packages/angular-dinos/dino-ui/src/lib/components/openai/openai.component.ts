@@ -19,6 +19,11 @@ import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
         <div class="mockup-code">
           <pre>{{ detailsStore.openAiObject() | json }}</pre>
         </div>
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline btn-primary" (click)="(sendToOpenai)">
+            Send to OpenAI
+          </button>
+        </div>
       </div>
     </div>
   `,
@@ -34,5 +39,9 @@ export class OpenaiComponent {
       queryParams: { editMode: true },
       queryParamsHandling: 'merge',
     });
+  }
+
+  protected sendToOpenai() {
+    this.detailsStore.sendToOpenai();
   }
 }

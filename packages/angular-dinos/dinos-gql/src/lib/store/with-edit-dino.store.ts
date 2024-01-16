@@ -1,5 +1,6 @@
 import { computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { OpenaiService } from '@fullstack-dinos/angular-dinos/openai';
 import {
   patchState,
   signalStoreFeature,
@@ -8,10 +9,15 @@ import {
   withMethods,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, filter, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, of, switchMap, tap } from 'rxjs';
 import { DinosCrudService } from '../dinos-crud.service';
 import { EditDinoState } from '../models/details.state';
-import { Dinosaur, errorParser, validateUpdateDino } from '../models/dinosaur';
+import {
+  Dinosaur,
+  OpenaiDino,
+  errorParser,
+  validateUpdateDino,
+} from '../models/dinosaur';
 import {
   CallStateSlice,
   setError,
@@ -29,7 +35,7 @@ export function withEditDino() {
       displayTrivia: computed(() => dinosaur.trivia().length),
       genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
       cancelLink: computed(() => ['/dinos', id()]),
-      openAiObject: computed(() => {
+      openAiObject: computed<OpenaiDino>(() => {
         const { __typename, id, imageUrl, updatedAt, ...openAiObject } =
           dinosaur() as Dinosaur & { __typename: unknown };
 
@@ -39,6 +45,7 @@ export function withEditDino() {
     withMethods((state) => {
       const dinosCrudService = inject(DinosCrudService);
       const router = inject(Router);
+      const openaiService = inject(OpenaiService);
 
       return {
         setEditMode: (editMode: boolean | undefined) => {
@@ -121,6 +128,17 @@ export function withEditDino() {
                   networkError: `Unknown error: ${result.error}`,
                 });
               }
+            }),
+          ),
+        ),
+        sendToOpenai: rxMethod<void>((dino$) =>
+          dino$.pipe(
+            switchMap(() => {
+              const dino = state.openAiObject();
+
+              openaiService.updateDino();
+
+              return of(dino);
             }),
           ),
         ),

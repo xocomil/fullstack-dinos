@@ -67,6 +67,10 @@ export const dinoParser = baseDinoParser.extend({
 
 export type Dinosaur = z.infer<typeof dinoParser>;
 
+export type OpenaiDino = Omit<Dinosaur, 'id' | 'updatedAt' | 'imageUrl'> & {
+  lengthInMeters: number;
+};
+
 export const updateDinoParser = dinoParser.omit({
   dinoName: true,
   species: true,
