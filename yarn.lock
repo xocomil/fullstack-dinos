@@ -4005,25 +4005,25 @@
     replace-in-file "6.2.0"
     tslib "^2.6.2"
 
-"@ngrx/component-store@17.0.1":
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-17.0.1.tgz#de84dab7c3595329378ca46b2b82595d6406e87e"
-  integrity sha512-6A7IXzZHAdFadcCILbljNQzrVMwOlx1opdCV/91h3S3ttY7HrPuatyZJyjau8dSf1ANjnAm1kcoof8lZfwhaHg==
+"@ngrx/component-store@17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/component-store/-/component-store-17.1.0.tgz#b454f16b201944646260e9f84631989648f36935"
+  integrity sha512-dYaOB/jfXbQ6du/l3Wi4UdFmrIU3PksjCz+u4j5MKGBDNjRsRDKNfiSSJCzRtJDyFIQoYbMVj/SS9+R1VYW1wA==
   dependencies:
     "@ngrx/operators" "17.0.0-beta.0"
     tslib "^2.0.0"
 
-"@ngrx/component@17.0.1":
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/component/-/component-17.0.1.tgz#ad9044b1bc07f9cff75af0a8bd7ee807cd773e64"
-  integrity sha512-B38NyH18gxTjrTJOu1fc+AMwOpAaRly6hgWx7zZZtbIwo0sd/bYTZGgMrJkw/CjmvjpAVBE14fB9qI+pSUsl4A==
+"@ngrx/component@17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/component/-/component-17.1.0.tgz#90d1452d60d8bc260eb7b0671bb5b7de4bc994d1"
+  integrity sha512-bNkHMl78gr2mI6E+vfKJasXtZWyzz3jP0thulw1OW7DZooVzIrAeUoxFWLQ7lSiqw/Sql1YC28uCqAYjST0brA==
   dependencies:
     tslib "^2.0.0"
 
-"@ngrx/eslint-plugin@17.0.1":
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/eslint-plugin/-/eslint-plugin-17.0.1.tgz#77f3184217836fe2722f778815a58d5a2672ca2b"
-  integrity sha512-z7g/r/1oGo9Xbqm2cIVW/mhOiCmmVN+8AdVk2VTmbvci4Zhoq6Lvwu9R5x3eEXs4fVeLR5jUWvToZt8ziTg8eg==
+"@ngrx/eslint-plugin@17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/eslint-plugin/-/eslint-plugin-17.1.0.tgz#c757e430fc6f2ca31f456eb9b3e91b23a0e83ad2"
+  integrity sha512-QKvu5PraCFX1TjQDD26XKclLtzHhoOQliqYuqQHhfI53NZmn9zxJChItBXrULsKFfJdXhNlbN+KDetMyYQ7yxg==
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.4.0"
     eslint-etc "^5.1.0"
@@ -4037,10 +4037,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@ngrx/signals@17.0.1":
-  version "17.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-17.0.1.tgz#901fb51b21c1f3867db463000def811172cb57ee"
-  integrity sha512-YxnYoDlm0Q0Wighspwg3mgUqnOuIiGP3jvqcr1R/ZMIQ2e0IyzJR2QhtZ1etFxB6NhyDuGtG8FWU2+0cgc0w/w==
+"@ngrx/signals@17.1.0":
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-17.1.0.tgz#92a83961a715270aa0a9c395b39b0e3ecae75fad"
+  integrity sha512-CF387SNYUoPeFCh13S/vmsyFRZHXm7cZjxuwXbI3AWDS/JXO9GC2061O9f0Fy7DIyQtDisY9uGV5eOiKTYmT0w==
   dependencies:
     tslib "^2.3.0"
 
