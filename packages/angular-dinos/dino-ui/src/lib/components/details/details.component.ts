@@ -3,8 +3,9 @@ import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
-  Input as RouteInput,
+  input,
 } from '@angular/core';
 import {
   EditDinoStore,
@@ -18,12 +19,13 @@ import { OpenaiComponent } from '../openai/openai.component';
   selector: 'fullstack-dinos-details',
   standalone: true,
   template: `
-    <!-- <pre>
-editMode: {{ detailsStore.editMode() }}
-dino: {{ detailsStore.dinosaur() | json }}
-id: {{ detailsStore.id() }}
-    </pre
-    > -->
+    <!--    <pre>-->
+    <!--editMode: {{ detailsStore.editMode() }}-->
+    <!--dino: {{ detailsStore.dinosaur() | json }}-->
+    <!--id: {{ detailsStore.id() }}-->
+    <!--routeId: {{ dinoId() }}-->
+    <!--    </pre-->
+    <!--    >-->
 
     @if (detailsStore.editMode()) {
       @defer (when detailsStore.editMode()) {
@@ -52,19 +54,48 @@ id: {{ detailsStore.id() }}
 export class DetailsComponent {
   protected readonly detailsStore = inject(EditDinoStore);
 
-  @RouteInput() set dinoId(id: string | undefined) {
-    this.detailsStore.setId(id);
-  }
+  /* *****************************************************
+   * WARNING:
+   * ================================================================
+   * Changing from @RouteInput() to signal inputs is not recommended.
+   * This is only done here to demonstrate how you can do it for the
+   * stream.
+   * *****************************************************
+   * */
 
-  @RouteInput({ transform: booleanAttribute }) set editMode(
-    editMode: boolean | undefined,
-  ) {
-    this.detailsStore.setEditMode(editMode);
-  }
+  // @RouteInput() set dinoId(id: string | undefined) {
+  //   this.detailsStore.setId(id);
+  // }
+  dinoId = input<string>();
 
-  @RouteInput({ transform: booleanAttribute }) set openAiMode(
-    openAiMode: boolean | undefined,
-  ) {
-    this.detailsStore.newOpenAiMode(openAiMode);
+  // @RouteInput({ transform: booleanAttribute }) set editMode(
+  //   editMode: boolean | undefined,
+  // ) {
+  //   this.detailsStore.setEditMode(editMode);
+  // }
+  editMode = input(false, {
+    transform: booleanAttribute,
+  });
+
+  // @RouteInput({ transform: booleanAttribute }) set openAiMode(
+  //   openAiMode: boolean | undefined,
+  // ) {
+  //   this.detailsStore.newOpenAiMode(openAiMode);
+  // }
+  openAiMode = input(false, {
+    transform: booleanAttribute,
+  });
+
+  constructor() {
+    effect(
+      () => {
+        console.log('effect running for DetailsComponent');
+
+        this.detailsStore.setId(this.dinoId());
+        this.detailsStore.setEditMode(this.editMode());
+        this.detailsStore.setOpenAiMode(this.openAiMode());
+      },
+      { allowSignalWrites: true },
+    );
   }
 }
