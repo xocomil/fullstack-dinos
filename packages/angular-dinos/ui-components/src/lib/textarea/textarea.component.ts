@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
 import { injectNgControl } from '../utilities/inject-ng-control';
@@ -10,22 +10,22 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   imports: [NgIf, ReactiveFormsModule],
   template: `
     <label class="label">
-      <span>{{ labelText }}</span>
-      @if (altLabelText) {
-        <span class="label-text-alt">{{ altLabelText }}</span>
+      <span>{{ labelText() }}</span>
+      @if (altLabelText()) {
+        <span class="label-text-alt">{{ altLabelText() }}</span>
       }
     </label>
     <textarea
-      [id]="id"
-      [name]="name"
+      [id]="id()"
+      [name]="name()"
       class="textarea textarea-bordered h-24"
-      [placeholder]="placeholder"
+      [placeholder]="placeholder()"
       [formControl]="ngControl.control"
-      [class.error]="errorText"
+      [class.error]="errorText()"
     ></textarea>
-    @if (errorText) {
+    @if (errorText()) {
       <span class="error">
-        {{ errorText }}
+        {{ errorText() }}
       </span>
     }
   `,
@@ -39,14 +39,12 @@ import { injectNgControl } from '../utilities/inject-ng-control';
 export class TextareaComponent {
   protected readonly ngControl = injectNgControl();
 
-  @Input({ required: true }) id!: string;
-  @Input({ required: true }) name!: string;
-  @Input({ required: true }) labelText!: string;
-  @Input() altLabelText?: string;
-  @Input() errorText?: string;
-
-  @Input({
+  id = input.required<string>();
+  name = input.required<string>();
+  labelText = input.required<string>();
+  altLabelText = input<string>();
+  errorText = input<string>();
+  placeholder = input('', {
     transform: (value: unknown) => (typeof value === 'string' ? value : ''),
-  })
-  placeholder = '';
+  });
 }
