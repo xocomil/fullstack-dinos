@@ -1,6 +1,5 @@
-/* eslint-disable @angular-eslint/no-host-metadata-property */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
 import { injectNgControl } from '../utilities/inject-ng-control';
@@ -13,31 +12,31 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   template: `
-    @if (labelText) {
-      <label [for]="id">{{ labelText }}</label>
+    @if (labelText()) {
+      <label [for]="id()">{{ labelText() }}</label>
     }
-    @if (type === 'number') {
+    @if (type() === 'number') {
       <input
-        [id]="id"
-        [name]="name"
-        [class.error]="errorText"
+        [id]="id()"
+        [name]="name()"
+        [class.error]="errorText()"
         [formControl]="ngControl.control"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         type="number"
       />
     } @else {
       <input
-        [id]="id"
-        [name]="name"
-        [class.error]="errorText"
+        [id]="id()"
+        [name]="name()"
+        [class.error]="errorText()"
         [formControl]="ngControl.control"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         type="text"
       />
     }
-    @if (errorText) {
+    @if (errorText()) {
       <span class="error">
-        {{ errorText }}
+        {{ errorText() }}
       </span>
     }
   `,
@@ -51,14 +50,12 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
 export class TextInputComponent {
   protected readonly ngControl = injectNgControl();
 
-  @Input({ required: true }) id!: string;
-  @Input({ required: true }) name!: string;
-  @Input() type: AllowedHtmlTypes = 'text';
-  @Input() labelText?: string;
-
-  @Input() errorText?: string;
-  @Input({
+  id = input.required<string>();
+  name = input.required<string>();
+  type = input<AllowedHtmlTypes>('text');
+  labelText = input<string>();
+  errorText = input<string>();
+  placeholder = input('', {
     transform: (value: unknown) => (typeof value === 'string' ? value : ''),
-  })
-  placeholder = '';
+  });
 }
