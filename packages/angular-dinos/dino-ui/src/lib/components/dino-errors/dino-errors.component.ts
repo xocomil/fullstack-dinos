@@ -1,6 +1,6 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
       <p class="m-0">The data has some errors. Please fix them to save.</p>
 
       <ul class="m-0">
-        @for (error of errors; track error) {
+        @for (error of errors(); track error) {
           <li class="mx-0 my-1 p-0">{{ error }}</li>
         }
       </ul>
@@ -25,5 +25,5 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DinoErrorsComponent {
-  @Input() errors: string[] = [];
+  errors = input<string[]>([]);
 }
