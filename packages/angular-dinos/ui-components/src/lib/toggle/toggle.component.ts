@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
 import { injectNgControl } from '../utilities/inject-ng-control';
@@ -10,10 +10,10 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   imports: [ReactiveFormsModule],
   template: `
     <label class="label cursor-pointer">
-      <span class="font-semi-bold text-lg">{{ labelText }}</span>
+      <span class="font-semi-bold text-lg">{{ labelText() }}</span>
       <input
-        [id]="id"
-        [name]="name"
+        [id]="id()"
+        [name]="name()"
         type="checkbox"
         [formControl]="ngControl.control"
         class="toggle toggle-accent"
@@ -30,7 +30,7 @@ import { injectNgControl } from '../utilities/inject-ng-control';
 export class ToggleComponent {
   protected readonly ngControl = injectNgControl();
 
-  @Input({ required: true }) id!: string;
-  @Input({ required: true }) name!: string;
-  @Input({ required: true }) labelText!: string;
+  id = input.required<string>();
+  name = input.required<string>();
+  labelText = input.required<string>();
 }
