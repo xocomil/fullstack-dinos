@@ -14,8 +14,8 @@ import { DinosCrudService } from '../dinos-crud.service';
 import { EditDinoState } from '../models/details.state';
 import {
   Dinosaur,
-  OpenaiDino,
   errorParser,
+  OpenaiDino,
   validateUpdateDino,
 } from '../models/dinosaur';
 import {
@@ -51,7 +51,7 @@ export function withEditDino() {
         setEditMode: (editMode: boolean | undefined) => {
           patchState(state, { editMode: editMode ?? false });
         },
-        newOpenAiMode: (openAiMode: boolean | undefined) => {
+        setOpenAiMode: (openAiMode: boolean | undefined) => {
           patchState(state, { openAiMode: openAiMode ?? false });
         },
         setId: async (id: string | undefined) => {
