@@ -4,7 +4,7 @@ import { IsDefined } from 'class-validator';
 export class DinoDto {
   @ApiProperty({ description: 'Dino name', required: true, example: 'T-Rex' })
   @IsDefined({ message: 'Dino name is required' })
-  name: string;
+  dinoName: string;
 
   @ApiProperty({
     description: 'Does it have feathers?',

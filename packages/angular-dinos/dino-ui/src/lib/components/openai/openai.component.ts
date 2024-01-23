@@ -20,7 +20,7 @@ import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
           <pre>{{ detailsStore.openAiObject() | json }}</pre>
         </div>
         <div class="card-actions justify-end">
-          <button class="btn btn-outline btn-primary" (click)="(sendToOpenai)">
+          <button class="btn btn-outline btn-primary" (click)="sendToOpenai()">
             Send to OpenAI
           </button>
         </div>
@@ -35,7 +35,7 @@ export class OpenaiComponent {
   protected readonly detailsStore = inject(EditDinoStore);
 
   protected turnOnEditMode() {
-    this.#router.navigate([], {
+    void this.#router.navigate([], {
       queryParams: { editMode: true },
       queryParamsHandling: 'merge',
     });
