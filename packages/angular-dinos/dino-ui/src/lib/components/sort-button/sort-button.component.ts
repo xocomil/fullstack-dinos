@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 
 @Component({
   selector: 'fullstack-dinos-sort-button',
@@ -7,7 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   imports: [CommonModule],
   template: `
     <button type="button" class="btn btn-xs" (click)="sortClicked($event)">
-      @if (direction === 'desc') {
+      @if (direction() === 'desc') {
         @defer (on immediate) {
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   },
 })
 export class SortButtonComponent {
-  @Input() direction: 'asc' | 'desc' = 'asc';
+  direction = input<'asc' | 'desc'>('asc');
   @Output() sortClick = new EventEmitter<MouseEvent>();
 
   protected sortClicked(event: MouseEvent) {

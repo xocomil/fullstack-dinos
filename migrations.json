@@ -1,12 +1,11 @@
 {
   "migrations": [
     {
-      "cli": "nx",
-      "version": "17.2.1-beta.0",
-      "description": "Add webpack.config.js file when webpackConfig is not defined",
-      "implementation": "./src/migrations/update-17-2-1/webpack-config-setup",
-      "package": "@nx/webpack",
-      "name": "update-17-2-1-webpack-config-setup"
+      "version": "17.1.0",
+      "factory": "./update-17/add-browser-sync-dependency",
+      "description": "Add 'browser-sync' as dev dependency when '@angular-devkit/build-angular:ssr-dev-server' is used, as it is no longer a direct dependency of '@angular-devkit/build-angular'.",
+      "package": "@angular/cli",
+      "name": "add-browser-sync-dependency"
     }
   ]
 }

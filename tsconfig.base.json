@@ -22,6 +22,9 @@
       "@fullstack-dinos/angular-dinos/dinos-gql": [
         "packages/angular-dinos/dinos-gql/src/index.ts"
       ],
+      "@fullstack-dinos/angular-dinos/openai": [
+        "packages/angular-dinos/openai/src/index.ts"
+      ],
       "@fullstack-dinos/rxjs-operators": [
         "packages/angular-dinos/rxjs-operators/src/index.ts"
       ],

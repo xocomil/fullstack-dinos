@@ -15,6 +15,7 @@ const globalPrefix = 'api' as const;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix(globalPrefix);
+  app.enableCors();
 
   setupSwagger(app);
 

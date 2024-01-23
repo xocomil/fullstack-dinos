@@ -53,8 +53,8 @@ export class AppController {
   }
 
   @ApiOkResponse({ type: DinoDto })
-  @Post('dino')
-  postDino(@Body() dino: DinoDto) {
-    return dino;
+  @Post('openai')
+  async openai(@Body() dino: DinoDto): Promise<DinoDto> {
+    return await this.appService.openai(dino);
   }
 }
