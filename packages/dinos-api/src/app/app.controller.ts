@@ -5,12 +5,12 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Post,
   Query,
+  Sse,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import { Observable } from 'rxjs';
 import { AppService } from './app.service';
-import { DinoDto } from './dtos/dino.dto';
 import { GetHelloResponse } from './dtos/get-hello.dto';
 
 @Controller()
@@ -52,9 +52,8 @@ export class AppController {
     return this.appService.getHelloWithAge(name, age);
   }
 
-  @ApiOkResponse({ type: DinoDto })
-  @Post('dino')
-  postDino(@Body() dino: DinoDto) {
-    return dino;
+  @Sse('openai')
+  async openai(@Body() dino: unknown): Promise<Observable<unknown>> {
+    return await this.appService.openai(dino);
   }
 }
