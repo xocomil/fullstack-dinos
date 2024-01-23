@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDefined, IsTaxId } from 'class-validator';
+import { IsDefined } from 'class-validator';
 
 export class DinoDto {
   @ApiProperty({ description: 'Dino name', required: true, example: 'T-Rex' })
@@ -8,20 +8,61 @@ export class DinoDto {
 
   @ApiProperty({
     description: 'Does it have feathers?',
-    required: true,
     example: 'true',
+    required: false,
   })
-  @IsBoolean({
-    message:
-      'Incorrect value for hasFeathers. It should be boolean true or false.',
-  })
-  hasFeathers: boolean;
+  hasFeathers?: boolean;
 
   @ApiProperty({
-    description: 'For when it retires.',
-    required: true,
-    example: '23-1234567',
+    description: 'Dino genus',
+    example: 'Tyrannosaurus',
+    required: false,
   })
-  @IsTaxId()
-  taxId: string;
+  genus?: string;
+
+  @ApiProperty({
+    description: 'Dino species',
+    example: 'rex',
+    required: false,
+  })
+  species?: string;
+
+  @ApiProperty({
+    description: 'Dino height in meters',
+    example: 4.15,
+    required: false,
+    minimum: 0,
+  })
+  heightInMeters?: number;
+
+  @ApiProperty({
+    description: 'Dino length in meters',
+    example: 4.15,
+    required: false,
+    minimum: 0,
+  })
+  lengthInMeters?: number;
+
+  @ApiProperty({
+    description: 'Dino weight in kilograms',
+    example: 1000,
+    required: false,
+    minimum: 0,
+  })
+  weightInKilos?: number;
+
+  @ApiProperty({
+    description: 'Description of dinosaur.',
+    example: 'A large, carnivorous dinosaur.',
+    required: false,
+  })
+  description?: string;
+
+  @ApiProperty({
+    description: 'Trivia about dinosaur.',
+    example: ['Tyrannosaurus rex means "king of the tyrant lizards".'],
+    required: false,
+    isArray: true,
+  })
+  trivia?: string[];
 }

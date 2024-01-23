@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
-import { Observable, of } from 'rxjs';
+import { DinoDto } from './dtos/dino.dto';
 
 @Injectable()
 export class AppService {
@@ -18,7 +18,7 @@ export class AppService {
     return { hello: `Hello ${name}! ${extraGreeting}` };
   }
 
-  async openai(dino: unknown): Promise<Observable<unknown>> {
+  async openai(dino: DinoDto): Promise<DinoDto> {
     const client = new OpenAI();
     const thread = await client.beta.threads.create();
 
@@ -46,9 +46,16 @@ export class AppService {
     const aiMessages = await client.beta.threads.messages.list(thread.id);
 
     console.log('assistant', aiMessages);
-    console.log('dino', dino);
 
-    return of({ resp });
+    const content = aiMessages.data[0].content[0];
+
+    if (content.type === 'text') {
+      const json = content.text.value;
+
+      return JSON.parse(json);
+    }
+
+    throw new Error('Response was not JSON');
   }
 }
 
