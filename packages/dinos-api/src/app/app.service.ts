@@ -24,7 +24,7 @@ export class AppService {
 
     const messages = await client.beta.threads.messages.create(thread.id, {
       role: 'user',
-      content: '{name: "Triceratops", heightInMeters: 0, weightInKilograms: 0}',
+      content: JSON.stringify(dino),
     });
 
     const assistant = await client.beta.assistants.retrieve(
