@@ -37,3 +37,5 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 ```
+## Git Multi Contributor Counter
+Number of multi-repo contributors: 3
