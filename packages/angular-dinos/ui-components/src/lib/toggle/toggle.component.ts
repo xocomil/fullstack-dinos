@@ -5,10 +5,9 @@ import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.di
 import { injectNgControl } from '../utilities/inject-ng-control';
 
 @Component({
-  selector: 'ui-toggle',
-  standalone: true,
-  imports: [ReactiveFormsModule],
-  template: `
+    selector: 'ui-toggle',
+    imports: [ReactiveFormsModule],
+    template: `
     <label class="label cursor-pointer">
       <span class="font-semi-bold text-lg">{{ labelText() }}</span>
       <input
@@ -20,12 +19,12 @@ import { injectNgControl } from '../utilities/inject-ng-control';
       />
     </label>
   `,
-  styleUrls: ['./toggle.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'form-control',
-  },
-  hostDirectives: [NoopValueAccessorDirective],
+    styleUrls: ['./toggle.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'form-control',
+    },
+    hostDirectives: [NoopValueAccessorDirective]
 })
 export class ToggleComponent {
   protected readonly ngControl = injectNgControl();

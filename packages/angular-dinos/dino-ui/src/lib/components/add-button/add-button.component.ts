@@ -6,10 +6,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'fullstack-dinos-add-button',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'fullstack-dinos-add-button',
+    imports: [CommonModule],
+    template: `
     <button
       type="button"
       class="btn btn-success btn-outline btn-sm"
@@ -32,11 +31,11 @@ import {
       <span class="ml-2">Add Dino</span>
     </button>
   `,
-  styleUrls: ['./add-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'block',
-  },
+    styleUrls: ['./add-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'block',
+    }
 })
 export class AddButtonComponent {
   click = new EventEmitter<void>();

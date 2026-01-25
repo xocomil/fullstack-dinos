@@ -18,9 +18,8 @@ import { SortButtonComponent } from '../sort-button/sort-button.component';
 import { YesNoComponent } from '../yes-no/yes-no.component';
 
 @Component({
-  selector: 'fullstack-dinos-dinos-table',
-  standalone: true,
-  template: `
+    selector: 'fullstack-dinos-dinos-table',
+    template: `
     <table class="table-zebra table">
       <thead>
         <tr class="semi-bold text-lg">
@@ -68,16 +67,16 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
     </table>
     <fullstack-dinos-delete-dino-modal />
   `,
-  styleUrls: ['./dinos-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    DeleteButtonComponent,
-    DeleteDinoModalComponent,
-    RouterLink,
-    SortButtonComponent,
-    YesNoComponent,
-  ],
+    styleUrls: ['./dinos-table.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        DeleteButtonComponent,
+        DeleteDinoModalComponent,
+        RouterLink,
+        SortButtonComponent,
+        YesNoComponent,
+    ]
 })
 export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })

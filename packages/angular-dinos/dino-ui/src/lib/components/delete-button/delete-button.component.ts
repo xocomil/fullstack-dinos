@@ -7,10 +7,9 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'fullstack-dinos-delete-button',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'fullstack-dinos-delete-button',
+    imports: [CommonModule],
+    template: `
     <button class="btn btn-error btn-outline btn-sm" (click)="onClick($event)">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -28,11 +27,11 @@ import {
       </svg>
     </button>
   `,
-  styleUrls: ['./delete-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'block',
-  },
+    styleUrls: ['./delete-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'block',
+    }
 })
 export class DeleteButtonComponent {
   @Output()

@@ -1,4 +1,3 @@
-import { JsonPipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -12,7 +11,6 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
 
 @Component({
   selector: 'fullstack-dinos-home',
-  standalone: true,
   template: `
     <div class="flex justify-end gap-4">
       <select
@@ -30,7 +28,7 @@ import { DinosTableComponent } from '../dinos-table/dinos-table.component';
   `,
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AddButtonComponent, DinosTableComponent, JsonPipe],
+  imports: [AddButtonComponent, DinosTableComponent],
   providers: [DinosCrudStoreService],
   host: {
     class: 'mt-2',

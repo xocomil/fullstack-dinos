@@ -4,10 +4,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'fullstack-dinos-dino-errors',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
+    selector: 'fullstack-dinos-dino-errors',
+    imports: [CommonModule, FormsModule],
+    template: `
     <div class="card-body p-2">
       <p class="m-0">The data has some errors. Please fix them to save.</p>
 
@@ -18,11 +17,11 @@ import { FormsModule } from '@angular/forms';
       </ul>
     </div>
   `,
-  host: {
-    class: 'block card w-full bg-error text-error-content',
-  },
-  styleUrls: ['./dino-errors.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'block card w-full bg-error text-error-content',
+    },
+    styleUrls: ['./dino-errors.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DinoErrorsComponent {
   errors = input<string[]>([]);

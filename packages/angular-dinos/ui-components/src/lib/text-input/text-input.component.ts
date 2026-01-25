@@ -8,10 +8,9 @@ const AllowedHtmlTypes = ['text', 'number', 'email'] as const;
 type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
 
 @Component({
-  selector: 'ui-text-input',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  template: `
+    selector: 'ui-text-input',
+    imports: [CommonModule, ReactiveFormsModule],
+    template: `
     @if (labelText()) {
       <label [for]="id()">{{ labelText() }}</label>
     }
@@ -40,12 +39,12 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
       </span>
     }
   `,
-  styleUrls: ['./text-input.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'form-control',
-  },
-  hostDirectives: [NoopValueAccessorDirective],
+    styleUrls: ['./text-input.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'form-control',
+    },
+    hostDirectives: [NoopValueAccessorDirective]
 })
 export class TextInputComponent {
   protected readonly ngControl = injectNgControl();

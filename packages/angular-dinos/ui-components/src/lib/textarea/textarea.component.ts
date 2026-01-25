@@ -6,8 +6,7 @@ import { injectNgControl } from '../utilities/inject-ng-control';
 
 @Component({
   selector: 'ui-textarea',
-  standalone: true,
-  imports: [NgIf, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   template: `
     <label class="label">
       <span>{{ labelText() }}</span>
