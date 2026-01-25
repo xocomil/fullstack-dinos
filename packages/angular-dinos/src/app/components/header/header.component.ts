@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { RouteToHomeComponent } from '@dino-ui/components';
 
@@ -13,6 +13,6 @@ import { RouteToHomeComponent } from '@dino-ui/components';
     styleUrls: ['./header.component.scss'],
     // eslint-disable-next-line @angular-eslint/no-host-metadata-property
     host: { class: 'block' },
-    imports: [CommonModule, RouteToHomeComponent]
+    imports: [RouteToHomeComponent]
 })
 export class HeaderComponent {}

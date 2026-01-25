@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,7 +7,7 @@ import {
 
 @Component({
     selector: 'fullstack-dinos-add-button',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <button
       type="button"

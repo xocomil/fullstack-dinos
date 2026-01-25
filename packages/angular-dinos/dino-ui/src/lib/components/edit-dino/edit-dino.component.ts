@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -125,15 +125,14 @@ import { ToastComponent } from '../toast/toast.component';
   `,
     styleUrls: ['./edit-dino.component.scss'],
     imports: [
-        CommonModule,
-        DinoErrorsComponent,
-        FormsModule,
-        RouterLink,
-        TextareaComponent,
-        TextInputComponent,
-        ToggleComponent,
-        ToastComponent,
-    ]
+    DinoErrorsComponent,
+    FormsModule,
+    RouterLink,
+    TextareaComponent,
+    TextInputComponent,
+    ToggleComponent,
+    ToastComponent
+]
 })
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DINO_STORE);

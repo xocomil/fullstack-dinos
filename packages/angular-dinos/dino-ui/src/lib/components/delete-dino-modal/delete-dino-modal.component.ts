@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import {
   BaseDinosaur,
@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 
 @Component({
     selector: 'fullstack-dinos-delete-dino-modal',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <dialog #dialog class="modal">
       <div class="modal-box">

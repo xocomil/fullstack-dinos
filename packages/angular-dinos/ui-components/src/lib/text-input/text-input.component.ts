@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
@@ -9,7 +9,7 @@ type AllowedHtmlTypes = (typeof AllowedHtmlTypes)[number];
 
 @Component({
     selector: 'ui-text-input',
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [ReactiveFormsModule],
     template: `
     @if (labelText()) {
       <label [for]="id()">{{ labelText() }}</label>

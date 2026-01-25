@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, input } from '@angular/core';
 
 @Component({
     selector: 'fullstack-dinos-yes-no',
-    imports: [CommonModule],
+    imports: [],
     template: `
     @if (value()) {
       <svg

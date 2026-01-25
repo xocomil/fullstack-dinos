@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
     selector: 'fullstack-dinos-toast',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <div class="alert alert-error">
       <ng-content />

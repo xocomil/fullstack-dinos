@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, input, Output } from '@angular/core';
 
 @Component({
     selector: 'fullstack-dinos-sort-button',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <button type="button" class="btn btn-xs" (click)="sortClicked($event)">
       @if (direction() === 'desc') {

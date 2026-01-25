@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -43,11 +43,10 @@ import { OpenaiComponent } from '../openai/openai.component';
     styleUrls: ['./details.component.scss'],
     providers: [provideEditDinoStore()],
     imports: [
-        CommonModule,
-        DisplayDinoComponent,
-        EditDinoComponent,
-        OpenaiComponent,
-    ],
+    DisplayDinoComponent,
+    EditDinoComponent,
+    OpenaiComponent
+],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent {

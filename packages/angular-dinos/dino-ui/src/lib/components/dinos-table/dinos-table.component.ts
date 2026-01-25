@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -70,13 +70,12 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
     styleUrls: ['./dinos-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
-        CommonModule,
-        DeleteButtonComponent,
-        DeleteDinoModalComponent,
-        RouterLink,
-        SortButtonComponent,
-        YesNoComponent,
-    ]
+    DeleteButtonComponent,
+    DeleteDinoModalComponent,
+    RouterLink,
+    SortButtonComponent,
+    YesNoComponent
+]
 })
 export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })

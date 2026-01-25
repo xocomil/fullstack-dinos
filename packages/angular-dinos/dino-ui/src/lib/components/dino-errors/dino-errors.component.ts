@@ -1,11 +1,11 @@
 /* eslint-disable @angular-eslint/no-host-metadata-property */
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'fullstack-dinos-dino-errors',
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     template: `
     <div class="card-body p-2">
       <p class="m-0">The data has some errors. Please fix them to save.</p>

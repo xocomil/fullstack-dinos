@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +8,7 @@ import {
 
 @Component({
     selector: 'fullstack-dinos-delete-button',
-    imports: [CommonModule],
+    imports: [],
     template: `
     <button class="btn btn-error btn-outline btn-sm" (click)="onClick($event)">
       <svg
