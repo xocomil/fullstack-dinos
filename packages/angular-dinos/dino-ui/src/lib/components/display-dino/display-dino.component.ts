@@ -5,10 +5,9 @@ import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { extraDescriptionFromDino } from '../models/details.constants';
 
 @Component({
-  selector: 'fullstack-dinos-display-dino',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'fullstack-dinos-display-dino',
+    imports: [CommonModule],
+    template: `
     <div class="flex flex-1 gap-2">
       <h1 class="mb-1 flex-grow text-blue-500">
         {{ detailsStore.dinosaur().dinoName }}
@@ -60,11 +59,11 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       </div>
     }
   `,
-  styleUrls: ['./display-dino.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  host: {
-    class: 'block',
-  },
+    styleUrls: ['./display-dino.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        class: 'block',
+    }
 })
 export class DisplayDinoComponent {
   readonly #router = inject(Router);

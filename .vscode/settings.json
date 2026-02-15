@@ -1,5 +1,6 @@
 {
   "cSpell.words": ["dinos", "openai"],
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "vsicons.presets.angular": true
+  "vsicons.presets.angular": true,
+  "css.lint.unknownAtRules": "ignore"
 }

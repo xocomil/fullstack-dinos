@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+/* nx-tailwind-sources:start */
+@source "..";
+@source "../dino-ui";
+@source "../dinos-gql";
+@source "../openai";
+@source "../rxjs-operators";
+@source "../ui-components";
+/* nx-tailwind-sources:end */
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
+
+/* You can add global styles to this file, and also import other style files */
+label > span,
+.label,
+.fieldset-legend {
+  @apply label text-secondary;
+}
+
+input:not([type='checkbox'], [type='radio']) {
+  @apply input;
+
+  &.error {
+    @apply border-error;
+  }
+}
+
+textarea {
+  @apply textarea;
+
+  &.error {
+    @apply border-error;
+  }
+}
+
+span {
+  &.error {
+    @apply text-error italic;
+  }
+}

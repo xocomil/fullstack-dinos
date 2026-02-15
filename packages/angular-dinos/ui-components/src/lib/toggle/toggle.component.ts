@@ -6,11 +6,10 @@ import { injectNgControl } from '../utilities/inject-ng-control';
 
 @Component({
   selector: 'ui-toggle',
-  standalone: true,
   imports: [ReactiveFormsModule],
   template: `
+    <legend class="fieldset-legend text-lg">{{ labelText() }}</legend>
     <label class="label cursor-pointer">
-      <span class="font-semi-bold text-lg">{{ labelText() }}</span>
       <input
         [id]="id()"
         [name]="name()"
@@ -20,10 +19,9 @@ import { injectNgControl } from '../utilities/inject-ng-control';
       />
     </label>
   `,
-  styleUrls: ['./toggle.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'form-control',
+    class: 'fieldset',
   },
   hostDirectives: [NoopValueAccessorDirective],
 })

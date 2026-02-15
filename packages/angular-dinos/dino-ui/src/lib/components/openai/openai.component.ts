@@ -4,10 +4,9 @@ import { Router } from '@angular/router';
 import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 
 @Component({
-  selector: 'fullstack-dinos-openai',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'fullstack-dinos-openai',
+    imports: [CommonModule],
+    template: `
     <button class="btn btn-outline flex-none" (click)="turnOnEditMode()">
       Edit
     </button>
@@ -27,8 +26,8 @@ import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
       </div>
     </div>
   `,
-  styleUrl: './openai.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrl: './openai.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OpenaiComponent {
   readonly #router = inject(Router);

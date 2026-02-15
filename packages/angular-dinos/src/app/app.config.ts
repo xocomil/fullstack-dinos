@@ -1,5 +1,9 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZonelessChangeDetection,
+} from '@angular/core';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -32,5 +36,6 @@ export const appConfig: ApplicationConfig = {
       deps: [HttpLink],
     },
     provideHttpClient(),
+    provideZonelessChangeDetection(),
   ],
 };

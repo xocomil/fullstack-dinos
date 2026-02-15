@@ -8,24 +8,19 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "syncGenerators": ["@juristr/nx-tailwind-sync:source-directives"],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/angular-dinos",
         "index": "packages/angular-dinos/src/index.html",
         "browser": "packages/angular-dinos/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": [],
         "tsConfig": "packages/angular-dinos/tsconfig.app.json",
         "assets": [
           "packages/angular-dinos/src/favicon.ico",
           "packages/angular-dinos/src/assets"
         ],
-        "styles": [
-          "packages/angular-dinos/src/styles.scss"
-        ],
+        "styles": ["packages/angular-dinos/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -48,6 +43,7 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "syncGenerators": ["@juristr/nx-tailwind-sync:source-directives"],
       "configurations": {
         "production": {
           "buildTarget": "angular-dinos:build:production"
@@ -59,7 +55,8 @@
       "defaultConfiguration": "development",
       "options": {
         "proxyConfig": "packages/angular-dinos/proxy.conf.json"
-      }
+      },
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -69,17 +66,14 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "packages/angular-dinos/jest.config.ts"
+        "jestConfig": "packages/angular-dinos/jest.config.ts",
+        "tsConfig": "packages/angular-dinos/tsconfig.spec.json"
       }
     },
     "serve-static": {

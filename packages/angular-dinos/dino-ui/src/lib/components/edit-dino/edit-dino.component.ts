@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -12,10 +12,9 @@ import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 import { ToastComponent } from '../toast/toast.component';
 
 @Component({
-  selector: 'fullstack-dinos-edit-dino',
-  standalone: true,
-  host: { class: 'block' },
-  template: `
+    selector: 'fullstack-dinos-edit-dino',
+    host: { class: 'block' },
+    template: `
     @if (detailsStore.errorsArray().length > 0) {
       <fullstack-dinos-dino-errors
         class="hidden lg:block"
@@ -124,17 +123,16 @@ import { ToastComponent } from '../toast/toast.component';
       </fullstack-dinos-toast>
     }
   `,
-  styleUrls: ['./edit-dino.component.scss'],
-  imports: [
-    CommonModule,
+    styleUrls: ['./edit-dino.component.scss'],
+    imports: [
     DinoErrorsComponent,
     FormsModule,
     RouterLink,
     TextareaComponent,
     TextInputComponent,
     ToggleComponent,
-    ToastComponent,
-  ],
+    ToastComponent
+]
 })
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DINO_STORE);

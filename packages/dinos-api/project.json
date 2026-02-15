@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/dinos-api/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/webpack:webpack",
@@ -49,6 +50,5 @@
         "jestConfig": "packages/dinos-api/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -16,9 +16,8 @@ import { EditDinoComponent } from '../edit-dino/edit-dino.component';
 import { OpenaiComponent } from '../openai/openai.component';
 
 @Component({
-  selector: 'fullstack-dinos-details',
-  standalone: true,
-  template: `
+    selector: 'fullstack-dinos-details',
+    template: `
     <!--    <pre>-->
     <!--editMode: {{ detailsStore.editMode() }}-->
     <!--dino: {{ detailsStore.dinosaur() | json }}-->
@@ -41,15 +40,14 @@ import { OpenaiComponent } from '../openai/openai.component';
       <fullstack-dinos-display-dino />
     }
   `,
-  styleUrls: ['./details.component.scss'],
-  providers: [provideEditDinoStore()],
-  imports: [
-    CommonModule,
+    styleUrls: ['./details.component.scss'],
+    providers: [provideEditDinoStore()],
+    imports: [
     DisplayDinoComponent,
     EditDinoComponent,
-    OpenaiComponent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    OpenaiComponent
+],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent {
   protected readonly detailsStore = inject(EditDinoStore);
