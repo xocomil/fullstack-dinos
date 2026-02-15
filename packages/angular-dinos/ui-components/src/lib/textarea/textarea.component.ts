@@ -1,5 +1,9 @@
-
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NoopValueAccessorDirective } from '../directives/noop-value-accessor.directive';
 import { injectNgControl } from '../utilities/inject-ng-control';
@@ -8,35 +12,38 @@ import { injectNgControl } from '../utilities/inject-ng-control';
   selector: 'ui-textarea',
   imports: [ReactiveFormsModule],
   template: `
-    <label class="label">
-      <span>{{ labelText() }}</span>
-      @if (altLabelText()) {
-        <span class="label-text-alt">{{ altLabelText() }}</span>
-      }
+    <label class="floating-label">
+      <span>{{ placeholderDisplay() }}</span>
+      <textarea
+        [id]="id()"
+        [name]="name()"
+        class="textarea-bordered h-24 min-w-full"
+        [placeholder]="placeholderDisplay()"
+        [formControl]="ngControl.control"
+        [class.error]="errorText()"
+      ></textarea>
     </label>
-    <textarea
-      [id]="id()"
-      [name]="name()"
-      class="textarea textarea-bordered h-24"
-      [placeholder]="placeholder()"
-      [formControl]="ngControl.control"
-      [class.error]="errorText()"
-    ></textarea>
+    @if (altLabelText()) {
+      <p class="label not-prose">{{ altLabelText() }}</p>
+    }
     @if (errorText()) {
       <span class="error">
         {{ errorText() }}
       </span>
     }
   `,
-  styleUrls: ['./textarea.component.scss'],
+  styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'form-control',
+    class: 'fieldset',
   },
   hostDirectives: [NoopValueAccessorDirective],
 })
 export class TextareaComponent {
   protected readonly ngControl = injectNgControl();
+  protected readonly placeholderDisplay = computed(() => {
+    return this.placeholder() || this.labelText();
+  });
 
   id = input.required<string>();
   name = input.required<string>();
