@@ -1,4 +1,3 @@
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,8 +17,8 @@ import { SortButtonComponent } from '../sort-button/sort-button.component';
 import { YesNoComponent } from '../yes-no/yes-no.component';
 
 @Component({
-    selector: 'fullstack-dinos-dinos-table',
-    template: `
+  selector: 'fullstack-dinos-dinos-table',
+  template: `
     <table class="table-zebra table">
       <thead>
         <tr class="semi-bold text-lg">
@@ -38,7 +37,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
       <tbody>
         @for (dinosaur of dinosStore.dinosaurs(); track dinosaur.id) {
           <tr
-            class="hover hover:cursor-pointer"
+            class="hover hover:cursor-pointer hover:bg-primary/10"
             [routerLink]="['/dinos', dinosaur.id]"
           >
             <td>
@@ -49,8 +48,10 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
               </span>
             </td>
             <td>{{ dinosaur.description }}</td>
-            <td class="flex place-content-center">
-              <fullstack-dinos-yes-no [value]="dinosaur.hasFeathers" />
+            <td>
+              <div class="flex place-content-center">
+                <fullstack-dinos-yes-no [value]="dinosaur.hasFeathers" />
+              </div>
             </td>
             <td>
               <fullstack-dinos-delete-button
@@ -67,15 +68,21 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
     </table>
     <fullstack-dinos-delete-dino-modal />
   `,
-    styleUrls: ['./dinos-table.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+    `,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
     DeleteButtonComponent,
     DeleteDinoModalComponent,
     RouterLink,
     SortButtonComponent,
-    YesNoComponent
-]
+    YesNoComponent,
+  ],
 })
 export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })
