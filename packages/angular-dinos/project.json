@@ -8,6 +8,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
+      "syncGenerators": ["@juristr/nx-tailwind-sync:source-directives"],
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/angular-dinos",
@@ -19,7 +20,7 @@
           "packages/angular-dinos/src/favicon.ico",
           "packages/angular-dinos/src/assets"
         ],
-        "styles": ["packages/angular-dinos/src/styles.scss"],
+        "styles": ["packages/angular-dinos/src/styles.css"],
         "scripts": []
       },
       "configurations": {
@@ -42,6 +43,7 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "syncGenerators": ["@juristr/nx-tailwind-sync:source-directives"],
       "configurations": {
         "production": {
           "buildTarget": "angular-dinos:build:production"
