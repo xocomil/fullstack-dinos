@@ -3788,9 +3788,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@jscutlery/operators@^2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@jscutlery/operators/-/operators-2.1.3.tgz#646bd3014107f8409d94b89bcef81be04adac465"
-  integrity sha512-2Uo5D7vVVeq34kOr9teyWNootl2lF9laNOFwgx3epiMXfHj6mV5YTtJMlYAqlVgDZMzfigst1Peml4qTTEkPwg==
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@jscutlery/operators/-/operators-2.1.5.tgz#67408865b5b111a466cc7fab0be9e216d31550ec"
+  integrity sha512-oYpIcaHvIrWYv2o99gF9ImQAaw73NPpRiJSVOkuYy4iGvtmQCbgNY8O6DDoyMwELy0VAO7VAtFTlOwwjLRiFhA==
 
 "@jsonjoy.com/base64@17.65.0":
   version "17.65.0"
@@ -3802,7 +3802,7 @@
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/base64/-/base64-1.1.2.tgz#cf8ea9dcb849b81c95f14fc0aaa151c6b54d2578"
   integrity sha512-q6XAnWQDIMA3+FTiOYajoYqySkO+JSat0ytXGSuRdq9uXE7o92gzuQwQM14xaCRlBLGq3v5miDGC4vkVTn54xA==
 
-"@jsonjoy.com/buffers@17.65.0", "@jsonjoy.com/buffers@^17.65.0":
+"@jsonjoy.com/buffers@17.65.0":
   version "17.65.0"
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/buffers/-/buffers-17.65.0.tgz#d6890737d9cbc49c17e2c5d1a2d796c57205152c"
   integrity sha512-eBrIXd0/Ld3p9lpDDlMaMn6IEfWqtHMD+z61u0JrIiPzsV1r7m6xDZFRxJyvIFTEO+SWdYF9EiQbXZGd8BzPfA==
@@ -3811,6 +3811,11 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@jsonjoy.com/buffers/-/buffers-1.2.1.tgz#8d99c7f67eaf724d3428dfd9826c6455266a5c83"
   integrity sha512-12cdlDwX4RUM3QxmUbVJWqZ/mrK6dFQH4Zxq6+r1YXKXYBNgZXndx2qbCJwh3+WWkCSn67IjnlG3XYTvmvYtgA==
+
+"@jsonjoy.com/buffers@^17.65.0":
+  version "17.67.0"
+  resolved "https://registry.yarnpkg.com/@jsonjoy.com/buffers/-/buffers-17.67.0.tgz#5c58dbcdeea8824ce296bd1cfce006c2eb167b3d"
+  integrity sha512-tfExRpYxBvi32vPs9ZHaTjSP4fHAfzSmcahOfNxtvGHcyJel+aibkPlGeBB+7AoC6hL7lXIE++8okecBxx7lcw==
 
 "@jsonjoy.com/codegen@17.65.0":
   version "17.65.0"
