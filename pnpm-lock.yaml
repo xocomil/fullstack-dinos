@@ -74,9 +74,6 @@ importers:
       '@ngrx/component-store':
         specifier: 21.0.1
         version: 21.0.1(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@ngrx/eslint-plugin':
-        specifier: 21.0.1
-        version: 21.0.1(@typescript-eslint/utils@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript-eslint@8.56.0(eslint@8.57.1)(typescript@5.9.3))(typescript@5.9.3)
       '@ngrx/operators':
         specifier: 21.0.1
         version: 21.0.1(rxjs@7.8.2)
@@ -177,6 +174,9 @@ importers:
       '@ngneat/spectator':
         specifier: ^16.0.0
         version: 16.0.0(@angular/animations@21.1.5(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2)))(@angular/common@21.1.5(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/router@21.1.5(@angular/common@21.1.5(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2))(@angular/platform-browser@21.1.5(@angular/animations@21.1.5(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2)))(@angular/common@21.1.5(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.1.5(@angular/compiler@21.1.5)(rxjs@7.8.2)))(rxjs@7.8.2))
+      '@ngrx/eslint-plugin':
+        specifier: 21.0.1
+        version: 21.0.1(@typescript-eslint/utils@7.18.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript-eslint@8.56.0(eslint@8.57.1)(typescript@5.9.3))(typescript@5.9.3)
       '@nx/angular':
         specifier: 22.5.2
         version: 22.5.2(931483256de71761212ae0909cad2bdc)

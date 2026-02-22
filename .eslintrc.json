@@ -52,10 +52,6 @@
         "jest": true
       },
       "rules": {}
-    },
-    {
-      "files": ["*.ts"],
-      "extends": ["plugin:@ngrx/component-store-strict"]
     }
   ]
 }
