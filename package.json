@@ -113,7 +113,6 @@
     "start-frontend": "nx serve angular-dinos"
   },
   "volta": {
-    "node": "24.13.0",
-    "yarn": "1.22.21"
+    "node": "24.13.0"
   }
 }
