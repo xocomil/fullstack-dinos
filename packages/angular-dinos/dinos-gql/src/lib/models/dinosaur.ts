@@ -1,28 +1,36 @@
-import { SafeParseReturnType, z } from 'zod';
+import { z, ZodSafeParseResult } from 'zod';
 
 export const baseDinoParser = z.object({
   id: z.string().nullable().optional(),
   dinoName: z
     .string({
-      invalid_type_error: 'Dinosaur name must be a string.',
-      required_error: 'Dinosaur name is required.',
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Dinosaur name is required.'
+          : 'Dinosaur name must be a string.',
     })
     .min(3, { message: 'Name must be at least 3 characters long.' }),
   genus: z
     .string({
-      invalid_type_error: 'Genus must be a string.',
-      required_error: 'Genus is required.',
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Genus is required.'
+          : 'Genus must be a string.',
     })
     .min(3, { message: 'Genus must be at least 3 characters long.' }),
   species: z
     .string({
-      invalid_type_error: 'Species must be a string.',
-      required_error: 'Species is required.',
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Species is required.'
+          : 'Species must be a string.',
     })
     .min(3, { message: 'Species must be at least 3 characters long.' }),
   hasFeathers: z.boolean({
-    invalid_type_error: 'Has feathers must be a boolean value.',
-    required_error: 'Has feathers is required.',
+    error: (issue) =>
+      issue.input === undefined
+        ? 'Has feathers is required.'
+        : 'Has feathers must be a boolean value.',
   }),
   description: z
     .string()
@@ -38,30 +46,57 @@ export type BaseDinosaur = z.infer<typeof baseDinoParser>;
 
 export const dinoParser = baseDinoParser.extend({
   heightInMeters: z
-    .number({ invalid_type_error: 'Height in meters must be a number.' })
+    .number({
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Height in meters is required.'
+          : 'Height in meters must be a number.',
+    })
     .gt(0, { message: 'Height in meters must be greater than 0.' }),
   weightInKilos: z
-    .number({ invalid_type_error: 'Weight in kilos must be a number.' })
+    .number({
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Weight in kilos is required.'
+          : 'Weight in kilos must be a number.',
+    })
     .gt(0, { message: 'Weight in kilos must be greater than 0.' }),
   trivia: z.array(
     z
       .string({
-        invalid_type_error: 'A trivia item must be a string',
-        required_error: 'You cannot provide empty trivia.',
+        error: (issue) =>
+          issue.input === undefined
+            ? 'A trivia item is required.'
+            : 'A trivia item must be a string',
       })
       .min(3, {
         message:
           'You cannot provide empty trivia items. Must be at least 3 characters.',
       }),
-    { required_error: 'Trivia is required.' },
+    {
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Trivia is required.'
+          : 'Trivia must be an array.',
+    },
   ),
   imageUrl: z
-    .string({ invalid_type_error: 'Image URL must be a string.' })
+    .string({
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Image URL is required.'
+          : 'Image URL must be a string.',
+    })
     .url('Image URL is not a valid URL.')
     .or(z.string().max(0))
     .nullish(),
   updatedAt: z
-    .date({ invalid_type_error: 'Updated At must be a date.' })
+    .date({
+      error: (issue) =>
+        issue.input === undefined
+          ? 'Updated At is required.'
+          : 'Updated At must be a date.',
+    })
     .optional(),
 });
 
@@ -94,7 +129,7 @@ export const createEmptyDino = (): Dinosaur => ({
   trivia: [],
 });
 
-const formatDinoErrors = <T, U>(parseResults: SafeParseReturnType<T, U>) =>
+const formatDinoErrors = <T>(parseResults: ZodSafeParseResult<T>) =>
   parseResults.success
     ? {}
     : parseResults.error.issues.reduce(
