@@ -20,20 +20,20 @@
     "@nestjs/schematics": "11.0.9",
     "@nestjs/testing": "^10.3.0",
     "@ngneat/spectator": "^16.0.0",
-    "@nx/angular": "22.4.2",
-    "@nx/cypress": "22.4.2",
-    "@nx/eslint": "22.4.2",
-    "@nx/eslint-plugin": "22.4.2",
-    "@nx/jest": "22.4.2",
-    "@nx/js": "22.4.2",
-    "@nx/nest": "22.4.2",
-    "@nx/node": "22.4.2",
-    "@nx/web": "22.4.2",
-    "@nx/webpack": "22.4.2",
-    "@nx/workspace": "22.4.2",
+    "@nx/angular": "22.5.2",
+    "@nx/cypress": "22.5.2",
+    "@nx/eslint": "22.5.2",
+    "@nx/eslint-plugin": "22.5.2",
+    "@nx/jest": "22.5.2",
+    "@nx/js": "22.5.2",
+    "@nx/nest": "22.5.2",
+    "@nx/node": "22.5.2",
+    "@nx/web": "22.5.2",
+    "@nx/webpack": "22.5.2",
+    "@nx/workspace": "22.5.2",
     "@schematics/angular": "21.1.1",
     "@swc-node/register": "1.11.1",
-    "@swc/core": "1.15.10",
+    "@swc/core": "1.15.5",
     "@types/jest": "30.0.0",
     "@types/node": "^18.16.9",
     "@typescript-eslint/eslint-plugin": "7.16.0",
@@ -52,7 +52,7 @@
     "jest-util": "30.2.0",
     "jsonc-eslint-parser": "^2.4.2",
     "ng-mocks": "^14.12.1",
-    "nx": "22.4.2",
+    "nx": "22.5.2",
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^3.2.4",
@@ -114,5 +114,11 @@
   },
   "volta": {
     "node": "24.13.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "nx"
+    ]
   }
 }
