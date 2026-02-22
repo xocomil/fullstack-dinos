@@ -110,7 +110,7 @@
     "rxjs": "^7.8.2",
     "stylelint-config-tailwindcss": "^1.0.1",
     "tslib": "^2.6.2",
-    "zod": "^3.22.4"
+    "zod": "^4.3.6"
   },
   "scripts": {
     "gql": "graphql-codegen --config=\"./packages/angular-dinos/dinos-gql/codegen.ts\" --verbose",
