@@ -117,5 +117,13 @@
   },
   "nxCloudAccessToken": "YzY0NDA4NTctYTVmMC00ZTg3LWJjMmUtODFmYzRhNWE5YzU0fHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ]
 }
