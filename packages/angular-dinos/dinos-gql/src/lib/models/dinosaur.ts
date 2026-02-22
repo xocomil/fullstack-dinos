@@ -1,4 +1,4 @@
-import { z, ZodSafeParseResult } from 'zod';
+import * as z from 'zod';
 
 export const baseDinoParser = z.object({
   id: z.string().nullable().optional(),
@@ -129,7 +129,7 @@ export const createEmptyDino = (): Dinosaur => ({
   trivia: [],
 });
 
-const formatDinoErrors = <T>(parseResults: ZodSafeParseResult<T>) =>
+const formatDinoErrors = <T>(parseResults: z.ZodSafeParseResult<T>) =>
   parseResults.success
     ? {}
     : parseResults.error.issues.reduce(
