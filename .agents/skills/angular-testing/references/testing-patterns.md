@@ -18,7 +18,7 @@ import { describe, it, expect } from 'vitest';
 
 describe('UserCard', () => {
   it('should match snapshot', () => {
-    const fixture = TestBed.createComponent(UserCardComponent);
+    const fixture = TestBed.createComponent(UserCard);
     fixture.componentRef.setInput('user', { id: '1', name: 'John', email: 'john@example.com' });
     fixture.detectChanges();
     
@@ -59,7 +59,7 @@ describe('Debounced Search', () => {
   });
   
   it('should debounce search input', async () => {
-    const fixture = TestBed.createComponent(SearchComponent);
+    const fixture = TestBed.createComponent(Search);
     fixture.detectChanges();
     
     fixture.componentInstance.query.set('test');
@@ -84,7 +84,7 @@ import { describe, it, expect, vi } from 'vitest';
 
 // Mock entire module
 vi.mock('./analytics.service', () => ({
-  AnalyticsService: class {
+  Analytics: class {
     track = vi.fn();
     identify = vi.fn();
   },
@@ -92,8 +92,8 @@ vi.mock('./analytics.service', () => ({
 
 describe('with mocked analytics', () => {
   it('should track events', () => {
-    const fixture = TestBed.createComponent(DashboardComponent);
-    const analytics = TestBed.inject(AnalyticsService);
+    const fixture = TestBed.createComponent(Dashboard);
+    const analytics = TestBed.inject(Analytics);
     
     fixture.detectChanges();
     
@@ -107,11 +107,11 @@ describe('with mocked analytics', () => {
 ```typescript
 import { describe, it, expect, vi } from 'vitest';
 
-describe('UserService', () => {
+describe('User', () => {
   it('should load user data', async () => {
     const mockUser = { id: '1', name: 'Test' };
     const httpMock = TestBed.inject(HttpTestingController);
-    const service = TestBed.inject(UserService);
+    const service = TestBed.inject(User);
     
     const userPromise = service.loadUser('1');
     
@@ -200,9 +200,9 @@ const createTestProduct = (overrides = {}) => ({
   ...overrides,
 });
 
-describe('OrderComponent', () => {
+describe('Order', () => {
   it('should calculate total', () => {
-    const fixture = TestBed.createComponent(OrderComponent);
+    const fixture = TestBed.createComponent(Order);
     fixture.componentRef.setInput('user', createTestUser());
     fixture.componentRef.setInput('products', [
       createTestProduct({ price: 10 }),
@@ -224,7 +224,7 @@ Use Angular CDK component harnesses for more maintainable tests:
 ```typescript
 import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
 
-export class CounterHarness extends ComponentHarness {
+export class CounterHarn extends ComponentHarness {
   static hostSelector = 'app-counter';
   
   // Locators
@@ -251,8 +251,8 @@ export class CounterHarness extends ComponentHarness {
   }
   
   // Filter factory
-  static with(options: { count?: number } = {}): HarnessPredicate<CounterHarness> {
-    return new HarnessPredicate(CounterHarness, options)
+  static with(options: { count?: number } = {}): HarnessPredicate<CounterHarn> {
+    return new HarnessPredicate(CounterHarn, options)
       .addOption('count', options.count, async (harness, count) => {
         return (await harness.getCount()) === count;
       });
@@ -265,20 +265,20 @@ export class CounterHarness extends ComponentHarness {
 ```typescript
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
-describe('CounterComponent with Harness', () => {
+describe('Counter with Harness', () => {
   let loader: HarnessLoader;
   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CounterComponent],
+      imports: [Counter],
     }).compileComponents();
     
-    const fixture = TestBed.createComponent(CounterComponent);
+    const fixture = TestBed.createComponent(Counter);
     loader = TestbedHarnessEnvironment.loader(fixture);
   });
   
   it('should increment count', async () => {
-    const counter = await loader.getHarness(CounterHarness);
+    const counter = await loader.getHarness(CounterHarn);
     
     expect(await counter.getCount()).toBe(0);
     
@@ -290,12 +290,12 @@ describe('CounterComponent with Harness', () => {
   });
   
   it('should find counter with specific count', async () => {
-    const counter = await loader.getHarness(CounterHarness);
+    const counter = await loader.getHarness(CounterHarn);
     await counter.increment();
     await counter.increment();
     
     // Find counter with count of 2
-    const counterWith2 = await loader.getHarness(CounterHarness.with({ count: 2 }));
+    const counterWith2 = await loader.getHarness(CounterHarn.with({ count: 2 }));
     expect(counterWith2).toBeTruthy();
   });
 });
@@ -316,8 +316,8 @@ describe('Router Navigation', () => {
     await TestBed.configureTestingModule({
       providers: [
         provideRouter([
-          { path: '', component: HomeComponent },
-          { path: 'users/:id', component: UserComponent },
+          { path: '', component: Home },
+          { path: 'users/:id', component: UserCmpt },
         ]),
       ],
     }).compileComponents();
@@ -326,7 +326,7 @@ describe('Router Navigation', () => {
   });
   
   it('should navigate to user page', async () => {
-    const component = await harness.navigateByUrl('/users/123', UserComponent);
+    const component = await harness.navigateByUrl('/users/123', UserCmpt);
     
     expect(component.id()).toBe('123');
   });
@@ -343,19 +343,19 @@ describe('Router Navigation', () => {
 
 ```typescript
 describe('AuthGuard', () => {
-  let authService: jasmine.SpyObj<AuthService>;
+  let authService: jasmine.SpyObj<Auth>;
   
   beforeEach(() => {
-    authService = jasmine.createSpyObj('AuthService', ['isAuthenticated']);
+    authService = jasmine.createSpyObj('Auth', ['isAuthenticated']);
     
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useValue: authService },
+        { provide: Auth, useValue: authService },
         provideRouter([
-          { path: 'login', component: LoginComponent },
+          { path: 'login', component: Login },
           { 
             path: 'dashboard', 
-            component: DashboardComponent,
+            component: Dashboard,
             canActivate: [authGuard],
           },
         ]),
@@ -400,7 +400,7 @@ import { form, FormField, required, email } from '@angular/forms/signals';
     </form>
   `,
 })
-export class LoginComponent {
+export class Login {
   model = signal({ email: '', password: '' });
   loginForm = form(this.model, (schemaPath) => {
     required(schemaPath.email);
@@ -418,16 +418,16 @@ export class LoginComponent {
   }
 }
 
-describe('LoginComponent', () => {
-  let fixture: ComponentFixture<LoginComponent>;
-  let component: LoginComponent;
+describe('Login', () => {
+  let fixture: ComponentFixture<Login>;
+  let component: Login;
   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoginComponent],
+      imports: [Login],
     }).compileComponents();
     
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(Login);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -463,9 +463,9 @@ describe('LoginComponent', () => {
 ### Testing Reactive Forms
 
 ```typescript
-describe('ReactiveFormComponent', () => {
+describe('ReactiveForm', () => {
   it('should validate form', () => {
-    const fixture = TestBed.createComponent(ProfileFormComponent);
+    const fixture = TestBed.createComponent(ProfileForm);
     const component = fixture.componentInstance;
     
     expect(component.form.valid).toBeFalse();
@@ -479,7 +479,7 @@ describe('ReactiveFormComponent', () => {
   });
   
   it('should show validation errors', () => {
-    const fixture = TestBed.createComponent(ProfileFormComponent);
+    const fixture = TestBed.createComponent(ProfileForm);
     fixture.detectChanges();
     
     const emailControl = fixture.componentInstance.form.controls.email;
@@ -504,19 +504,19 @@ describe('ReactiveFormComponent', () => {
     '[style.backgroundColor]': 'color()',
   },
 })
-export class HighlightDirective {
+export class Highlight {
   color = input('yellow', { alias: 'appHighlight' });
 }
 
-describe('HighlightDirective', () => {
+describe('Highlight', () => {
   @Component({
-    imports: [HighlightDirective],
+    imports: [Highlight],
     template: `<p appHighlight="lightblue">Test</p>`,
   })
-  class TestComponent {}
+  class Test {}
   
   it('should apply background color', () => {
-    const fixture = TestBed.createComponent(TestComponent);
+    const fixture = TestBed.createComponent(Test);
     fixture.detectChanges();
     
     const p = fixture.nativeElement.querySelector('p');
@@ -531,7 +531,7 @@ describe('HighlightDirective', () => {
 @Directive({
   selector: '[appIf]',
 })
-export class IfDirective {
+export class If {
   private templateRef = inject(TemplateRef);
   private viewContainer = inject(ViewContainerRef);
   
@@ -548,17 +548,17 @@ export class IfDirective {
   }
 }
 
-describe('IfDirective', () => {
+describe('If', () => {
   @Component({
-    imports: [IfDirective],
+    imports: [If],
     template: `<p *appIf="show()">Visible</p>`,
   })
-  class TestComponent {
+  class TestCmpt {
     show = signal(false);
   }
   
   it('should show content when condition is true', () => {
-    const fixture = TestBed.createComponent(TestComponent);
+    const fixture = TestBed.createComponent(Test);
     fixture.detectChanges();
     
     expect(fixture.nativeElement.querySelector('p')).toBeNull();
@@ -575,18 +575,18 @@ describe('IfDirective', () => {
 
 ```typescript
 @Pipe({ name: 'truncate' })
-export class TruncatePipe implements PipeTransform {
+export class Truncate implements PipeTransform {
   transform(value: string, length: number = 50): string {
     if (value.length <= length) return value;
     return value.substring(0, length) + '...';
   }
 }
 
-describe('TruncatePipe', () => {
-  let pipe: TruncatePipe;
+describe('Truncate', () => {
+  let pipe: Truncate;
   
   beforeEach(() => {
-    pipe = new TruncatePipe();
+    pipe = new Truncate();
   });
   
   it('should not truncate short strings', () => {
@@ -694,7 +694,7 @@ export async function waitForSignal<T>(
 
 // Usage
 it('should load data', async () => {
-  const fixture = TestBed.createComponent(DataComponent);
+  const fixture = TestBed.createComponent(Data);
   fixture.detectChanges();
   
   await waitForSignal(

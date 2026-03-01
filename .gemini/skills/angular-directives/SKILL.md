@@ -17,7 +17,7 @@ import { Directive, input, effect, inject, ElementRef } from '@angular/core';
 @Directive({
   selector: '[appHighlight]',
 })
-export class HighlightDirective {
+export class Highlight {
   private el = inject(ElementRef<HTMLElement>);
   
   // Input with alias matching selector
@@ -47,7 +47,7 @@ Prefer `host` over `@HostBinding`/`@HostListener`:
     '[attr.aria-describedby]': 'tooltipId',
   },
 })
-export class TooltipDirective {
+export class Tooltip {
   text = input.required<string>({ alias: 'appTooltip' });
   position = input<'top' | 'bottom' | 'left' | 'right'>('top');
   
@@ -93,7 +93,7 @@ export class TooltipDirective {
     '[attr.disabled]': 'disabled() || null',
   },
 })
-export class ButtonDirective {
+export class Button {
   variant = input<'primary' | 'secondary'>('primary');
   size = input<'small' | 'medium' | 'large'>('medium');
   disabled = input(false, { transform: booleanAttribute });
@@ -111,7 +111,7 @@ export class ButtonDirective {
     '(document:click)': 'onDocumentClick($event)',
   },
 })
-export class ClickOutsideDirective {
+export class ClickOutside {
   private el = inject(ElementRef<HTMLElement>);
   
   clickOutside = output<void>();
@@ -135,7 +135,7 @@ export class ClickOutsideDirective {
     '(document:keydown)': 'onKeydown($event)',
   },
 })
-export class ShortcutDirective {
+export class Shortcut {
   key = input.required<string>({ alias: 'appShortcut' });
   ctrl = input(false, { transform: booleanAttribute });
   shift = input(false, { transform: booleanAttribute });
@@ -173,7 +173,7 @@ import { Directive, inject, TemplateRef, ViewContainerRef, OnInit, OnDestroy, in
 @Directive({
   selector: '[appPortal]',
 })
-export class PortalDirective implements OnInit, OnDestroy {
+export class Portal implements OnInit, OnDestroy {
   private templateRef = inject(TemplateRef<any>);
   private viewContainerRef = inject(ViewContainerRef);
   private viewRef: EmbeddedViewRef<any> | null = null;
@@ -216,7 +216,7 @@ Defer rendering until condition is met (one-time):
 @Directive({
   selector: '[appLazyRender]',
 })
-export class LazyRenderDirective {
+export class LazyRender {
   private templateRef = inject(TemplateRef<any>);
   private viewContainer = inject(ViewContainerRef);
   private rendered = false;
@@ -252,7 +252,7 @@ interface TemplateContext<T> {
 @Directive({
   selector: '[appTemplateOutlet]',
 })
-export class TemplateOutletDirective<T> {
+export class TemplateOutlet<T> {
   private viewContainer = inject(ViewContainerRef);
   private currentView: EmbeddedViewRef<TemplateContext<T>> | null = null;
   
@@ -306,7 +306,7 @@ Compose directives on components or other directives:
     '[class.focused]': 'isFocused()',
   },
 })
-export class FocusableDirective {
+export class Focusable {
   isFocused = signal(false);
   
   onFocus() { this.isFocused.set(true); }
@@ -320,7 +320,7 @@ export class FocusableDirective {
     '[attr.aria-disabled]': 'disabled()',
   },
 })
-export class DisableableDirective {
+export class Disableable {
   disabled = input(false, { transform: booleanAttribute });
 }
 
@@ -328,9 +328,9 @@ export class DisableableDirective {
 @Component({
   selector: 'app-custom-button',
   hostDirectives: [
-    FocusableDirective,
+    Focusable,
     {
-      directive: DisableableDirective,
+      directive: Disableable,
       inputs: ['disabled'],
     },
   ],
@@ -342,8 +342,8 @@ export class DisableableDirective {
   },
   template: `<ng-content />`,
 })
-export class CustomButtonComponent {
-  private disableable = inject(DisableableDirective);
+export class CustomButton {
+  private disableable = inject(Disableable);
   
   clicked = output<void>();
   
@@ -368,7 +368,7 @@ export class CustomButtonComponent {
     '[class.hovered]': 'isHovered()',
   },
 })
-export class HoverableDirective {
+export class Hoverable {
   isHovered = signal(false);
   
   hoverChange = output<boolean>();
@@ -388,13 +388,13 @@ export class HoverableDirective {
   selector: 'app-card',
   hostDirectives: [
     {
-      directive: HoverableDirective,
+      directive: Hoverable,
       outputs: ['hoverChange'],
     },
   ],
   template: `<ng-content />`,
 })
-export class CardComponent {}
+export class Card {}
 
 // Usage: <app-card (hoverChange)="onHover($event)">...</app-card>
 ```
@@ -406,12 +406,12 @@ Combine multiple behaviors:
 ```typescript
 // Base directives
 @Directive({ selector: '[withRipple]' })
-export class RippleDirective {
+export class Ripple {
   // Ripple effect implementation
 }
 
 @Directive({ selector: '[withElevation]' })
-export class ElevationDirective {
+export class Elevation {
   elevation = input(2);
 }
 
@@ -419,19 +419,19 @@ export class ElevationDirective {
 @Component({
   selector: 'app-material-button',
   hostDirectives: [
-    RippleDirective,
+    Ripple,
     {
-      directive: ElevationDirective,
+      directive: Elevation,
       inputs: ['elevation'],
     },
     {
-      directive: DisableableDirective,
+      directive: Disableable,
       inputs: ['disabled'],
     },
   ],
   template: `<ng-content />`,
 })
-export class MaterialButtonComponent {}
+export class MaterialButton {}
 ```
 
 For advanced patterns, see [references/directive-patterns.md](references/directive-patterns.md).

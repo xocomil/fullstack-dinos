@@ -17,7 +17,7 @@
 @Component({
   template: `<p>Current time: {{ currentTime }}</p>`,
 })
-export class TimeComponent {
+export class Time {
   // BAD: Different value on server and client
   currentTime = new Date().toLocaleTimeString();
 }
@@ -26,7 +26,7 @@ export class TimeComponent {
 @Component({
   template: `<p>Current time: {{ currentTime() }}</p>`,
 })
-export class TimeComponent {
+export class Time {
   currentTime = signal('');
   
   constructor() {
@@ -48,7 +48,7 @@ export class TimeComponent {
     </div>
   `,
 })
-export class PageComponent {}
+export class Page {}
 ```
 
 ### Debug Hydration Issues
@@ -77,7 +77,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
-export class SeoService {
+export class Seo {
   private meta = inject(Meta);
   private title = inject(Title);
   private document = inject(DOCUMENT);
@@ -144,8 +144,8 @@ export class SeoService {
 
 // Usage in component
 @Component({...})
-export class ProductComponent {
-  private seo = inject(SeoService);
+export class Product {
+  private seo = inject(Seo);
   product = input.required<Product>();
   
   constructor() {
@@ -182,7 +182,7 @@ export class ProductComponent {
 // seo.resolver.ts
 export const seoResolver: ResolveFn<SeoData> = async (route) => {
   const productId = route.paramMap.get('id')!;
-  const productService = inject(ProductService);
+  const productService = inject(Product);
   const product = await productService.getById(productId);
   
   return {
@@ -195,14 +195,14 @@ export const seoResolver: ResolveFn<SeoData> = async (route) => {
 // Routes
 {
   path: 'products/:id',
-  component: ProductComponent,
+  component: Product,
   resolve: { seo: seoResolver },
 }
 
 // Component
 @Component({...})
-export class ProductComponent {
-  private seo = inject(SeoService);
+export class Product {
+  private seo = inject(Seo);
   seoData = input.required<SeoData>(); // From resolver
   
   constructor() {
@@ -222,7 +222,7 @@ export class ProductComponent {
 import { REQUEST } from '@angular/ssr/tokens';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class Auth {
   private request = inject(REQUEST, { optional: true });
   private platformId = inject(PLATFORM_ID);
   
@@ -271,7 +271,7 @@ import { REQUEST, RESPONSE_INIT } from '@angular/ssr/tokens';
 
 // In route configuration or component
 @Component({...})
-export class ProductListComponent {
+export class ProductList {
   private responseInit = inject(RESPONSE_INIT, { optional: true });
   
   constructor() {
@@ -317,7 +317,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 
 @Injectable()
-export class SsrErrorHandler implements ErrorHandler {
+export class SsrError implements ErrorHandler {
   private platformId = inject(PLATFORM_ID);
   
   handleError(error: Error) {
@@ -333,7 +333,7 @@ export class SsrErrorHandler implements ErrorHandler {
 }
 
 // Provide in app.config.ts
-{ provide: ErrorHandler, useClass: SsrErrorHandler }
+{ provide: ErrorHandler, useClass: SsrError }
 ```
 
 ### Graceful Degradation
@@ -349,8 +349,8 @@ export class SsrErrorHandler implements ErrorHandler {
     }
   `,
 })
-export class PageComponent {
-  private dataService = inject(DataService);
+export class PageCmpt {
+  private dataService = inject(Data);
   
   data = signal<Data | null>(null);
   dataError = signal(false);
@@ -405,7 +405,7 @@ export class PageComponent {
     }
   `,
 })
-export class ProductPageComponent {}
+export class ProductPage {}
 ```
 
 ### Preload Critical Data
@@ -445,12 +445,12 @@ const serverConfig: ApplicationConfig = {
 
 ```typescript
 import { renderApplication } from '@angular/platform-server';
-import { AppComponent } from './app.component';
+import { App } from './app.component';
 import { config } from './app.config.server';
 
 describe('SSR', () => {
   it('should render home page', async () => {
-    const html = await renderApplication(AppComponent, {
+    const html = await renderApplication(App, {
       appId: 'my-app',
       providers: config.providers,
       url: '/',
@@ -461,7 +461,7 @@ describe('SSR', () => {
   });
   
   it('should render product page with data', async () => {
-    const html = await renderApplication(AppComponent, {
+    const html = await renderApplication(App, {
       appId: 'my-app',
       providers: config.providers,
       url: '/products/123',
@@ -487,7 +487,7 @@ describe('Hydration', () => {
   });
   
   it('should hydrate without errors', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     
     // No hydration mismatch errors should be thrown

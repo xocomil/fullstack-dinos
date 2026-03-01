@@ -35,7 +35,7 @@ interface User {
     }
   `,
 })
-export class UserProfileComponent {
+export class UserProfile {
   userId = signal('123');
   
   // Reactive HTTP resource - refetches when userId changes
@@ -93,7 +93,7 @@ For non-HTTP async operations or custom fetch logic:
 import { resource, signal } from '@angular/core';
 
 @Component({...})
-export class SearchComponent {
+export class Search {
   query = signal('');
   
   searchResource = resource({
@@ -156,7 +156,7 @@ import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({...})
-export class UsersComponent {
+export class Users {
   private http = inject(HttpClient);
   
   // Convert Observable to Signal
@@ -229,7 +229,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const authService = inject(Auth);
   const token = authService.token();
   
   if (token) {
@@ -299,7 +299,7 @@ export const appConfig: ApplicationConfig = {
     }
   `,
 })
-export class UserComponent {
+export class UserCmpt {
   userResource = httpResource<User>(() => `/api/users/${this.userId()}`);
   
   getErrorMessage(error: unknown): string {
@@ -355,7 +355,7 @@ getUser(id: string) {
     }
   `,
 })
-export class DataComponent {
+export class Data {
   query = signal('');
   dataResource = httpResource<Data[]>(() => 
     this.query() ? `/api/search?q=${this.query()}` : undefined

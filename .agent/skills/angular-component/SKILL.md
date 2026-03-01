@@ -32,7 +32,7 @@ import { Component, ChangeDetectionStrategy, input, output, computed } from '@an
     :host.active { border: 2px solid blue; }
   `,
 })
-export class UserCardComponent {
+export class UserCard {
   // Required input
   name = input.required<string>();
   
@@ -125,7 +125,7 @@ Use the `host` object in `@Component`—do NOT use `@HostBinding` or `@HostListe
   },
   template: `<ng-content />`,
 })
-export class ButtonComponent {
+export class Button {
   variant = input<'primary' | 'secondary'>('primary');
   disabled = input(false, { transform: booleanAttribute });
   color = input('#007bff');
@@ -157,7 +157,7 @@ export class ButtonComponent {
     </footer>
   `,
 })
-export class CardComponent {}
+export class Card {}
 
 // Usage:
 // <app-card>
@@ -170,26 +170,21 @@ export class CardComponent {}
 ## Lifecycle Hooks
 
 ```typescript
-import { 
-  AfterContentInit, AfterViewInit, OnDestroy, OnInit,
-  afterNextRender, afterRender
-} from '@angular/core';
+import { OnDestroy, OnInit, afterNextRender, afterRender } from '@angular/core';
 
-export class MyComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
+export class My implements OnInit, OnDestroy {
   constructor() {
     // For DOM manipulation after render (SSR-safe)
     afterNextRender(() => {
       // Runs once after first render
     });
-    
+
     afterRender(() => {
       // Runs after every render
     });
   }
-  
+
   ngOnInit() { /* Component initialized */ }
-  ngAfterContentInit() { /* Projected content ready */ }
-  ngAfterViewInit() { /* View children ready */ }
   ngOnDestroy() { /* Cleanup */ }
 }
 ```
@@ -217,7 +212,7 @@ Components MUST:
   },
   template: `<span class="toggle-track"><span class="toggle-thumb"></span></span>`,
 })
-export class ToggleComponent {
+export class Toggle {
   label = input.required<string>();
   checked = input(false, { transform: booleanAttribute });
   checkedChange = output<boolean>();
@@ -285,7 +280,7 @@ import { NgOptimizedImage } from '@angular/common';
     <img [ngSrc]="imageUrl()" width="200" height="200" />
   `,
 })
-export class HeroComponent {
+export class Hero {
   imageUrl = input.required<string>();
 }
 ```

@@ -24,7 +24,7 @@ export interface User {
 }
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class User {
   private http = inject(HttpClient);
   private baseUrl = '/api/users';
   
@@ -71,7 +71,7 @@ export class UserService {
 
 ```typescript
 @Injectable({ providedIn: 'root' })
-export class CachedUserService {
+export class CachedUser {
   private http = inject(HttpClient);
   private cache = new Map<string, { data: User; timestamp: number }>();
   private cacheDuration = 5 * 60 * 1000; // 5 minutes
@@ -104,7 +104,7 @@ export class CachedUserService {
 
 ```typescript
 @Injectable({ providedIn: 'root' })
-export class UserCacheService {
+export class UserCache {
   private http = inject(HttpClient);
   
   // Cache as signal
@@ -176,7 +176,7 @@ interface PaginatedResponse<T> {
     }
   `,
 })
-export class UsersListComponent {
+export class UsersList {
   page = signal(1);
   pageSize = signal(10);
   
@@ -218,7 +218,7 @@ export class UsersListComponent {
     }
   `,
 })
-export class InfiniteUsersComponent {
+export class InfiniteUsers {
   private http = inject(HttpClient);
   
   private page = signal(1);
@@ -271,7 +271,7 @@ export class InfiniteUsersComponent {
     }
   `,
 })
-export class FileUploadComponent {
+export class FileUpload {
   private http = inject(HttpClient);
   
   uploadProgress = signal<number | null>(null);
@@ -333,7 +333,7 @@ searchResource = resource({
 
 ```typescript
 @Component({...})
-export class SearchComponent implements OnDestroy {
+export class Search implements OnDestroy {
   private http = inject(HttpClient);
   private destroyRef = inject(DestroyRef);
   
@@ -358,7 +358,7 @@ export class SearchComponent implements OnDestroy {
 
 ```typescript
 @Component({...})
-export class SearchComponent {
+export class SearchDebounced {
   query = signal('');
   
   private http = inject(HttpClient);
@@ -381,17 +381,17 @@ export class SearchComponent {
 ### Testing httpResource
 
 ```typescript
-describe('UserComponent', () => {
-  let component: UserComponent;
+describe('UserCmpt', () => {
+  let component: UserCmpt;
   let httpMock: HttpTestingController;
   
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [UserComponent],
+      imports: [UserCmpt],
       providers: [provideHttpClientTesting()],
     });
     
-    component = TestBed.createComponent(UserComponent).componentInstance;
+    component = TestBed.createComponent(UserCmpt).componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
   });
   
@@ -413,20 +413,20 @@ describe('UserComponent', () => {
 ### Testing Services
 
 ```typescript
-describe('UserService', () => {
-  let service: UserService;
+describe('User', () => {
+  let service: User;
   let httpMock: HttpTestingController;
   
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        UserService,
+        User,
         provideHttpClient(),
         provideHttpClientTesting(),
       ],
     });
     
-    service = TestBed.inject(UserService);
+    service = TestBed.inject(User);
     httpMock = TestBed.inject(HttpTestingController);
   });
   

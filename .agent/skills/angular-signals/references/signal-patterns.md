@@ -15,7 +15,7 @@ The `resource()` API handles async data fetching with signals:
 import { resource, signal, computed } from '@angular/core';
 
 @Component({...})
-export class UserProfileComponent {
+export class UserProfile {
   userId = signal<string>('');
   
   // Resource fetches data when params change
@@ -103,7 +103,7 @@ interface ProductState {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ProductStore {
+export class ProductSt {
   // Private state
   private state = signal<ProductState>({
     products: [],
@@ -226,7 +226,7 @@ function createFormField<T>(
 
 // Usage
 @Component({...})
-export class SignupComponent {
+export class Signup {
   email = createFormField('', [
     v => !v ? 'Email is required' : null,
     v => !v.includes('@') ? 'Invalid email' : null,
@@ -249,7 +249,7 @@ export class SignupComponent {
 
 ```typescript
 @Component({...})
-export class SearchComponent {
+export class Search {
   query = signal('');
   
   private http = inject(HttpClient);
@@ -269,7 +269,7 @@ export class SearchComponent {
   // Loading state
   private searching = signal(false);
   readonly isSearching = this.searching.asReadonly();
-  
+
   constructor() {
     // Track loading state
     effect(() => {
@@ -277,12 +277,12 @@ export class SearchComponent {
       if (q.length >= 2) {
         this.searching.set(true);
       }
-    }, { allowSignalWrites: true });
-    
+    });
+
     effect(() => {
       this.results(); // Subscribe to results
       this.searching.set(false);
-    }, { allowSignalWrites: true });
+    });
   }
 }
 ```
@@ -291,7 +291,7 @@ export class SearchComponent {
 
 ```typescript
 @Injectable({ providedIn: 'root' })
-export class TodoService {
+export class Todo {
   private todos = signal<Todo[]>([]);
   readonly items = this.todos.asReadonly();
   
@@ -319,9 +319,9 @@ export class TodoService {
 ## Testing Signals
 
 ```typescript
-describe('CounterComponent', () => {
+describe('Counter', () => {
   it('should increment count', () => {
-    const component = new CounterComponent();
+    const component = new Counter();
     
     expect(component.count()).toBe(0);
     
@@ -333,7 +333,7 @@ describe('CounterComponent', () => {
   });
   
   it('should compute doubled value', () => {
-    const component = new CounterComponent();
+    const component = new Counter();
     
     expect(component.doubled()).toBe(0);
     
@@ -342,17 +342,20 @@ describe('CounterComponent', () => {
   });
 });
 
-describe('ProductStore', () => {
-  let store: ProductStore;
+describe('ProductSt', () => {
+  let store: ProductSt;
   let httpMock: HttpTestingController;
-  
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ProductStore],
-      imports: [HttpClientTestingModule],
+      providers: [
+        ProductSt,
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     });
-    
-    store = TestBed.inject(ProductStore);
+
+    store = TestBed.inject(ProductSt);
     httpMock = TestBed.inject(HttpTestingController);
   });
   

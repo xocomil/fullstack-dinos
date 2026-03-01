@@ -32,7 +32,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
     </form>
   `,
 })
-export class LoginComponent {
+export class Login {
   private fb = inject(FormBuilder);
   
   form = this.fb.group({
@@ -97,7 +97,7 @@ import { inject } from '@angular/core';
 import { NonNullableFormBuilder } from '@angular/forms';
 
 @Component({...})
-export class ProfileComponent {
+export class Profile {
   private fb = inject(NonNullableFormBuilder);
   
   form = this.fb.group({
@@ -132,7 +132,7 @@ export class ProfileComponent {
     </form>
   `,
 })
-export class ProfileComponent {
+export class Profile {
   private fb = inject(NonNullableFormBuilder);
   
   form = this.fb.group({
@@ -168,7 +168,7 @@ import { FormArray } from '@angular/forms';
     </form>
   `,
 })
-export class OrderComponent {
+export class Order {
   private fb = inject(NonNullableFormBuilder);
   
   form = this.fb.group({
@@ -239,7 +239,7 @@ form = this.fb.group({
 import { AsyncValidatorFn } from '@angular/forms';
 import { map, catchError, of } from 'rxjs';
 
-export function uniqueEmail(userService: UserService): AsyncValidatorFn {
+export function uniqueEmail(userService: User): AsyncValidatorFn {
   return (control: AbstractControl) => {
     return userService.checkEmail(control.value).pipe(
       map(exists => exists ? { emailTaken: true } : null),
@@ -310,11 +310,12 @@ form.statusChanges.subscribe(status => {
 });
 ```
 
-### Unified Events (Angular v21+)
+### Unified Events (Angular v18+)
 
 ```typescript
 import { 
-  ValueChangeEvent, StatusChangeEvent, 
+  ValueChangeEvent, StatusChangeEvent,
+  PristineChangeEvent,TouchedChangeEvent,
   FormSubmittedEvent, FormResetEvent 
 } from '@angular/forms';
 
@@ -324,6 +325,12 @@ form.events.subscribe(event => {
   }
   if (event instanceof StatusChangeEvent) {
     console.log('Status changed:', event.status);
+  }
+  if (event instanceof PristineChangeEvent) {
+    console.log('Pristine changed:', event.pristine);
+  }
+  if (event instanceof TouchedChangeEvent) {
+    console.log('Touched changed:', event.touched);
   }
   if (event instanceof FormSubmittedEvent) {
     console.log('Form submitted');
@@ -353,7 +360,7 @@ form.events.subscribe(event => {
     }
   `,
 })
-export class FormComponent {
+export class Form {
   // Helper for cleaner templates
   hasError(controlName: string, errorKey: string): boolean {
     const control = this.form.get(controlName);
@@ -375,7 +382,7 @@ export class FormComponent {
     </form>
   `,
 })
-export class FormComponent {
+export class Form {
   isSubmitting = false;
   
   async onSubmit() {
