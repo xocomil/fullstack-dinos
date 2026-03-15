@@ -16,7 +16,7 @@ import { DinosCrudStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
       <select
         class="select select-bordered select-sm w-1/4"
         (change)="filterHasFeathers($event)"
-        [value]="dinosStore.hasFeathersFilter?.()"
+        [value]="dinosStore.hasFeathersFilterOptions()"
       >
         <option value="">No filter</option>
         <option value="true">Has feathers</option>
