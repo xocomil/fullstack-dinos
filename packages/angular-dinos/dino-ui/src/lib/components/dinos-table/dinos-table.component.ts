@@ -5,11 +5,10 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import {
   BaseDinosaur,
-  DinosCrudStoreService,
+  DinosCrudStore,
 } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { DeleteButtonComponent } from '../delete-button/delete-button.component';
 import { DeleteDinoModalComponent } from '../delete-dino-modal/delete-dino-modal.component';
@@ -25,7 +24,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
           <th scope="col" class="w-1/4">
             Dinosaur
             <fullstack-dinos-sort-button
-              [direction]="sortDirection()"
+              [direction]="dinosStore.sortDirection()"
               (sortClick)="sortClick()"
             />
           </th>
@@ -87,10 +86,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
 export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })
   deleteDinoModal!: DeleteDinoModalComponent;
-  protected readonly dinosStore = inject(DinosCrudStoreService);
-  protected readonly sortDirection = toSignal(this.dinosStore.sortDirection$, {
-    initialValue: 'asc' as const,
-  });
+  protected readonly dinosStore = inject(DinosCrudStore);
 
   ngOnInit(): void {
     this.dinosStore.deleteDino(this.deleteDinoModal.confirmDelete$);

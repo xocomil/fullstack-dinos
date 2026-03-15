@@ -15,7 +15,8 @@ import { emptyDinosCrudState } from '../models/crud.state';
 import { computed, effect, inject } from '@angular/core';
 import { BaseDinosaur } from '../models/dinosaur';
 import { DinosCrudService } from '../dinos-crud.service';
-import { EMPTY } from 'rxjs';
+import { EMPTY, pipe, tap } from 'rxjs';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 export const DinosCrudStore = signalStore(
   withImmutableState(emptyDinosCrudState()),
@@ -63,7 +64,7 @@ export const DinosCrudStore = signalStore(
     }),
   })),
   withMutations((state) => ({
-    deleteDino: rxMutation({
+    deleteDinoMutation: rxMutation({
       operation: ({ id: dinoId }: BaseDinosaur) => {
         const crudService = inject(DinosCrudService);
 
@@ -82,6 +83,15 @@ export const DinosCrudStore = signalStore(
         console.error('Error deleting dino', error);
       },
     }),
+  })),
+  withMethods((state) => ({
+    deleteDino: rxMethod<BaseDinosaur>(
+      pipe(
+        tap((dino) => {
+          state.deleteDinoMutation(dino);
+        }),
+      ),
+    ),
   })),
   withHooks({
     onInit(store) {
