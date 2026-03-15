@@ -34,7 +34,15 @@ export const DinosCrudStore = signalStore(
         sortAscending: !state.sortAscending(),
       });
     },
-    updateHasFeathersFilter: (filter: '' | 'true' | 'false') => {
+    updateHasFeathersFilter: (filter: string) => {
+      if (!isBoolString(filter)) {
+        patchState(state, {
+          hasFeathersFilter: undefined,
+        });
+
+        return;
+      }
+
       patchState(state, {
         hasFeathersFilter: filter,
       });
@@ -115,3 +123,8 @@ export const DinosCrudStore = signalStore(
 
 const isString = (value: string | unknown | null): value is string =>
   typeof value === 'string' && value != null;
+
+const isBoolString = (
+  value: string | unknown | null,
+): value is '' | 'true' | 'false' =>
+  value === 'true' || value === 'false' || value === '';
