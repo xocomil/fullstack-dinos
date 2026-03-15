@@ -16,6 +16,7 @@ import { computed, effect, inject } from '@angular/core';
 import { BaseDinosaur } from '../models/dinosaur';
 import { DinosCrudService } from '../dinos-crud.service';
 import { EMPTY, pipe, tap } from 'rxjs';
+import { z } from 'zod';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 export const DinosCrudStore = signalStore(
@@ -23,9 +24,9 @@ export const DinosCrudStore = signalStore(
   withComputed((state) => ({
     sortDirection: computed(() => (state.sortAscending() ? 'asc' : 'desc')),
     boolHasFeathersFilter: computed(() =>
-      !state.hasFeathersFilter
+      !state.hasFeathersFilterOptions
         ? undefined
-        : state.hasFeathersFilter() === 'true',
+        : state.hasFeathersFilterOptions() === 'true',
     ),
   })),
   withMethods((state) => ({
@@ -34,17 +35,15 @@ export const DinosCrudStore = signalStore(
         sortAscending: !state.sortAscending(),
       });
     },
-    updateHasFeathersFilter: (filter: string) => {
-      if (!isBoolString(filter)) {
-        patchState(state, {
-          hasFeathersFilter: undefined,
-        });
-
-        return;
-      }
+    updateHasFeathersFilter: (
+      filter: '' | 'true' | 'false' | (string & {}),
+    ) => {
+      const hasFeathersFilterOptions = boolStringSchema.parse(
+        filter.toLocaleLowerCase(),
+      );
 
       patchState(state, {
-        hasFeathersFilter: filter,
+        hasFeathersFilterOptions,
       });
     },
   })),
@@ -124,7 +123,4 @@ export const DinosCrudStore = signalStore(
 const isString = (value: string | unknown | null): value is string =>
   typeof value === 'string' && value != null;
 
-const isBoolString = (
-  value: string | unknown | null,
-): value is '' | 'true' | 'false' =>
-  value === 'true' || value === 'false' || value === '';
+const boolStringSchema = z.enum(['true', 'false', '']).catch('');
