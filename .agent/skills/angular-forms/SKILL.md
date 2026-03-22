@@ -1,6 +1,6 @@
 ---
 name: angular-forms
-description: Build signal-based forms in Angular v21+ using the new Signal Forms API. Use for form creation with automatic two-way binding, schema-based validation, field state management, and dynamic forms. Triggers on form implementation, adding validation, creating multi-step forms, or building forms with conditional fields. Signal Forms are experimental but recommended for new Angular projects.
+description: Build signal-based forms in Angular v21+ using the new Signal Forms API. Use for form creation with automatic two-way binding, schema-based validation, field state management, and dynamic forms. Triggers on form implementation, adding validation, creating multi-step forms, or building forms with conditional fields. Signal Forms are experimental but recommended for new Angular projects. Don't use for template-driven forms without signals or third-party form libraries like Formly or ngx-formly.
 ---
 
 # Angular Signal Forms
@@ -45,7 +45,7 @@ interface LoginData {
     </form>
   `,
 })
-export class LoginComponent {
+export class Login {
   // Form model - a writable signal
   loginModel = signal<LoginData>({
     email: '',
@@ -322,7 +322,7 @@ import { submit } from '@angular/forms/signals';
     </form>
   `,
 })
-export class LoginComponent {
+export class Login {
   model = signal({ email: '', password: '' });
   form = form(this.model, (schemaPath) => {
     required(schemaPath.email);
@@ -359,7 +359,7 @@ interface Order {
     <button type="button" (click)="addItem()">Add Item</button>
   `,
 })
-export class OrderComponent {
+export class Order {
   orderModel = signal<Order>({
     items: [{ product: '', quantity: 1 }],
   });

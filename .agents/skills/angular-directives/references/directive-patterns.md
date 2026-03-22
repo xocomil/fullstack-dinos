@@ -16,7 +16,7 @@
 @Directive({
   selector: '[appAutoFocus]',
 })
-export class AutoFocusDirective {
+export class AutoFocus {
   private el = inject(ElementRef<HTMLElement>);
   
   enabled = input(true, { alias: 'appAutoFocus', transform: booleanAttribute });
@@ -47,7 +47,7 @@ export class AutoFocusDirective {
     '(click)': 'onClick($event)',
   },
 })
-export class SelectAllDirective {
+export class SelectAll {
   private el = inject(ElementRef<HTMLInputElement>);
   
   onFocus() {
@@ -76,7 +76,7 @@ export class SelectAllDirective {
     '[style.cursor]': '"pointer"',
   },
 })
-export class CopyToClipboardDirective {
+export class CopyToClipboard {
   text = input.required<string>({ alias: 'appCopyToClipboard' });
   
   copied = output<void>();
@@ -109,7 +109,7 @@ export class CopyToClipboardDirective {
     '(blur)': 'onBlur()',
   },
 })
-export class TrimDirective {
+export class Trim {
   private el = inject(ElementRef<HTMLInputElement | HTMLTextAreaElement>);
   private ngControl = inject(NgControl, { optional: true, self: true });
   
@@ -137,7 +137,7 @@ export class TrimDirective {
     '(keydown)': 'onKeydown($event)',
   },
 })
-export class MaskDirective {
+export class Mask {
   private el = inject(ElementRef<HTMLInputElement>);
   
   // Mask pattern: 9 = digit, A = letter, * = any
@@ -220,7 +220,7 @@ export class MaskDirective {
 @Directive({
   selector: '[appCharCount]',
 })
-export class CharCountDirective {
+export class CharCount {
   private el = inject(ElementRef<HTMLInputElement | HTMLTextAreaElement>);
   
   maxLength = input.required<number>({ alias: 'appCharCount' });
@@ -256,7 +256,7 @@ export class CharCountDirective {
 @Directive({
   selector: '[appLazyLoad]',
 })
-export class LazyLoadDirective implements OnDestroy {
+export class LazyLoad implements OnDestroy {
   private el = inject(ElementRef<HTMLElement>);
   private observer: IntersectionObserver | null = null;
   
@@ -318,7 +318,7 @@ export class LazyLoadDirective implements OnDestroy {
 @Directive({
   selector: '[appInfiniteScroll]',
 })
-export class InfiniteScrollDirective implements OnDestroy {
+export class InfiniteScroll implements OnDestroy {
   private el = inject(ElementRef<HTMLElement>);
   private observer: IntersectionObserver | null = null;
   
@@ -378,7 +378,7 @@ export class InfiniteScrollDirective implements OnDestroy {
 @Directive({
   selector: '[appResize]',
 })
-export class ResizeDirective implements OnDestroy {
+export class Resize implements OnDestroy {
   private el = inject(ElementRef<HTMLElement>);
   private observer: ResizeObserver | null = null;
   
@@ -425,7 +425,7 @@ export class ResizeDirective implements OnDestroy {
     '(dragend)': 'onDragEnd($event)',
   },
 })
-export class DraggableDirective {
+export class Draggable {
   data = input<any>(null, { alias: 'appDraggable' });
   effectAllowed = input<DataTransfer['effectAllowed']>('move');
   
@@ -460,7 +460,7 @@ export class DraggableDirective {
     '(drop)': 'onDrop($event)',
   },
 })
-export class DropZoneDirective {
+export class DropZone {
   isDragOver = signal(false);
   
   dropped = output<any>();
@@ -496,10 +496,10 @@ export class DropZoneDirective {
 @Directive({
   selector: '[appHasPermission]',
 })
-export class HasPermissionDirective {
+export class HasPermission {
   private templateRef = inject(TemplateRef<any>);
   private viewContainer = inject(ViewContainerRef);
-  private authService = inject(AuthService);
+  private authService = inject(Auth);
   private hasView = false;
   
   permission = input.required<string | string[]>({ alias: 'appHasPermission' });
@@ -544,7 +544,7 @@ export class HasPermissionDirective {
   selector: '[appToggle]',
   exportAs: 'appToggle',
 })
-export class ToggleDirective {
+export class Toggle {
   isOpen = signal(false);
   
   toggle() {

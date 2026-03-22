@@ -15,9 +15,9 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'about', component: AboutComponent },
-  { path: '**', component: NotFoundComponent },
+  { path: 'home', component: Home },
+  { path: 'about', component: About },
+  { path: '**', component: NotFound },
 ];
 
 // app.config.ts
@@ -46,7 +46,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     <router-outlet />
   `,
 })
-export class AppComponent {}
+export class App {}
 ```
 
 ## Lazy Loading
@@ -57,7 +57,7 @@ Load feature modules on demand:
 // app.routes.ts
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: Home },
   
   // Lazy load entire feature
   {
@@ -68,15 +68,15 @@ export const routes: Routes = [
   // Lazy load single component
   {
     path: 'settings',
-    loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent),
+    loadComponent: () => import('./settings/settings.component').then(m => m.Settings),
   },
 ];
 
 // admin/admin.routes.ts
 export const adminRoutes: Routes = [
-  { path: '', component: AdminDashboardComponent },
-  { path: 'users', component: AdminUsersComponent },
-  { path: 'settings', component: AdminSettingsComponent },
+  { path: '', component: AdminDashboard },
+  { path: 'users', component: AdminUsers },
+  { path: 'settings', component: AdminSettings },
 ];
 ```
 
@@ -86,7 +86,7 @@ export const adminRoutes: Routes = [
 
 ```typescript
 // Route config
-{ path: 'users/:id', component: UserDetailComponent }
+{ path: 'users/:id', component: UserDetail }
 
 // Component - use input() for route params
 import { Component, input, computed } from '@angular/core';
@@ -97,7 +97,7 @@ import { Component, input, computed } from '@angular/core';
     <h1>User {{ id() }}</h1>
   `,
 })
-export class UserDetailComponent {
+export class UserDetail {
   // Route param as signal input
   id = input.required<string>();
   
@@ -125,7 +125,7 @@ export const appConfig: ApplicationConfig = {
 // Route: /search?q=angular&page=1
 
 @Component({...})
-export class SearchComponent {
+export class Search {
   // Query params as inputs
   q = input<string>('');
   page = input<string>('1');
@@ -143,7 +143,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
 @Component({...})
-export class UserDetailComponent {
+export class UserDetail {
   private route = inject(ActivatedRoute);
   
   // Convert route params to signal
@@ -170,7 +170,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
+  const authService = inject(Auth);
   const router = inject(Router);
   
   if (authService.isAuthenticated()) {
@@ -186,7 +186,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 // Usage in routes
 {
   path: 'dashboard',
-  component: DashboardComponent,
+  component: Dashboard,
   canActivate: [authGuard],
 }
 ```
@@ -196,7 +196,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 ```typescript
 export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
   return (route, state) => {
-    const authService = inject(AuthService);
+    const authService = inject(Auth);
     const router = inject(Router);
     
     const userRole = authService.currentUser()?.role;
@@ -212,7 +212,7 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
 // Usage
 {
   path: 'admin',
-  component: AdminComponent,
+  component: Admin,
   canActivate: [authGuard, roleGuard(['admin', 'superadmin'])],
 }
 ```
@@ -220,11 +220,11 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
 ### Can Deactivate Guard
 
 ```typescript
-export interface CanDeactivateComponent {
+export interface CanDeactivate {
   canDeactivate: () => boolean | Promise<boolean>;
 }
 
-export const unsavedChangesGuard: CanDeactivateFn<CanDeactivateComponent> = (component) => {
+export const unsavedChangesGuard: CanDeactivateFn<CanDeactivate> = (component) => {
   if (component.canDeactivate()) {
     return true;
   }
@@ -234,7 +234,7 @@ export const unsavedChangesGuard: CanDeactivateFn<CanDeactivateComponent> = (com
 
 // Component implementation
 @Component({...})
-export class EditComponent implements CanDeactivateComponent {
+export class Edit implements CanDeactivate {
   form = inject(FormBuilder).group({...});
   
   canDeactivate(): boolean {
@@ -245,7 +245,7 @@ export class EditComponent implements CanDeactivateComponent {
 // Route
 {
   path: 'edit/:id',
-  component: EditComponent,
+  component: Edit,
   canDeactivate: [unsavedChangesGuard],
 }
 ```
@@ -260,7 +260,7 @@ import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 
 export const userResolver: ResolveFn<User> = (route) => {
-  const userService = inject(UserService);
+  const userService = inject(User);
   const id = route.paramMap.get('id')!;
   return userService.getById(id);
 };
@@ -268,13 +268,13 @@ export const userResolver: ResolveFn<User> = (route) => {
 // Route config
 {
   path: 'users/:id',
-  component: UserDetailComponent,
+  component: UserDetail,
   resolve: { user: userResolver },
 }
 
 // Component - access resolved data via input
 @Component({...})
-export class UserDetailComponent {
+export class UserDetail {
   user = input.required<User>();
 }
 ```
@@ -286,16 +286,16 @@ export class UserDetailComponent {
 export const routes: Routes = [
   {
     path: 'products',
-    component: ProductsLayoutComponent,
+    component: ProductsLayout,
     children: [
-      { path: '', component: ProductListComponent },
-      { path: ':id', component: ProductDetailComponent },
-      { path: ':id/edit', component: ProductEditComponent },
+      { path: '', component: ProductList },
+      { path: ':id', component: ProductDetail },
+      { path: ':id/edit', component: ProductEdit },
     ],
   },
 ];
 
-// ProductsLayoutComponent
+// ProductsLayout
 @Component({
   imports: [RouterOutlet],
   template: `
@@ -303,7 +303,7 @@ export const routes: Routes = [
     <router-outlet /> <!-- Child routes render here -->
   `,
 })
-export class ProductsLayoutComponent {}
+export class ProductsLayout {}
 ```
 
 ## Programmatic Navigation
@@ -313,7 +313,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({...})
-export class ProductComponent {
+export class Product {
   private router = inject(Router);
   
   // Navigate to route
@@ -351,7 +351,7 @@ export class ProductComponent {
 // Static route data
 {
   path: 'admin',
-  component: AdminComponent,
+  component: Admin,
   data: {
     title: 'Admin Dashboard',
     roles: ['admin'],
@@ -360,7 +360,7 @@ export class ProductComponent {
 
 // Access in component
 @Component({...})
-export class AdminComponent {
+export class AdminCmpt {
   title = input<string>(); // From route data
   roles = input<string[]>(); // From route data
 }
@@ -377,7 +377,7 @@ import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({...})
-export class AppComponent {
+export class AppMain {
   private router = inject(Router);
   
   isNavigating = signal(false);

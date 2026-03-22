@@ -27,21 +27,45 @@ import {
   setLoading,
 } from './with-call-state.store';
 import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
+import { withResource } from '@angular-architects/ngrx-toolkit';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { createEmptyDino } from '../models/dinosaur';
 
 export function withEditDino() {
   return signalStoreFeature(
     {
       state: type<EditDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
     },
-    withComputed(({ dinosaur, id }) => ({
-      displayTrivia: computed(() => dinosaur.trivia().length),
-      genusSpecies: computed(() => `${dinosaur.genus()} ${dinosaur.species()}`),
-      cancelLink: computed(() => ['/dinos', id()]),
+    withResource((state) => {
+      const dinosCrudService = inject(DinosCrudService);
+
+      return {
+        dinosaur: rxResource({
+          params: () => ({ id: state.id() }),
+          defaultValue: createEmptyDino(),
+          stream: ({ params: { id } }) =>
+            id ? dinosCrudService.getDino(id) : EMPTY,
+        }),
+      };
+    }),
+    // TODO: use the resource properly instead of ?. operator
+    withComputed((state) => ({
+      displayTrivia: computed(() => state.dinosaurValue()?.trivia.length),
+      genusSpecies: computed(
+        () =>
+          `${state.dinosaurValue()?.genus} ${state.dinosaurValue()?.species}`,
+      ),
+      cancelLink: computed(() => ['/dinos', state.id()]),
       openAiObject: computed<OpenaiDino>(() => {
         const { __typename, id, imageUrl, updatedAt, ...openAiObject } =
-          dinosaur() as Dinosaur & { __typename: unknown };
+          state.dinosaurValue() as Dinosaur & { __typename: unknown };
 
         return { ...openAiObject, lengthInMeters: 0 };
+      }),
+      dinosaur: computed(() => {
+        return state.dinosaurHasValue()
+          ? state.dinosaurValue()!
+          : createEmptyDino();
       }),
     })),
     withMethods((state) => {
@@ -50,6 +74,7 @@ export function withEditDino() {
       const openaiService = inject(OpenaiService);
       const save = rxMethod<UpdateDinosaur>((dino$) =>
         dino$.pipe(
+          // TODO: change into mutation
           switchMap((dino) => {
             const errors = validateUpdateDino(dino);
 
@@ -63,7 +88,7 @@ export function withEditDino() {
 
             console.log('Saving dino...', dino);
 
-            const id = state.dinosaur().id;
+            const id = state.dinosaurValue()?.id;
 
             if (!id) {
               console.error('No id found for dino', dino);
@@ -122,16 +147,6 @@ export function withEditDino() {
           }
 
           patchState(state, { id });
-
-          const dino = await dinosCrudService.getDinoPromise(id);
-
-          if (dino.hasValue) {
-            patchState(state, { dinosaur: dino.value });
-          }
-
-          if (dino.hasError) {
-            console.error('dino error', dino.error);
-          }
         },
         save,
         sendToOpenai: rxMethod<void>((dino$) =>

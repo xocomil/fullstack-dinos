@@ -27,7 +27,8 @@
       "inputs": [
         "default",
         "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore"
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs"
       ],
       "cache": true
     }
@@ -40,7 +41,8 @@
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.[jt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.mjs"
     ],
     "sharedGlobals": []
   },
@@ -117,5 +119,14 @@
   },
   "nxCloudAccessToken": "YzY0NDA4NTctYTVmMC00ZTg3LWJjMmUtODFmYzRhNWE5YzU0fHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "plugins": [
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      }
+    }
+  ],
+  "analytics": true
 }

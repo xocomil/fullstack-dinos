@@ -15,10 +15,10 @@
 ```typescript
 {
   path: 'users/:id',
-  component: UserComponent,
+  component: UserCmpt,
   
   // Lazy loading alternatives
-  loadComponent: () => import('./user.component').then(m => m.UserComponent),
+  loadComponent: () => import('./user.component').then(m => m.UserCmpt),
   loadChildren: () => import('./user.routes').then(m => m.userRoutes),
   
   // Guards
@@ -51,7 +51,7 @@
 
 ```typescript
 export const userTitleResolver: ResolveFn<string> = (route) => {
-  const userService = inject(UserService);
+  const userService = inject(User);
   const id = route.paramMap.get('id')!;
   return userService.getById(id).pipe(
     map(user => `${user.name} - Profile`)
@@ -66,7 +66,7 @@ export const userTitleResolver: ResolveFn<string> = (route) => {
 ```typescript
 // auth.service.ts
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class Auth {
   private _user = signal<User | null>(null);
   private _token = signal<string | null>(null);
   
@@ -119,7 +119,7 @@ export class AuthService {
 
 // auth.guard.ts
 export const authGuard: CanActivateFn = async (route, state) => {
-  const authService = inject(AuthService);
+  const authService = inject(Auth);
   const router = inject(Router);
   
   // Check if already authenticated
@@ -149,8 +149,8 @@ export const authGuard: CanActivateFn = async (route, state) => {
     </form>
   `,
 })
-export class LoginComponent {
-  private authService = inject(AuthService);
+export class Login {
+  private authService = inject(Auth);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   
@@ -176,7 +176,7 @@ export class LoginComponent {
 ```typescript
 // breadcrumb.service.ts
 @Injectable({ providedIn: 'root' })
-export class BreadcrumbService {
+export class Breadcrumb {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   
@@ -226,11 +226,11 @@ export const routes: Routes = [
     path: 'products',
     data: { breadcrumb: 'Products' },
     children: [
-      { path: '', component: ProductListComponent },
+      { path: '', component: ProductList },
       {
         path: ':id',
         data: { breadcrumb: 'Product Details' },
-        component: ProductDetailComponent,
+        component: ProductDetail,
       },
     ],
   },
@@ -252,8 +252,8 @@ export const routes: Routes = [
     </nav>
   `,
 })
-export class BreadcrumbComponent {
-  breadcrumbService = inject(BreadcrumbService);
+export class BreadcrumbCmpt {
+  breadcrumbService = inject(Breadcrumb);
 }
 ```
 
@@ -280,7 +280,7 @@ export class BreadcrumbComponent {
     </div>
   `,
 })
-export class TabsLayoutComponent {
+export class TabsLayout {
   tabs = [
     { path: './', label: 'Overview', exact: true },
     { path: 'details', label: 'Details', exact: false },
@@ -291,11 +291,11 @@ export class TabsLayoutComponent {
 // Routes
 {
   path: 'account',
-  component: TabsLayoutComponent,
+  component: TabsLayout,
   children: [
-    { path: '', component: AccountOverviewComponent },
-    { path: 'details', component: AccountDetailsComponent },
-    { path: 'settings', component: AccountSettingsComponent },
+    { path: '', component: AccountOverview },
+    { path: 'details', component: AccountDetails },
+    { path: 'settings', component: AccountSettings },
   ],
 }
 ```
@@ -307,8 +307,8 @@ Using auxiliary outlets for modals:
 ```typescript
 // Routes
 export const routes: Routes = [
-  { path: 'products', component: ProductListComponent },
-  { path: 'product-modal/:id', component: ProductModalComponent, outlet: 'modal' },
+  { path: 'products', component: ProductList },
+  { path: 'product-modal/:id', component: ProductModal, outlet: 'modal' },
 ];
 
 // App template
@@ -318,7 +318,7 @@ export const routes: Routes = [
     <router-outlet name="modal" />
   `,
 })
-export class AppComponent {}
+export class App {}
 
 // Open modal
 this.router.navigate([{ outlets: { modal: ['product-modal', productId] } }]);
@@ -408,8 +408,8 @@ export class NetworkAwarePreloadStrategy implements PreloadingStrategy {
 ```typescript
 // app.routes.ts
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent, data: { animation: 'HomePage' } },
-  { path: 'about', component: AboutComponent, data: { animation: 'AboutPage' } },
+  { path: 'home', component: Home, data: { animation: 'HomePage' } },
+  { path: 'about', component: About, data: { animation: 'AboutPage' } },
 ];
 
 // app.component.ts
@@ -442,7 +442,7 @@ export const routes: Routes = [
     ]),
   ],
 })
-export class AppComponent {
+export class AppMain {
   getRouteAnimationData() {
     return this.route.firstChild?.snapshot.data['animation'];
   }

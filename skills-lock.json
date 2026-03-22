@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "skills": {
+    "angular-component": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "9d2fb6fbec5a8a9fd029e125194ba749b717b1fefef1cf5cd6f7a67d5b7bc364"
+    },
+    "angular-di": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "b7e4fa9c9cc06eba5b2057cc0da024a015fa0af301c3654f34a5c3ec9160d7c6"
+    },
+    "angular-directives": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "a96e63582eb4350cd6bfe0fbdad2585d999f3ed567c05fd2f99544769977a2e3"
+    },
+    "angular-forms": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "b6d99388e6efbd7006b0729a0a8bb2346b30214afc1a369a71d31f076c95d6a6"
+    },
+    "angular-http": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "251aab8c4417ee6fc22187eaf9a88ae1a08613d201b65d1d0ec48ba4807f53eb"
+    },
+    "angular-routing": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "cd02400200c70c1c8544ac6deb589269275fd33a7d6b93728bf8127cc2f0c71e"
+    },
+    "angular-signals": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "3c81e0d5622c38ba42699895c50b3363130f2c2c6f74faf3402302e40f6ccbb9"
+    },
+    "angular-ssr": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "f81a11be1f05ca9bedc2da509d7ff9d19f43e63a6977c99a305c142e10d57aca"
+    },
+    "angular-testing": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "f0afa362dccf84f959eaec0572324a1a212765c0e90c1c2bf9c05b6f87a0d165"
+    },
+    "angular-tooling": {
+      "source": "analogjs/angular-skills",
+      "sourceType": "github",
+      "computedHash": "137551a64038adda469b5313224950bb4be432cb76252144b56ed7173eb3c95d"
+    }
+  }
+}

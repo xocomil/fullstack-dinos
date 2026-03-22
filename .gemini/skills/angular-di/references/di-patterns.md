@@ -17,9 +17,9 @@ Combine multiple services into a single API:
 ```typescript
 @Injectable({ providedIn: 'root' })
 export class ShopFacade {
-  private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  private orderService = inject(OrderService);
+  private productService = inject(Product);
+  private cartService = inject(Cart);
+  private orderService = inject(Order);
   
   // Expose combined state
   readonly products = this.productService.products;
@@ -53,7 +53,7 @@ interface UserState {
 }
 
 @Injectable({ providedIn: 'root' })
-export class UserStateService {
+export class UserState {
   private state = signal<UserState>({
     user: null,
     loading: false,
@@ -99,7 +99,7 @@ export abstract class Repository<T extends { id: string }> {
 
 // HTTP implementation
 @Injectable()
-export class HttpUserRepository extends Repository<User> {
+export class HttpUserRepo extends Repository<User> {
   private http = inject(HttpClient);
   private apiUrl = inject(API_URL);
   
@@ -129,7 +129,7 @@ export class HttpUserRepository extends Repository<User> {
 }
 
 // Provide implementation
-{ provide: Repository, useClass: HttpUserRepository }
+{ provide: Repository, useClass: HttpUserRepo }
 ```
 
 ## Abstract Classes as Tokens
@@ -146,7 +146,7 @@ export abstract class Logger {
 
 // Console implementation
 @Injectable()
-export class ConsoleLogger extends Logger {
+export class ConsoleLog extends Logger {
   log(message: string) {
     console.log(`[LOG] ${message}`);
   }
@@ -162,7 +162,7 @@ export class ConsoleLogger extends Logger {
 
 // Remote implementation
 @Injectable()
-export class RemoteLogger extends Logger {
+export class RemoteLog extends Logger {
   private http = inject(HttpClient);
   
   log(message: string) {
@@ -185,15 +185,15 @@ export class RemoteLogger extends Logger {
 // Provide based on environment
 {
   provide: Logger,
-  useClass: environment.production ? RemoteLogger : ConsoleLogger,
+  useClass: environment.production ? RemoteLog : ConsoleLog,
 }
 
 // Inject using abstract class
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class User {
   private logger = inject(Logger);
-  
-  createUser(user: User) {
+
+  createUser(user: UserData) {
     this.logger.log(`Creating user: ${user.email}`);
     // ...
   }
@@ -208,15 +208,15 @@ export class UserService {
 // Parent provides service
 @Component({
   selector: 'app-form-container',
-  providers: [FormStateService],
+  providers: [FormState],
   template: `
     <app-form-header />
     <app-form-body />
     <app-form-footer />
   `,
 })
-export class FormContainerComponent {
-  private formState = inject(FormStateService);
+export class FormContainer {
+  private formState = inject(FormState);
 }
 
 // Children share same instance
@@ -224,9 +224,9 @@ export class FormContainerComponent {
   selector: 'app-form-body',
   template: `...`,
 })
-export class FormBodyComponent {
+export class FormBody {
   // Gets same instance as parent
-  private formState = inject(FormStateService);
+  private formState = inject(FormState);
 }
 
 // Grandchildren also share
@@ -234,9 +234,9 @@ export class FormBodyComponent {
   selector: 'app-form-field',
   template: `...`,
 })
-export class FormFieldComponent {
+export class FormField {
   // Gets same instance from ancestor
-  private formState = inject(FormStateService);
+  private formState = inject(FormState);
 }
 ```
 
@@ -246,11 +246,11 @@ export class FormFieldComponent {
 @Component({
   selector: 'app-tabs',
   // providers: Available to component AND content children
-  providers: [TabsService],
-  
+  providers: [TabsSvc],
+
   // viewProviders: Available to component AND view children only
   // NOT available to content children (<ng-content>)
-  viewProviders: [InternalTabsService],
+  viewProviders: [InternalTabs],
   
   template: `
     <div class="tabs">
@@ -258,7 +258,7 @@ export class FormFieldComponent {
     </div>
   `,
 })
-export class TabsComponent {}
+export class Tabs {}
 ```
 
 ## Dynamic Providers
@@ -285,7 +285,7 @@ interface FeatureFlags {
 
 // Use in components
 @Component({...})
-export class DashboardComponent {
+export class Dashboard {
   private features = inject(FEATURE_FLAGS);
   
   showNewDashboard = this.features.newDashboard;
@@ -295,23 +295,23 @@ export class DashboardComponent {
 ### Platform-Specific Services
 
 ```typescript
-export abstract class StorageService {
+export abstract class Storage {
   abstract get(key: string): string | null;
   abstract set(key: string, value: string): void;
   abstract remove(key: string): void;
 }
 
 @Injectable()
-export class BrowserStorageService extends StorageService {
+export class BrowserStorage extends Storage {
   get(key: string) { return localStorage.getItem(key); }
   set(key: string, value: string) { localStorage.setItem(key, value); }
   remove(key: string) { localStorage.removeItem(key); }
 }
 
 @Injectable()
-export class ServerStorageService extends StorageService {
+export class ServerStorage extends Storage {
   private store = new Map<string, string>();
-  
+
   get(key: string) { return this.store.get(key) ?? null; }
   set(key: string, value: string) { this.store.set(key, value); }
   remove(key: string) { this.store.delete(key); }
@@ -321,11 +321,11 @@ export class ServerStorageService extends StorageService {
 import { PLATFORM_ID, isPlatformBrowser } from '@angular/common';
 
 {
-  provide: StorageService,
+  provide: Storage,
   useFactory: (platformId: object) => {
     return isPlatformBrowser(platformId)
-      ? new BrowserStorageService()
-      : new ServerStorageService();
+      ? new BrowserStorage()
+      : new ServerStorage();
   },
   deps: [PLATFORM_ID],
 }
@@ -336,23 +336,23 @@ import { PLATFORM_ID, isPlatformBrowser } from '@angular/common';
 ### Mocking Services
 
 ```typescript
-describe('UserComponent', () => {
-  let userServiceSpy: jasmine.SpyObj<UserService>;
+describe('UserCmpt', () => {
+  let userServiceSpy: jasmine.SpyObj<User>;
   
   beforeEach(async () => {
-    userServiceSpy = jasmine.createSpyObj('UserService', ['getUser', 'updateUser']);
+    userServiceSpy = jasmine.createSpyObj('User', ['getUser', 'updateUser']);
     userServiceSpy.getUser.and.returnValue(of({ id: '1', name: 'Test' }));
     
     await TestBed.configureTestingModule({
-      imports: [UserComponent],
+      imports: [UserCmpt],
       providers: [
-        { provide: UserService, useValue: userServiceSpy },
+        { provide: User, useValue: userServiceSpy },
       ],
     }).compileComponents();
   });
   
   it('should load user', () => {
-    const fixture = TestBed.createComponent(UserComponent);
+    const fixture = TestBed.createComponent(UserCmpt);
     fixture.detectChanges();
     
     expect(userServiceSpy.getUser).toHaveBeenCalled();
@@ -366,7 +366,7 @@ describe('UserComponent', () => {
 describe('with different config', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [App],
     })
     .overrideProvider(APP_CONFIG, {
       useValue: { apiUrl: 'http://test-api.com' },
@@ -402,9 +402,9 @@ import { DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({...})
-export class DataComponent {
+export class Data {
   private destroyRef = inject(DestroyRef);
-  private dataService = inject(DataService);
+  private dataService = inject(DataSvc);
   
   constructor() {
     // Auto-unsubscribe when component destroys
@@ -431,7 +431,7 @@ export class DataComponent {
 
 ```typescript
 @Injectable()
-export class WebSocketService {
+export class WebSocket {
   private destroyRef = inject(DestroyRef);
   private socket: WebSocket | null = null;
   
@@ -451,9 +451,9 @@ export class WebSocketService {
 
 ```typescript
 @Component({...})
-export class MyComponent {
+export class My {
   private destroyRef = inject(DestroyRef);
-  
+
   loadData() {
     // Pass destroyRef when using outside constructor
     this.http.get('/api/data')
@@ -477,9 +477,9 @@ export function injectLogger(): Logger {
 
 // Usage - must be called in injection context
 @Component({...})
-export class MyComponent {
+export class My2 {
   private logger = injectLogger(); // OK
-  
+
   someMethod() {
     // injectLogger(); // ERROR - not in injection context
   }
@@ -512,7 +512,7 @@ export function injectQueryParam(param: string): Signal<string | null> {
 
 // Usage
 @Component({...})
-export class UserComponent {
+export class UserCmpt {
   userId = injectRouteParam('id');
   tab = injectQueryParam('tab');
 }

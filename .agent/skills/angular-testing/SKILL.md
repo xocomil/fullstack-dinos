@@ -1,215 +1,67 @@
 ---
 name: angular-testing
-description: Write unit and integration tests for Angular v21+ applications using Vitest or Jasmine with TestBed, component harnesses, and modern testing patterns. Use for testing components with signals, OnPush change detection, services with inject(), and HTTP interactions. Triggers on test creation, testing signal-based components, mocking dependencies, or setting up test infrastructure.
+description: Write unit and integration tests for Angular v20+ applications using Vitest or Jasmine with TestBed and modern testing patterns. Use for testing components with signals, OnPush change detection, services with inject(), and HTTP interactions. Triggers on test creation, testing signal-based components, mocking dependencies, or setting up test infrastructure. Don't use for E2E testing with Cypress or Playwright, or for testing non-Angular JavaScript/TypeScript code.
 ---
 
 # Angular Testing
 
-Test Angular v21+ applications with Vitest (recommended) or Jasmine, focusing on signal-based components and modern patterns.
+Test Angular v20+ applications with Vitest (recommended) or Jasmine, focusing on signal-based components and modern patterns.
 
-## Vitest Setup (Angular v21+)
+## Vitest Setup (Angular v20+)
 
-Angular v21+ has experimental support for Vitest. It's faster and provides a better developer experience.
-
-### Installation
+Angular v20+ has native Vitest support through the `@angular/build` package.
 
 ```bash
-ng add @analogjs/vitest-angular
+npm install -D vitest jsdom
 ```
 
-Or manually:
-
-```bash
-npm install -D vitest @analogjs/vitest-angular jsdom
-```
-
-### Configuration
-
-```typescript
-// vite.config.ts
-import { defineConfig } from 'vite';
-import angular from '@analogjs/vite-plugin-angular';
-
-export default defineConfig({
-  plugins: [angular()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['src/test-setup.ts'],
-    include: ['src/**/*.spec.ts'],
-  },
-});
-```
-
-```typescript
-// src/test-setup.ts
-import '@analogjs/vitest-angular/setup-zone';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
-
-getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting()
-);
-```
+Configure in angular.json:
 
 ```json
-// tsconfig.spec.json
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["vitest/globals"]
-  },
-  "include": ["src/**/*.spec.ts"]
+  "projects": {
+    "your-app": {
+      "architect": {
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "buildTarget": "your-app:build"
+          }
+        }
+      }
+    }
+  }
 }
 ```
 
-### Running Tests
+Run tests:
 
 ```bash
-# Run tests
-npx vitest
-
-# Watch mode
-npx vitest --watch
-
-# Coverage
-npx vitest --coverage
-
-# UI mode
-npx vitest --ui
+ng test              # Run tests
+ng test --watch      # Watch mode
+ng test --code-coverage  # With coverage
 ```
 
-### Vitest Test Example
-
-```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CounterComponent } from './counter.component';
-
-describe('CounterComponent', () => {
-  let component: CounterComponent;
-  let fixture: ComponentFixture<CounterComponent>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CounterComponent],
-    }).compileComponents();
-    
-    fixture = TestBed.createComponent(CounterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-  
-  it('should increment count', () => {
-    expect(component.count()).toBe(0);
-    
-    component.increment();
-    
-    expect(component.count()).toBe(1);
-  });
-});
-```
-
-### Vitest Mocking
-
-```typescript
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-
-describe('UserComponent', () => {
-  const mockUserService = {
-    getUser: vi.fn(),
-    updateUser: vi.fn(),
-    user: signal<User | null>(null),
-  };
-  
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    mockUserService.getUser.mockReturnValue(of({ id: '1', name: 'Test' }));
-    
-    await TestBed.configureTestingModule({
-      imports: [UserComponent],
-      providers: [
-        { provide: UserService, useValue: mockUserService },
-      ],
-    }).compileComponents();
-  });
-  
-  it('should call getUser on init', () => {
-    const fixture = TestBed.createComponent(UserComponent);
-    fixture.detectChanges();
-    
-    expect(mockUserService.getUser).toHaveBeenCalledWith('1');
-  });
-});
-```
-
-### Vitest with HTTP Testing
-
-```typescript
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
-
-describe('UserService', () => {
-  let service: UserService;
-  let httpMock: HttpTestingController;
-  
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
-    });
-    
-    service = TestBed.inject(UserService);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
-  
-  afterEach(() => {
-    httpMock.verify();
-  });
-  
-  it('should fetch user', () => {
-    const mockUser = { id: '1', name: 'Test User' };
-    
-    service.getUser('1').subscribe(user => {
-      expect(user).toEqual(mockUser);
-    });
-    
-    const req = httpMock.expectOne('/api/users/1');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUser);
-  });
-});
-```
-
----
+For Vitest migration from Jasmine and advanced configuration, see [references/vitest-migration.md](references/vitest-migration.md).
 
 ## Basic Component Test
 
 ```typescript
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CounterComponent } from './counter.component';
+import { Counter } from './counter.component';
 
-describe('CounterComponent', () => {
-  let component: CounterComponent;
-  let fixture: ComponentFixture<CounterComponent>;
+describe('Counter', () => {
+  let component: Counter;
+  let fixture: ComponentFixture<Counter>;
   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CounterComponent], // Standalone component
+      imports: [Counter], // Standalone component
     }).compileComponents();
     
-    fixture = TestBed.createComponent(CounterComponent);
+    fixture = TestBed.createComponent(Counter);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -220,9 +72,7 @@ describe('CounterComponent', () => {
   
   it('should increment count', () => {
     expect(component.count()).toBe(0);
-    
     component.increment();
-    
     expect(component.count()).toBe(1);
   });
   
@@ -273,7 +123,7 @@ describe('Signal logic', () => {
     <p>{{ remaining() }} remaining</p>
   `,
 })
-export class TodoListComponent {
+export class TodoList {
   todos = signal<Todo[]>([]);
   filter = signal<'all' | 'active' | 'done'>('all');
   
@@ -289,16 +139,16 @@ export class TodoListComponent {
   remaining = computed(() => this.todos().filter(t => !t.done).length);
 }
 
-describe('TodoListComponent', () => {
-  let component: TodoListComponent;
-  let fixture: ComponentFixture<TodoListComponent>;
+describe('TodoList', () => {
+  let component: TodoList;
+  let fixture: ComponentFixture<TodoList>;
   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TodoListComponent],
+      imports: [TodoList],
     }).compileComponents();
     
-    fixture = TestBed.createComponent(TodoListComponent);
+    fixture = TestBed.createComponent(TodoList);
     component = fixture.componentInstance;
   });
   
@@ -314,19 +164,6 @@ describe('TodoListComponent', () => {
     expect(component.filteredTodos().length).toBe(2);
     expect(component.remaining()).toBe(2);
   });
-  
-  it('should render filtered todos', () => {
-    component.todos.set([
-      { id: '1', text: 'Active Task', done: false },
-      { id: '2', text: 'Done Task', done: true },
-    ]);
-    component.filter.set('active');
-    fixture.detectChanges();
-    
-    const items = fixture.nativeElement.querySelectorAll('li');
-    expect(items.length).toBe(1);
-    expect(items[0].textContent).toContain('Active Task');
-  });
 });
 ```
 
@@ -339,13 +176,13 @@ OnPush components require explicit change detection:
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<span>{{ data().name }}</span>`,
 })
-export class OnPushComponent {
+export class OnPushCmpt {
   data = input.required<{ name: string }>();
 }
 
-describe('OnPushComponent', () => {
+describe('OnPushCmpt', () => {
   it('should update when input signal changes', () => {
-    const fixture = TestBed.createComponent(OnPushComponent);
+    const fixture = TestBed.createComponent(OnPushCmpt);
     
     // Set input using setInput (for signal inputs)
     fixture.componentRef.setInput('data', { name: 'Initial' });
@@ -367,20 +204,13 @@ describe('OnPushComponent', () => {
 ### Basic Service Test
 
 ```typescript
-import { TestBed } from '@angular/core/testing';
-
 @Injectable({ providedIn: 'root' })
 export class CounterService {
   private _count = signal(0);
   readonly count = this._count.asReadonly();
   
-  increment() {
-    this._count.update(c => c + 1);
-  }
-  
-  reset() {
-    this._count.set(0);
-  }
+  increment() { this._count.update(c => c + 1); }
+  reset() { this._count.set(0); }
 }
 
 describe('CounterService', () => {
@@ -393,36 +223,17 @@ describe('CounterService', () => {
   
   it('should increment count', () => {
     expect(service.count()).toBe(0);
-    
     service.increment();
     expect(service.count()).toBe(1);
-    
-    service.increment();
-    expect(service.count()).toBe(2);
-  });
-  
-  it('should reset count', () => {
-    service.increment();
-    service.increment();
-    
-    service.reset();
-    
-    expect(service.count()).toBe(0);
   });
 });
 ```
 
-### Service with Dependencies
+### Service with HTTP
 
 ```typescript
-@Injectable({ providedIn: 'root' })
-export class UserService {
-  private http = inject(HttpClient);
-  
-  getUser(id: string) {
-    return this.http.get<User>(`/api/users/${id}`);
-  }
-}
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('UserService', () => {
   let service: UserService;
@@ -445,7 +256,7 @@ describe('UserService', () => {
   });
   
   it('should fetch user by id', () => {
-    const mockUser: User = { id: '1', name: 'Test User' };
+    const mockUser = { id: '1', name: 'Test User' };
     
     service.getUser('1').subscribe(user => {
       expect(user).toEqual(mockUser);
@@ -460,29 +271,35 @@ describe('UserService', () => {
 
 ## Mocking Dependencies
 
-### Using Jasmine Spies
+### Using Vitest Mocks
 
 ```typescript
-describe('ComponentWithDependency', () => {
-  let userServiceSpy: jasmine.SpyObj<UserService>;
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+describe('UserProfile', () => {
+  const mockUserService = {
+    getUser: vi.fn(),
+    updateUser: vi.fn(),
+    user: signal<User | null>(null),
+  };
   
   beforeEach(async () => {
-    userServiceSpy = jasmine.createSpyObj('UserService', ['getUser', 'updateUser']);
-    userServiceSpy.getUser.and.returnValue(of({ id: '1', name: 'Test' }));
+    vi.clearAllMocks();
+    mockUserService.getUser.mockReturnValue(of({ id: '1', name: 'Test' }));
     
     await TestBed.configureTestingModule({
-      imports: [UserProfileComponent],
+      imports: [UserProfile],
       providers: [
-        { provide: UserService, useValue: userServiceSpy },
+        { provide: UserService, useValue: mockUserService },
       ],
     }).compileComponents();
   });
   
   it('should call getUser on init', () => {
-    const fixture = TestBed.createComponent(UserProfileComponent);
+    const fixture = TestBed.createComponent(UserProfile);
     fixture.detectChanges();
     
-    expect(userServiceSpy.getUser).toHaveBeenCalledWith('1');
+    expect(mockUserService.getUser).toHaveBeenCalledWith('1');
   });
 });
 ```
@@ -490,27 +307,26 @@ describe('ComponentWithDependency', () => {
 ### Mock Signal-Based Service
 
 ```typescript
-// Create mock with signal
-const mockAuthService = {
+const mockAuth = {
   user: signal<User | null>(null),
-  isAuthenticated: computed(() => mockAuthService.user() !== null),
-  login: jasmine.createSpy('login'),
-  logout: jasmine.createSpy('logout'),
+  isAuthenticated: computed(() => mockAuth.user() !== null),
+  login: vi.fn(),
+  logout: vi.fn(),
 };
 
 beforeEach(async () => {
   await TestBed.configureTestingModule({
-    imports: [ProtectedComponent],
+    imports: [ProtectedPage],
     providers: [
-      { provide: AuthService, useValue: mockAuthService },
+      { provide: AuthService, useValue: mockAuth },
     ],
   }).compileComponents();
 });
 
 it('should show content when authenticated', () => {
-  mockAuthService.user.set({ id: '1', name: 'Test User' });
+  mockAuth.user.set({ id: '1', name: 'Test User' });
   
-  const fixture = TestBed.createComponent(ProtectedComponent);
+  const fixture = TestBed.createComponent(ProtectedPage);
   fixture.detectChanges();
   
   expect(fixture.nativeElement.querySelector('.protected-content')).toBeTruthy();
@@ -522,11 +338,9 @@ it('should show content when authenticated', () => {
 ```typescript
 @Component({
   selector: 'app-item',
-  template: `
-    <div (click)="select()">{{ item().name }}</div>
-  `,
+  template: `<div (click)="select()">{{ item().name }}</div>`,
 })
-export class ItemComponent {
+export class ItemCmpt {
   item = input.required<Item>();
   selected = output<Item>();
   
@@ -535,19 +349,17 @@ export class ItemComponent {
   }
 }
 
-describe('ItemComponent', () => {
+describe('ItemCmpt', () => {
   it('should emit selected event on click', () => {
-    const fixture = TestBed.createComponent(ItemComponent);
+    const fixture = TestBed.createComponent(ItemCmpt);
     const item: Item = { id: '1', name: 'Test Item' };
     
     fixture.componentRef.setInput('item', item);
     fixture.detectChanges();
     
-    // Subscribe to output
     let emittedItem: Item | undefined;
     fixture.componentInstance.selected.subscribe(i => emittedItem = i);
     
-    // Trigger click
     fixture.nativeElement.querySelector('div').click();
     
     expect(emittedItem).toEqual(item);
@@ -563,20 +375,17 @@ describe('ItemComponent', () => {
 import { fakeAsync, tick, flush } from '@angular/core/testing';
 
 it('should debounce search', fakeAsync(() => {
-  const fixture = TestBed.createComponent(SearchComponent);
+  const fixture = TestBed.createComponent(SearchCmpt);
   fixture.detectChanges();
   
-  // Type in search
   fixture.componentInstance.query.set('test');
   
-  // Advance time for debounce
-  tick(300);
+  tick(300); // Advance time for debounce
   fixture.detectChanges();
   
   expect(fixture.componentInstance.results().length).toBeGreaterThan(0);
   
-  // Flush any remaining timers
-  flush();
+  flush(); // Flush remaining timers
 }));
 ```
 
@@ -586,7 +395,7 @@ it('should debounce search', fakeAsync(() => {
 import { waitForAsync } from '@angular/core/testing';
 
 it('should load data', waitForAsync(() => {
-  const fixture = TestBed.createComponent(DataComponent);
+  const fixture = TestBed.createComponent(DataCmpt);
   fixture.detectChanges();
   
   fixture.whenStable().then(() => {
@@ -608,17 +417,17 @@ it('should load data', waitForAsync(() => {
     }
   `,
 })
-export class UserComponent {
+export class UserCmpt {
   userId = signal('1');
   userResource = httpResource<User>(() => `/api/users/${this.userId()}`);
 }
 
-describe('UserComponent', () => {
+describe('UserCmpt', () => {
   let httpMock: HttpTestingController;
   
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserComponent],
+      imports: [UserCmpt],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -629,13 +438,11 @@ describe('UserComponent', () => {
   });
   
   it('should display user name after loading', () => {
-    const fixture = TestBed.createComponent(UserComponent);
+    const fixture = TestBed.createComponent(UserCmpt);
     fixture.detectChanges();
     
-    // Initially loading
     expect(fixture.nativeElement.textContent).toContain('Loading');
     
-    // Respond to request
     const req = httpMock.expectOne('/api/users/1');
     req.flush({ id: '1', name: 'John Doe' });
     fixture.detectChanges();
@@ -645,37 +452,6 @@ describe('UserComponent', () => {
 });
 ```
 
-## Vitest vs Jasmine Comparison
+For advanced testing patterns including component harnesses, router testing, form testing, and directive testing, see [references/testing-patterns.md](references/testing-patterns.md).
 
-| Feature | Vitest | Jasmine/Karma |
-|---------|--------|---------------|
-| Speed | Faster (native ESM) | Slower |
-| Watch mode | Instant feedback | Slower rebuilds |
-| Mocking | `vi.fn()`, `vi.mock()` | `jasmine.createSpy()` |
-| Assertions | `expect()` (Chai-style) | `expect()` (Jasmine) |
-| UI | Built-in UI mode | Karma browser |
-| Config | `vite.config.ts` | `karma.conf.js` |
-
-### Migration from Jasmine to Vitest
-
-```typescript
-// Jasmine
-const spy = jasmine.createSpy('callback');
-spy.and.returnValue('value');
-expect(spy).toHaveBeenCalledWith('arg');
-
-// Vitest
-const spy = vi.fn();
-spy.mockReturnValue('value');
-expect(spy).toHaveBeenCalledWith('arg');
-```
-
-```typescript
-// Jasmine
-spyOn(service, 'method').and.returnValue(of(data));
-
-// Vitest
-vi.spyOn(service, 'method').mockReturnValue(of(data));
-```
-
-For advanced testing patterns, see [references/testing-patterns.md](references/testing-patterns.md).
+For Vitest migration from Jasmine, see [references/vitest-migration.md](references/vitest-migration.md).

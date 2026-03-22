@@ -24,7 +24,7 @@ export class DinosCrudService {
   getDinosTable(
     direction: 'asc' | 'desc',
     hasFeathers: boolean | undefined,
-  ): Observable<Suspense<{ allDinosaurs: BaseDinosaur[] }>> {
+  ): Observable<{ allDinosaurs: BaseDinosaur[] }> {
     return this.#allDinosGql
       .fetch({
         direction,
@@ -36,15 +36,14 @@ export class DinosCrudService {
         map((dinos) => ({
           allDinosaurs: dinos.map(convertGqlDinoToBaseDinosaur),
         })),
-        suspensify(),
       );
   }
 
-  getDinoPromise(id: string): Promise<Suspense<Dinosaur>> {
+  getDinoPromise(id: string): Promise<Dinosaur> {
     return lastValueFrom(this.getDino(id));
   }
 
-  getDino(id: string): Observable<Suspense<Dinosaur>> {
+  getDino(id: string): Observable<Dinosaur> {
     return this.#getDinoGql
       .fetch({
         where: { id },
@@ -58,7 +57,6 @@ export class DinosCrudService {
 
           return convertGqlDinoToDinosaur(dino);
         }),
-        suspensify(),
       );
   }
 
@@ -108,7 +106,7 @@ export class DinosCrudService {
       );
   }
 
-  deleteDino(dinoId: string): Observable<Suspense<string | null | undefined>> {
+  deleteDino(dinoId: string): Observable<string | null | undefined> {
     return this.#deleteDinoGql
       .mutate(
         {
@@ -120,10 +118,7 @@ export class DinosCrudService {
           },
         },
       )
-      .pipe(
-        map((mutationResult) => mutationResult.data?.deleteDino?.id),
-        suspensify(),
-      );
+      .pipe(map((mutationResult) => mutationResult.data?.deleteDino?.id));
   }
 }
 

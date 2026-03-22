@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { EditDinoStore } from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { extraDescriptionFromDino } from '../models/details.constants';
 
+// TODO: use the resource properly instead of ?. operator
 @Component({
-    selector: 'fullstack-dinos-display-dino',
-    imports: [CommonModule],
-    template: `
+  selector: 'fullstack-dinos-display-dino',
+  imports: [CommonModule],
+  template: `
     <div class="flex flex-1 gap-2">
       <h1 class="mb-1 flex-grow text-blue-500">
-        {{ detailsStore.dinosaur().dinoName }}
+        {{ detailsStore.dinosaurValue()?.dinoName }}
       </h1>
       <button
         class="btn btn-outline btn-secondary flex-none"
@@ -28,7 +29,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       </div>
       <div class="text-right italic text-blue-500/70">
         <strong>Last updated:</strong>
-        {{ detailsStore.dinosaur().updatedAt | date: 'medium' }}
+        {{ detailsStore.dinosaurValue()?.updatedAt | date: 'medium' }}
       </div>
     </div>
     <div
@@ -37,7 +38,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       <div class="card-body">
         <h4 class="card-title">Description</h4>
         <p>
-          @if (detailsStore.dinosaur().description; as description) {
+          @if (detailsStore.dinosaurValue()?.description; as description) {
             {{ description }}
           }
           {{ extraDescription }}
@@ -51,7 +52,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
         <div class="card-body">
           <h2 class="card-title">Trivia</h2>
           <ul>
-            @for (item of detailsStore.dinosaur().trivia; track item) {
+            @for (item of detailsStore.dinosaurValue()?.trivia; track item) {
               <li>{{ item }}</li>
             }
           </ul>
@@ -59,18 +60,22 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       </div>
     }
   `,
-    styleUrls: ['./display-dino.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    host: {
-        class: 'block',
-    }
+  styleUrls: ['./display-dino.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'block',
+  },
 })
 export class DisplayDinoComponent {
   readonly #router = inject(Router);
   protected readonly detailsStore = inject(EditDinoStore);
 
   protected get extraDescription(): string {
-    return extraDescriptionFromDino(this.detailsStore.dinosaur());
+    if (this.detailsStore.dinosaurHasValue()) {
+      return extraDescriptionFromDino(this.detailsStore.dinosaurValue()!);
+    }
+
+    return '';
   }
 
   protected turnOnEditMode(): void {

@@ -101,7 +101,7 @@ export const routes: Routes = [
   },
   {
     path: 'reports',
-    loadComponent: () => import('./reports/reports.component').then(m => m.ReportsComponent),
+    loadComponent: () => import('./reports/reports.component').then(m => m.Reports),
   },
 ];
 ```
@@ -192,13 +192,13 @@ ng serve admin-app
 
 ```typescript
 // After building library: ng build shared-ui
-import { ButtonComponent } from 'shared-ui';
+import { Button } from 'shared-ui';
 
 @Component({
-  imports: [ButtonComponent],
+  imports: [Button],
   template: `<lib-button>Click</lib-button>`,
 })
-export class AppComponent {}
+export class App {}
 ```
 
 ## CI/CD Configuration
@@ -305,10 +305,10 @@ build:
 
 ```typescript
 // Instead of relative imports
-import { UserService } from '../../../core/services/user.service';
+import { User } from '../../../core/services/user.service';
 
 // Use path alias
-import { UserService } from '@core/services/user.service';
+import { User } from '@core/services/user.service';
 ```
 
 ## Proxy Configuration
@@ -441,7 +441,7 @@ ng test --browsers=Chrome
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "analyze": "ng build -c production --stats-json && npx webpack-bundle-analyzer dist/my-app/browser/stats.json",
+    "analyze": "ng build -c production --stats-json && npx esbuild-visualizer --metadata dist/my-app/browser/stats.json --open",
     "update": "ng update"
   }
 }

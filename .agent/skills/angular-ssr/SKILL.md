@@ -142,7 +142,7 @@ Defer hydration of specific components:
     }
   `,
 })
-export class PostComponent {
+export class Post {
   postId = input.required<string>();
   chartData = input.required<ChartData>();
 }
@@ -183,7 +183,7 @@ import { PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Component({...})
-export class MyComponent {
+export class My {
   private platformId = inject(PLATFORM_ID);
   
   ngOnInit() {
@@ -203,7 +203,7 @@ Run code only in browser after rendering:
 import { afterNextRender, afterRender } from '@angular/core';
 
 @Component({...})
-export class ChartComponent {
+export class Chart {
   constructor() {
     // Runs once after first render (browser only)
     afterNextRender(() => {
@@ -249,7 +249,7 @@ export const LOCAL_STORAGE = new InjectionToken<Storage | null>('LocalStorage', 
 
 // Usage
 @Injectable({ providedIn: 'root' })
-export class StorageService {
+export class Storage {
   private storage = inject(LOCAL_STORAGE);
   
   get(key: string): string | null {
@@ -344,7 +344,7 @@ import { TransferState, makeStateKey } from '@angular/core';
 const PRODUCTS_KEY = makeStateKey<Product[]>('products');
 
 @Injectable({ providedIn: 'root' })
-export class ProductService {
+export class Product {
   private http = inject(HttpClient);
   private transferState = inject(TransferState);
   private platformId = inject(PLATFORM_ID);
