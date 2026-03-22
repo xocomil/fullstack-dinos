@@ -49,6 +49,15 @@ export default [
             args: 'after-used',
             ignoreRestSiblings: false,
             argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+          },
+        ],
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
           },
         ],
         '@stylistic/no-extra-semi': 'error',

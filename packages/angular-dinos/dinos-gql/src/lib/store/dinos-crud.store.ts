@@ -50,48 +50,50 @@ export const DinosCrudStore = signalStore(
     const crudService = inject(DinosCrudService);
 
     return {
-    getTableDinos: rxMutation({
-      operation: (_: void) => {
-        return crudService.getDinosTable(
-          state.sortDirection(),
-          state.boolHasFeathersFilter(),
-        );
-      },
-      onSuccess: (response) => {
-        console.log('getTableDinos success response', response);
+      getTableDinos: rxMutation({
+        operation: (_: void) => {
+          return crudService.getDinosTable(
+            state.sortDirection(),
+            state.boolHasFeathersFilter(),
+          );
+        },
+        onSuccess: (response) => {
+          console.log('getTableDinos success response', response);
 
-        const { allDinosaurs: dinosaurs } = response;
+          const { allDinosaurs: dinosaurs } = response;
 
-        patchState(state, { dinosaurs });
-      },
-      onError: (error) => {
-        console.error('Error getting table dinos', error);
-      },
-      operator: switchOp,
-    }),
-  }}),
+          patchState(state, { dinosaurs });
+        },
+        onError: (error) => {
+          console.error('Error getting table dinos', error);
+        },
+        operator: switchOp,
+      }),
+    };
+  }),
   withMutations((state) => {
     const crudService = inject(DinosCrudService);
 
     return {
-    deleteDinoMutation: rxMutation({
-      operation: ({ id: dinoId }: BaseDinosaur) => {
-        if (!isString(dinoId)) {
-          return EMPTY;
-        }
+      deleteDinoMutation: rxMutation({
+        operation: ({ id: dinoId }: BaseDinosaur) => {
+          if (!isString(dinoId)) {
+            return EMPTY;
+          }
 
-        return crudService.deleteDino(dinoId);
-      },
-      onSuccess: (response) => {
-        console.log('deleteDino success response', response);
+          return crudService.deleteDino(dinoId);
+        },
+        onSuccess: (response) => {
+          console.log('deleteDino success response', response);
 
-        state.getTableDinos();
-      },
-      onError: (error) => {
-        console.error('Error deleting dino', error);
-      },
-    }),
-  }}),
+          state.getTableDinos();
+        },
+        onError: (error) => {
+          console.error('Error deleting dino', error);
+        },
+      }),
+    };
+  }),
   withMethods((state) => ({
     deleteDino: rxMethod<BaseDinosaur>(
       pipe(

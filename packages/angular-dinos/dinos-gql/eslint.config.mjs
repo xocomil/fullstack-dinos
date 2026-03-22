@@ -42,6 +42,14 @@ export default [
             style: 'kebab-case',
           },
         ],
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+          },
+        ],
       },
     })),
   ...compat
