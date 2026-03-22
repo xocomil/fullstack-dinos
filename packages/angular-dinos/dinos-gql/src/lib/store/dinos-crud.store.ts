@@ -12,7 +12,7 @@ import {
   withMutations,
 } from '@angular-architects/ngrx-toolkit';
 import { emptyDinosCrudState } from '../models/crud.state';
-import { computed, effect, inject } from '@angular/core';
+import { effect, inject, untracked } from '@angular/core';
 import { BaseDinosaur } from '../models/dinosaur';
 import { DinosCrudService } from '../dinos-crud.service';
 import { EMPTY, pipe, tap } from 'rxjs';
@@ -22,12 +22,11 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 export const DinosCrudStore = signalStore(
   withImmutableState(emptyDinosCrudState()),
   withComputed((state) => ({
-    sortDirection: computed(() => (state.sortAscending() ? 'asc' : 'desc')),
-    boolHasFeathersFilter: computed(() =>
-      !state.hasFeathersFilterOptions
+    sortDirection: () => (state.sortAscending() ? 'asc' : 'desc'),
+    boolHasFeathersFilter: () =>
+      !state.hasFeathersFilterOptions()
         ? undefined
         : state.hasFeathersFilterOptions() === 'true',
-    ),
   })),
   withMethods((state) => ({
     toggleSortDirection: () => {
@@ -47,11 +46,12 @@ export const DinosCrudStore = signalStore(
       });
     },
   })),
-  withMutations((state) => ({
+  withMutations((state) => {
+    const crudService = inject(DinosCrudService);
+
+    return {
     getTableDinos: rxMutation({
       operation: (_: void) => {
-        const crudService = inject(DinosCrudService);
-
         return crudService.getDinosTable(
           state.sortDirection(),
           state.boolHasFeathersFilter(),
@@ -69,12 +69,13 @@ export const DinosCrudStore = signalStore(
       },
       operator: switchOp,
     }),
-  })),
-  withMutations((state) => ({
+  }}),
+  withMutations((state) => {
+    const crudService = inject(DinosCrudService);
+
+    return {
     deleteDinoMutation: rxMutation({
       operation: ({ id: dinoId }: BaseDinosaur) => {
-        const crudService = inject(DinosCrudService);
-
         if (!isString(dinoId)) {
           return EMPTY;
         }
@@ -90,7 +91,7 @@ export const DinosCrudStore = signalStore(
         console.error('Error deleting dino', error);
       },
     }),
-  })),
+  }}),
   withMethods((state) => ({
     deleteDino: rxMethod<BaseDinosaur>(
       pipe(
@@ -113,8 +114,8 @@ export const DinosCrudStore = signalStore(
           boolHasFeathersFilter,
         );
 
-        // Trigger the mutation
-        store.getTableDinos();
+        // Trigger the mutation (untracked to avoid infinite loop)
+        untracked(() => store.getTableDinos());
       });
     },
   }),
