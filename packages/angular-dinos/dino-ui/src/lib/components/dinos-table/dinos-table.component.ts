@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Injector,
   OnInit,
   ViewChild,
   inject,
@@ -87,9 +88,12 @@ export class DinosTableComponent implements OnInit {
   @ViewChild(DeleteDinoModalComponent, { static: true })
   deleteDinoModal!: DeleteDinoModalComponent;
   protected readonly dinosStore = inject(DinosCrudStore);
+  readonly #injector = inject(Injector);
 
   ngOnInit(): void {
-    this.dinosStore.deleteDino(this.deleteDinoModal.confirmDelete$);
+    this.dinosStore.deleteDino(this.deleteDinoModal.confirmDelete$, {
+      injector: this.#injector,
+    });
   }
 
   protected deleteDino(event: MouseEvent, dinosaur: BaseDinosaur) {
