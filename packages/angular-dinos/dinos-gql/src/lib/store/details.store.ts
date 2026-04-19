@@ -6,22 +6,18 @@ import {
   emptyAddDino,
   emptyEditDino,
 } from '../models/details.state';
-import { Dinosaur } from '../models/dinosaur';
 import { withAddDino } from './with-add-dino.store';
 import { withCallState } from './with-call-state.store';
-import { withErrors } from './with-dino-errors.store';
 import { withEditDino } from './with-edit-dino.store';
 
 export const EditDinoStore = signalStore(
   withState<EditDinoState>(emptyEditDino()),
   withCallState(),
-  withErrors<Dinosaur>(),
   withEditDino(),
 );
 
 export const AddDinoStore = signalStore(
   withState<AddDinoState>(emptyAddDino()),
-  withErrors<Dinosaur>(),
   withCallState(),
   withAddDino(),
 );
