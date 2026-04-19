@@ -120,11 +120,20 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@apollo/protobufjs",
+      "@nestjs/core",
+      "@parcel/watcher",
+      "@prisma/client",
+      "@prisma/engines",
       "@swc/core",
       "cypress",
       "esbuild",
+      "less",
       "lmdb",
-      "nx"
+      "msgpackr-extract",
+      "nx",
+      "prisma",
+      "unrs-resolver"
     ]
   }
 }
