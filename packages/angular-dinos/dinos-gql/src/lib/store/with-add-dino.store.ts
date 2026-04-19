@@ -18,12 +18,11 @@ import {
   setLoaded,
   setLoading,
 } from './with-call-state.store';
-import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 
 export function withAddDino() {
   return signalStoreFeature(
     {
-      state: type<AddDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
+      state: type<AddDinoState & CallStateSlice>(),
     },
     withState(() => ({ cancelLink: ['/dinos'], editMode: false })),
     withMethods((state) => {
@@ -36,11 +35,8 @@ export function withAddDino() {
             switchMap((dino) => {
               const errors = validateDino(dino);
 
-              console.log('errors', errors);
-
-              patchState(state, updateDinoErrors(errors));
-
               if (Object.keys(errors).length > 0) {
+                console.warn('Store-level validation failed:', errors);
                 return EMPTY;
               }
 
@@ -48,7 +44,7 @@ export function withAddDino() {
 
               return dinosCrudService.create(dino);
             }),
-            tap((saveStatus) => {
+            tap(() => {
               patchState(state, setLoading());
             }),
             filter((saveStatus) => saveStatus.finalized),

@@ -26,7 +26,6 @@ import {
   setLoaded,
   setLoading,
 } from './with-call-state.store';
-import { ErrorsSlice, updateDinoErrors } from './with-dino-errors.store';
 import { withResource } from '@angular-architects/ngrx-toolkit';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { createEmptyDino } from '../models/dinosaur';
@@ -34,7 +33,7 @@ import { createEmptyDino } from '../models/dinosaur';
 export function withEditDino() {
   return signalStoreFeature(
     {
-      state: type<EditDinoState & ErrorsSlice<Dinosaur> & CallStateSlice>(),
+      state: type<EditDinoState & CallStateSlice>(),
     },
     withResource((state) => {
       const dinosCrudService = inject(DinosCrudService);
@@ -78,11 +77,8 @@ export function withEditDino() {
           switchMap((dino) => {
             const errors = validateUpdateDino(dino);
 
-            console.log('errors', errors);
-
-            patchState(state, updateDinoErrors(errors));
-
             if (Object.keys(errors).length > 0) {
+              console.warn('Store-level validation failed:', errors);
               return EMPTY;
             }
 
