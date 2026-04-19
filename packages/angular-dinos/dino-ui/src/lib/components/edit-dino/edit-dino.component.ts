@@ -1,16 +1,19 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import {
   form,
   FormField,
   submit,
-  required,
-  minLength,
-  min,
-  validate,
   disabled,
+  validateStandardSchema,
+  applyWhen,
 } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
-import { DINO_STORE } from '@fullstack-dinos/angular-dinos/dinos-gql';
+import {
+  createEmptyDino,
+  DINO_STORE,
+  dinoParser,
+  updateDinoParser,
+} from '@fullstack-dinos/angular-dinos/dinos-gql';
 import { ToggleComponent } from '@ui-components';
 import { DinoErrorsComponent } from '../dino-errors/dino-errors.component';
 import { ToastComponent } from '../toast/toast.component';
@@ -19,10 +22,10 @@ import { ToastComponent } from '../toast/toast.component';
   selector: 'fullstack-dinos-edit-dino',
   host: { class: 'block' },
   template: `
-    @if (networkError()) {
+    @if (detailsStore.networkError()) {
       <fullstack-dinos-dino-errors
         class="hidden lg:block"
-        [errors]="[networkError()!]"
+        [errors]="[detailsStore.networkError()!]"
       />
     }
     <form (submit)="onSubmit(); $event.preventDefault()">
@@ -34,8 +37,12 @@ import { ToastComponent } from '../toast/toast.component';
             [formField]="dinoForm.dinoName"
             placeholder="Dinosaur's name"
           />
-          @if (dinoForm.dinoName().touched() && dinoForm.dinoName().errors().length) {
-            <span class="error">{{ dinoForm.dinoName().errors()[0].message }}</span>
+          @if (
+            dinoForm.dinoName().touched() && dinoForm.dinoName().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.dinoName().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -47,7 +54,9 @@ import { ToastComponent } from '../toast/toast.component';
             placeholder="Dinosaur's genus"
           />
           @if (dinoForm.genus().touched() && dinoForm.genus().errors().length) {
-            <span class="error">{{ dinoForm.genus().errors()[0].message }}</span>
+            <span class="error">
+              {{ dinoForm.genus().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -58,8 +67,12 @@ import { ToastComponent } from '../toast/toast.component';
             [formField]="dinoForm.species"
             placeholder="Dinosaur's species"
           />
-          @if (dinoForm.species().touched() && dinoForm.species().errors().length) {
-            <span class="error">{{ dinoForm.species().errors()[0].message }}</span>
+          @if (
+            dinoForm.species().touched() && dinoForm.species().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.species().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -72,8 +85,13 @@ import { ToastComponent } from '../toast/toast.component';
             placeholder="Description"
           ></textarea>
           <p class="label not-prose">Make it jazzy!</p>
-          @if (dinoForm.description().touched() && dinoForm.description().errors().length) {
-            <span class="error">{{ dinoForm.description().errors()[0].message }}</span>
+          @if (
+            dinoForm.description().touched() &&
+            dinoForm.description().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.description().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -91,8 +109,13 @@ import { ToastComponent } from '../toast/toast.component';
             [formField]="dinoForm.heightInMeters"
             placeholder="Dinosaur's height in meters"
           />
-          @if (dinoForm.heightInMeters().touched() && dinoForm.heightInMeters().errors().length) {
-            <span class="error">{{ dinoForm.heightInMeters().errors()[0].message }}</span>
+          @if (
+            dinoForm.heightInMeters().touched() &&
+            dinoForm.heightInMeters().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.heightInMeters().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -104,8 +127,13 @@ import { ToastComponent } from '../toast/toast.component';
             [formField]="dinoForm.weightInKilos"
             placeholder="Dinosaur's weight in kilograms"
           />
-          @if (dinoForm.weightInKilos().touched() && dinoForm.weightInKilos().errors().length) {
-            <span class="error">{{ dinoForm.weightInKilos().errors()[0].message }}</span>
+          @if (
+            dinoForm.weightInKilos().touched() &&
+            dinoForm.weightInKilos().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.weightInKilos().errors()[0].message }}
+            </span>
           }
         </label>
 
@@ -116,8 +144,12 @@ import { ToastComponent } from '../toast/toast.component';
             [formField]="dinoForm.imageUrl"
             placeholder="URL to Image"
           />
-          @if (dinoForm.imageUrl().touched() && dinoForm.imageUrl().errors().length) {
-            <span class="error">{{ dinoForm.imageUrl().errors()[0].message }}</span>
+          @if (
+            dinoForm.imageUrl().touched() && dinoForm.imageUrl().errors().length
+          ) {
+            <span class="error">
+              {{ dinoForm.imageUrl().errors()[0].message }}
+            </span>
           }
         </label>
       </div>
@@ -159,95 +191,39 @@ import { ToastComponent } from '../toast/toast.component';
 export class EditDinoComponent {
   protected readonly detailsStore = inject(DINO_STORE);
 
-  protected readonly dinoModel = signal({
-    dinoName: '',
-    genus: '',
-    species: '',
-    description: '',
-    hasFeathers: false,
-    heightInMeters: 0,
-    weightInKilos: 0,
-    imageUrl: '',
-    trivia: [] as string[],
-  });
-
-  protected readonly networkError = computed(() => this.detailsStore.networkError());
+  protected readonly dinoModel = signal(createEmptyDino());
 
   protected readonly dinoForm = form(this.dinoModel, (s) => {
-    // Name, genus, species validation
-    required(s.dinoName, { message: 'Dinosaur name is required.' });
-    minLength(s.dinoName, 3, { message: 'Name must be at least 3 characters long.' });
+    applyWhen(
+      s,
+      () => this.detailsStore.editMode(),
+      (schemaPath) => {
+        validateStandardSchema(schemaPath, updateDinoParser);
+      },
+    );
 
-    required(s.genus, { message: 'Genus is required.' });
-    minLength(s.genus, 3, { message: 'Genus must be at least 3 characters long.' });
+    applyWhen(
+      s,
+      () => !this.detailsStore.editMode(),
+      (schemaPath) => {
+        validateStandardSchema(schemaPath, dinoParser);
+      },
+    );
 
-    required(s.species, { message: 'Species is required.' });
-    minLength(s.species, 3, { message: 'Species must be at least 3 characters long.' });
-
-    // Description: only validate if non-empty
-    validate(s.description, ({ value }) => {
-      const val = value();
-      if (val && val.length > 0 && val.length < 3) {
-        return {
-          kind: 'minLength',
-          message: 'Please provide a better description. It should be at least 3 characters!',
-        };
-      }
-      return undefined;
-    });
-
-    // Numeric fields
-    required(s.heightInMeters, { message: 'Height in meters is required.' });
-    validate(s.heightInMeters, ({ value }) => {
-      if (value() <= 0) {
-        return { kind: 'min', message: 'Height in meters must be greater than 0.' };
-      }
-      return undefined;
-    });
-
-    required(s.weightInKilos, { message: 'Weight in kilos is required.' });
-    validate(s.weightInKilos, ({ value }) => {
-      if (value() <= 0) {
-        return { kind: 'min', message: 'Weight in kilos must be greater than 0.' };
-      }
-      return undefined;
-    });
-
-    // Image URL: only validate if non-empty
-    validate(s.imageUrl, ({ value }) => {
-      const val = value();
-      if (val && val.length > 0) {
-        try {
-          new URL(val);
-        } catch {
-          return { kind: 'url', message: 'Image URL is not a valid URL.' };
-        }
-      }
-      return undefined;
-    });
-
-    // Disable name/genus/species in edit mode
     disabled(s.dinoName, () => this.detailsStore.editMode());
     disabled(s.genus, () => this.detailsStore.editMode());
     disabled(s.species, () => this.detailsStore.editMode());
   });
 
   constructor() {
-    // Sync store dinosaur data into the local model signal
+    // TODO: WTF??? This could just bind to the signal store right???
+    // We need to fix the resource for the edit dino so we don't have to do this
+    // and can just use a delegatedSignal from the store.
     effect(() => {
       const dino = this.detailsStore.dinosaur();
+
       if (dino) {
-        this.dinoModel.set({
-          dinoName: dino.dinoName ?? '',
-          genus: dino.genus ?? '',
-          species: dino.species ?? '',
-          description: dino.description ?? '',
-          hasFeathers: dino.hasFeathers ?? false,
-          heightInMeters: dino.heightInMeters ?? 0,
-          weightInKilos: dino.weightInKilos ?? 0,
-          imageUrl: dino.imageUrl ?? '',
-          trivia: dino.trivia ?? [],
-        });
+        this.dinoModel.set(dino);
       }
     });
   }
@@ -259,9 +235,6 @@ export class EditDinoComponent {
   }
 
   protected cancel(): void {
-    // Reset network error state if store supports it
-    if ('clearErrors' in this.detailsStore) {
-      (this.detailsStore as any).clearErrors();
-    }
+    console.log('cancel()');
   }
 }

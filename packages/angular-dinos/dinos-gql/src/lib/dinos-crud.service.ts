@@ -122,15 +122,31 @@ export class DinosCrudService {
   }
 }
 
-type DbDino = Omit<Dinosaur, 'dinoName' | 'trivia'> & {
+type DbDino = Omit<
+  Dinosaur,
+  'dinoName' | 'trivia' | 'description' | 'imageUrl'
+> & {
   name: string;
   trivia?: string[] | null | undefined;
+  description?: string | null | undefined;
+  imageUrl?: string | null | undefined;
 };
-type DbBaseDino = Omit<BaseDinosaur, 'dinoName'> & { name: string };
+type DbBaseDino = Omit<BaseDinosaur, 'dinoName' | 'description'> & {
+  name: string;
+  description?: string | null | undefined;
+};
 
-function convertGqlDinoToDinosaur({ name, trivia, ...dino }: DbDino): Dinosaur {
+function convertGqlDinoToDinosaur({
+  name,
+  description,
+  imageUrl,
+  trivia,
+  ...dino
+}: DbDino): Dinosaur {
   return {
     ...dino,
+    description: description ?? '',
+    imageUrl: imageUrl ?? '',
     dinoName: name ?? '',
     trivia: trivia ?? [],
   };
@@ -138,10 +154,12 @@ function convertGqlDinoToDinosaur({ name, trivia, ...dino }: DbDino): Dinosaur {
 
 function convertGqlDinoToBaseDinosaur({
   name,
+  description,
   ...dino
 }: DbBaseDino): BaseDinosaur {
   return {
     ...dino,
+    description: description ?? '',
     dinoName: name ?? '',
   };
 }

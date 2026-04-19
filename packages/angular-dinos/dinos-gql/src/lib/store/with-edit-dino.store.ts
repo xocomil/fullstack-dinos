@@ -56,8 +56,12 @@ export function withEditDino() {
       ),
       cancelLink: computed(() => ['/dinos', state.id()]),
       openAiObject: computed<OpenaiDino>(() => {
-        const { __typename, id, imageUrl, updatedAt, ...openAiObject } =
-          state.dinosaurValue() as Dinosaur & { __typename: unknown };
+        const {
+          __typename,
+          id: _id,
+          updatedAt: _updatedAt,
+          ...openAiObject
+        } = state.dinosaurValue() as Dinosaur & { __typename: unknown };
 
         return { ...openAiObject, lengthInMeters: 0 };
       }),
@@ -162,9 +166,9 @@ export function withEditDino() {
               patchState(state, setLoaded());
 
               const {
-                dinoName: name,
-                genus: g2,
-                species: s2,
+                dinoName: _name,
+                genus: _g2,
+                species: _s2,
                 lengthInMeters,
                 ...openaiDino
               } = dinosaur;
