@@ -70,12 +70,12 @@ This codebase intentionally demonstrates different NgRx approaches:
 1. Ensure PostgreSQL is installed and running
 2. Create `.env` file with `DATABASE_URL` (see README.md for format)
 3. Configure `prisma/schema.prisma` provider to match your database
-4. Run database migrations: `npx prisma migrate dev` (or `yarn prisma migrate dev`)
+4. Run database migrations: `pnpm prisma migrate dev`
 
 ### Development Servers
 
-- **Backend**: `npx nx serve dinos-api` or `yarn nx s dinos-api`
-- **Frontend**: `npx nx serve angular-dinos` or `yarn nx s angular-dinos`
+- **Backend**: `pnpm nx serve dinos-api`
+- **Frontend**: `pnpm nx serve angular-dinos`
   - Also available via npm script: `npm run start-frontend`
 
 ### Building
@@ -102,7 +102,7 @@ This codebase intentionally demonstrates different NgRx approaches:
 
 ### GraphQL Code Generation
 
-- **Command**: `npm run gql` or `yarn gql`
+- **Command**: `pnpm gql`
 - **What it does**: Generates TypeScript types and Apollo Angular services from `.graphql` files
 - **Config**: `packages/angular-dinos/dinos-gql/codegen.ts`
 - **Source**: Reads schema from `http://localhost:3000/graphql` (API must be running)
@@ -128,9 +128,9 @@ This codebase intentionally demonstrates different NgRx approaches:
 
 ### Package Manager
 
-- **Primary**: Yarn 1.22.21 (configured via Volta)
-- **Node**: 20.10.0 (configured via Volta)
-- Yarn lockfile is present; prefer `yarn` commands over `npm`
+- **Primary**: pnpm 10.33.2 (configured via package.json & Volta)
+- **Node**: 24.13.0 (configured via Volta)
+- pnpm-lock.yaml is present; prefer `pnpm` commands over `npm` or `yarn`
 
 ### Code Style
 
