@@ -85,15 +85,12 @@ export class DetailsComponent {
   });
 
   constructor() {
-    effect(
-      () => {
-        console.log('effect running for DetailsComponent');
+    effect(() => {
+      console.log('effect running for DetailsComponent');
 
-        this.detailsStore.setId(this.dinoId());
-        this.detailsStore.setEditMode(this.editMode());
-        this.detailsStore.setOpenAiMode(this.openAiMode());
-      },
-      { allowSignalWrites: true },
-    );
+      this.detailsStore.setId(this.dinoId());
+      this.detailsStore.setEditMode(this.editMode());
+      this.detailsStore.setOpenAiMode(this.openAiMode());
+    });
   }
 }

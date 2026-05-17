@@ -52,3 +52,5 @@ node_modules.old
 
 .claude/worktrees
 .claude/settings.local.json
+.nx/polygraph
+.nx/self-healing

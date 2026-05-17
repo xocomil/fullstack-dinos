@@ -38,8 +38,7 @@ export const baseDinoParser = z.object({
       message:
         'Please provide a better description. It should be at least 3 characters!',
     })
-    .or(z.string().max(0))
-    .nullish(),
+    .or(z.string().max(0)),
 });
 
 export type BaseDinosaur = z.infer<typeof baseDinoParser>;
@@ -88,8 +87,7 @@ export const dinoParser = baseDinoParser.extend({
           : 'Image URL must be a string.',
     })
     .url('Image URL is not a valid URL.')
-    .or(z.string().max(0))
-    .nullish(),
+    .or(z.string().max(0)),
   updatedAt: z
     .date({
       error: (issue) =>
@@ -102,7 +100,7 @@ export const dinoParser = baseDinoParser.extend({
 
 export type Dinosaur = z.infer<typeof dinoParser>;
 
-export type OpenaiDino = Omit<Dinosaur, 'id' | 'updatedAt' | 'imageUrl'> & {
+export type OpenaiDino = Omit<Dinosaur, 'id' | 'updatedAt'> & {
   lengthInMeters: number;
 };
 
@@ -127,6 +125,7 @@ export const createEmptyDino = (): Dinosaur => ({
   heightInMeters: 0,
   weightInKilos: 0,
   trivia: [],
+  imageUrl: '',
 });
 
 const formatDinoErrors = <T>(parseResults: z.ZodSafeParseResult<T>) =>
