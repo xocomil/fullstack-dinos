@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
-  importProvidersFrom,
+  inject,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import {
@@ -9,32 +9,28 @@ import {
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
-import { InMemoryCache } from '@apollo/client/cache';
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { InMemoryCache } from '@apollo/client/core';
+import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(ApolloModule),
     provideRouter(
       appRoutes,
       withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
     ),
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory(httpLink: HttpLink) {
-        return {
-          cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: 'http://localhost:4200/graphql',
-          }),
-          connectToDevTools: true,
-        };
-      },
-      deps: [HttpLink],
-    },
+    provideApollo(() => {
+      const httpLink = inject(HttpLink);
+      return {
+        cache: new InMemoryCache(),
+        link: httpLink.create({
+          uri: 'http://localhost:4200/graphql',
+        }),
+        connectToDevTools: true,
+      };
+    }),
     provideHttpClient(),
     provideZonelessChangeDetection(),
   ],
