@@ -68,7 +68,5 @@ const getExtraGreeting = (age: number): string => {
     return 'Welcome back voter!';
   }
 
-  if (age > 65) {
-    return 'Welcome back old person!';
-  }
+  return 'Welcome back old person!';
 };

@@ -1,10 +1,9 @@
-
 import { Component, EventEmitter, input, Output } from '@angular/core';
 
 @Component({
-    selector: 'fullstack-dinos-sort-button',
-    imports: [],
-    template: `
+  selector: 'fullstack-dinos-sort-button',
+  imports: [],
+  template: `
     <button type="button" class="btn btn-xs" (click)="sortClicked($event)">
       @if (direction() === 'desc') {
         @defer (on immediate) {
@@ -47,10 +46,10 @@ import { Component, EventEmitter, input, Output } from '@angular/core';
       }
     </button>
   `,
-    styleUrls: ['./sort-button.component.scss'],
-    host: {
-        class: 'inline-block',
-    }
+  styleUrls: ['./sort-button.component.scss'],
+  host: {
+    class: 'inline-block',
+  },
 })
 export class SortButtonComponent {
   direction = input<'asc' | 'desc'>('asc');

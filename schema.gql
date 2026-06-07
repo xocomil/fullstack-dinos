@@ -9,13 +9,13 @@ scalar DateTime
 
 type Dinosaur {
   description: String
-  genus: String!
+  genus: String
   hasFeathers: Boolean!
   heightInMeters: Float!
   id: String
   imageUrl: String
   name: String!
-  species: String!
+  species: String
   trivia: [String!]
   updatedAt: DateTime
   weightInKilos: Float!

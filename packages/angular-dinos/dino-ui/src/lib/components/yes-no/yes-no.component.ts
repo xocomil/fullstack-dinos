@@ -1,10 +1,9 @@
-
 import { Component, input } from '@angular/core';
 
 @Component({
-    selector: 'fullstack-dinos-yes-no',
-    imports: [],
-    template: `
+  selector: 'fullstack-dinos-yes-no',
+  imports: [],
+  template: `
     @if (value()) {
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +36,7 @@ import { Component, input } from '@angular/core';
       </svg>
     }
   `,
-    styleUrls: ['./yes-no.component.scss']
+  styleUrls: ['./yes-no.component.scss'],
 })
 export class YesNoComponent {
   value = input(false);

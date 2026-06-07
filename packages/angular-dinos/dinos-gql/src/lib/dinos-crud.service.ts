@@ -27,11 +27,13 @@ export class DinosCrudService {
   ): Observable<{ allDinosaurs: BaseDinosaur[] }> {
     return this.#allDinosGql
       .fetch({
-        direction,
-        hasFeathers,
+        variables: {
+          direction,
+          hasFeathers,
+        },
       })
       .pipe(
-        map((apolloDinos) => apolloDinos.data.allDinosaurs),
+        map((apolloDinos) => apolloDinos.data?.allDinosaurs),
         map((dinos) => dinos ?? []),
         map((dinos) => ({
           allDinosaurs: dinos.map(convertGqlDinoToBaseDinosaur),
@@ -46,10 +48,12 @@ export class DinosCrudService {
   getDino(id: string): Observable<Dinosaur> {
     return this.#getDinoGql
       .fetch({
-        where: { id },
+        variables: {
+          where: { id },
+        },
       })
       .pipe(
-        map((apolloDino) => apolloDino.data.dinosaur),
+        map((apolloDino) => apolloDino.data?.dinosaur),
         map((dino) => {
           if (!dino) {
             throw new Error(`Dinosaur with id ${id} not found.`);
@@ -65,17 +69,15 @@ export class DinosCrudService {
     id: string,
   ): Observable<Suspense<Dinosaur | null | undefined>> {
     return this.#updateDinoGql
-      .mutate(
-        {
+      .mutate({
+        variables: {
           data: dino,
           where: { id },
         },
-        {
-          update(cache) {
-            cache.evict({ fieldName: 'allDinosaurs' });
-          },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
         },
-      )
+      })
       .pipe(
         map((mutationResult) => mutationResult.data?.updateDino),
         map((gqlDino) =>
@@ -87,16 +89,14 @@ export class DinosCrudService {
 
   create(dino: Dinosaur): Observable<Suspense<Dinosaur | null | undefined>> {
     return this.#createDinoGql
-      .mutate(
-        {
+      .mutate({
+        variables: {
           dino: convertDinosaurToCreateDino(dino),
         },
-        {
-          update(cache) {
-            cache.evict({ fieldName: 'allDinosaurs' });
-          },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
         },
-      )
+      })
       .pipe(
         map((mutationResult) => mutationResult.data?.createDino),
         map((gqlDino) =>
@@ -108,16 +108,14 @@ export class DinosCrudService {
 
   deleteDino(dinoId: string): Observable<string | null | undefined> {
     return this.#deleteDinoGql
-      .mutate(
-        {
+      .mutate({
+        variables: {
           where: { id: dinoId },
         },
-        {
-          update(cache) {
-            cache.evict({ fieldName: 'allDinosaurs' });
-          },
+        update(cache) {
+          cache.evict({ fieldName: 'allDinosaurs' });
         },
-      )
+      })
       .pipe(map((mutationResult) => mutationResult.data?.deleteDino?.id));
   }
 }
