@@ -7,12 +7,6 @@ import { HeaderComponent } from './components/header/header.component';
   template: `
     <dino-header />
     <router-outlet />
-    <strong>$safeNavigationMigration</strong>
-    <pre>
-      No wrapper: {{ undefined }}
-      With wrapper: {{ $safeNavigationMigration(undefined) }}
-    </pre
-    >
   `,
   host: {
     class: 'prose container block px-8 py-4 min-w-full',
