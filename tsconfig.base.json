@@ -13,22 +13,21 @@
     "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@dino-ui": ["packages/angular-dinos/dino-ui/src/index.ts"],
+      "@dino-ui": ["./packages/angular-dinos/dino-ui/src/index.ts"],
       "@dino-ui/components": [
-        "packages/angular-dinos/dino-ui/src/lib/components/index.ts"
+        "./packages/angular-dinos/dino-ui/src/lib/components/index.ts"
       ],
       "@fullstack-dinos/angular-dinos/dinos-gql": [
-        "packages/angular-dinos/dinos-gql/src/index.ts"
+        "./packages/angular-dinos/dinos-gql/src/index.ts"
       ],
       "@fullstack-dinos/angular-dinos/openai": [
-        "packages/angular-dinos/openai/src/index.ts"
+        "./packages/angular-dinos/openai/src/index.ts"
       ],
       "@fullstack-dinos/rxjs-operators": [
-        "packages/angular-dinos/rxjs-operators/src/index.ts"
+        "./packages/angular-dinos/rxjs-operators/src/index.ts"
       ],
-      "@ui-components": ["packages/angular-dinos/ui-components/src/index.ts"]
+      "@ui-components": ["./packages/angular-dinos/ui-components/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"],

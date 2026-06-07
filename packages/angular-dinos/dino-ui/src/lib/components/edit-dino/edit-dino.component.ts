@@ -1,11 +1,11 @@
-import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import {
+  applyWhen,
+  disabled,
   form,
   FormField,
   submit,
-  disabled,
   validateStandardSchema,
-  applyWhen,
 } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import {
@@ -180,7 +180,6 @@ import { ToastComponent } from '../toast/toast.component';
     }
   `,
   styleUrls: ['./edit-dino.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DinoErrorsComponent,
     FormField,

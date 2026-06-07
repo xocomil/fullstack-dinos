@@ -1,5 +1,4 @@
-
-import { Component, ElementRef, ViewChild, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import {
   BaseDinosaur,
   createEmptyBaseDino,
@@ -7,9 +6,9 @@ import {
 import { Subject } from 'rxjs';
 
 @Component({
-    selector: 'fullstack-dinos-delete-dino-modal',
-    imports: [],
-    template: `
+  selector: 'fullstack-dinos-delete-dino-modal',
+  imports: [],
+  template: `
     <dialog #dialog class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Confirm delete!</h3>
@@ -27,8 +26,7 @@ import { Subject } from 'rxjs';
       </div>
     </dialog>
   `,
-    changeDetection: ChangeDetectionStrategy.Eager,
-    styleUrls: ['./delete-dino-modal.component.scss']
+  styleUrls: ['./delete-dino-modal.component.scss'],
 })
 export class DeleteDinoModalComponent {
   @ViewChild('dialog', { static: true }) dialog!: ElementRef<HTMLDialogElement>;
