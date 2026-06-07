@@ -1,5 +1,5 @@
 
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'fullstack-dinos-yes-no',
@@ -37,6 +37,7 @@ import { Component, input } from '@angular/core';
       </svg>
     }
   `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./yes-no.component.scss']
 })
 export class YesNoComponent {

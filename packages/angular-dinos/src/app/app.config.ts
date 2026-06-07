@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
         connectToDevTools: true,
       };
     }),
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
     provideZonelessChangeDetection(),
   ],
 };

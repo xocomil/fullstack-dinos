@@ -29,7 +29,7 @@ import { extraDescriptionFromDino } from '../models/details.constants';
       </div>
       <div class="text-right italic text-blue-500/70">
         <strong>Last updated:</strong>
-        {{ detailsStore.dinosaurValue()?.updatedAt | date: 'medium' }}
+        {{ $safeNavigationMigration(detailsStore.dinosaurValue()?.updatedAt) | date: 'medium' }}
       </div>
     </div>
     <div

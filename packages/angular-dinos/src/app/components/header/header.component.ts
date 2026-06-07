@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouteToHomeComponent } from '@dino-ui/components';
 
 @Component({
@@ -13,6 +13,7 @@ import { RouteToHomeComponent } from '@dino-ui/components';
     styleUrls: ['./header.component.scss'],
     // eslint-disable-next-line @angular-eslint/no-host-metadata-property
     host: { class: 'block' },
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouteToHomeComponent]
 })
 export class HeaderComponent {}

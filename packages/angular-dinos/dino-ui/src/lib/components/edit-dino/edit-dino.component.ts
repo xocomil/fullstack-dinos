@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   form,
   FormField,
@@ -180,6 +180,7 @@ import { ToastComponent } from '../toast/toast.component';
     }
   `,
   styleUrls: ['./edit-dino.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DinoErrorsComponent,
     FormField,

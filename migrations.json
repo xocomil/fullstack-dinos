@@ -1,27 +1,89 @@
 {
   "migrations": [
     {
-      "cli": "nx",
-      "version": "22.7.0-beta.0",
-      "description": "Adds .nx/polygraph to .gitignore",
-      "implementation": "./dist/src/migrations/update-22-7-0/add-polygraph-to-git-ignore",
-      "package": "nx",
-      "name": "22-7-0-add-polygraph-to-git-ignore"
+      "version": "22.0.0",
+      "factory": "./add-istanbul-instrumenter/migration",
+      "description": "Add 'istanbul-lib-instrument' to 'devDependencies' if Karma unit testing is used.",
+      "package": "@angular/cli",
+      "name": "add-istanbul-instrumenter"
     },
     {
-      "cli": "nx",
-      "version": "22.7.0-beta.0",
-      "description": "Adds .nx/self-healing to .gitignore",
-      "implementation": "./dist/src/migrations/update-22-2-0/add-self-healing-to-gitignore",
-      "package": "nx",
-      "name": "22-7-0-add-self-healing-to-gitignore"
+      "version": "22.0.0",
+      "factory": "./migrate-karma-to-vitest/migration",
+      "description": "Migrate projects using legacy Karma unit-test builder to the new unit-test builder with Vitest.",
+      "optional": true,
+      "package": "@angular/cli",
+      "name": "migrate-karma-to-vitest"
     },
     {
-      "version": "22.7.0-beta.12",
-      "description": "Add missing inputs to @nx/eslint:lint executor target defaults",
-      "implementation": "./src/migrations/update-21-6-0/update-executor-lint-inputs",
-      "package": "@nx/eslint",
-      "name": "update-executor-lint-inputs"
+      "version": "22.0.0",
+      "factory": "./trust-proxy-headers/migration",
+      "description": "Add 'trustProxyHeaders' configuration to 'AngularNodeAppEngine' or 'AngularAppEngine'. For more information see: https://angular.dev/best-practices/security#configuring-trusted-proxy-headers",
+      "package": "@angular/cli",
+      "name": "trust-proxy-headers"
+    },
+    {
+      "version": "22.0.0",
+      "factory": "./update-workspace-config/migration",
+      "description": "Update the angular workspace configuration.",
+      "package": "@angular/cli",
+      "name": "update-workspace-config"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Adds `ChangeDetectionStrategy.Eager` to all components.",
+      "factory": "./bundles/change-detection-eager.cjs#migrate",
+      "package": "@angular/core",
+      "name": "change-detection-eager"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Adds 'withXhr' to 'provideHttpClient' function calls when the 'HttpXhrBackend' is used. For more information see: https://angular.dev/api/common/http/withXhr",
+      "factory": "./bundles/http-xhr-backend.cjs#migrate",
+      "package": "@angular/core",
+      "name": "http-xhr-backend"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Adds 'strictTemplates: false' in tsconfig.json when not set.",
+      "factory": "./bundles/strict-templates-default.cjs#migrate",
+      "package": "@angular/core",
+      "name": "strict-templates-default"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Adds the required third argument to canMatch callsites.",
+      "factory": "./bundles/can-match-snapshot-required.cjs#migrate",
+      "package": "@angular/core",
+      "name": "can-match-snapshot-required"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Adds withNoIncrementalHydration() opt out to provideClientHydration() when incremental hydration is not enabled to retain pre-v22 behavior-.",
+      "factory": "./bundles/incremental-hydration.cjs#migrate",
+      "package": "@angular/core",
+      "name": "incremental-hydration"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Disables the 'nullishCoalescingNotNullable & optionalChainNotNullable extended diagnostics.",
+      "factory": "./bundles/strict-safe-navigation-narrow.cjs#migrate",
+      "package": "@angular/core",
+      "name": "strict-safe-navigation-narrow"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Migrate broken duplicate outputs",
+      "factory": "./bundles/model-output.cjs#migrate",
+      "package": "@angular/core",
+      "name": "model-output"
+    },
+    {
+      "version": "22.0.0",
+      "description": "Wraps optional chaining expressions in $safeNavigationMigration().",
+      "factory": "./bundles/safe-optional-chaining.cjs#migrate",
+      "package": "@angular/core",
+      "name": "safe-optional-chaining"
     }
   ]
 }

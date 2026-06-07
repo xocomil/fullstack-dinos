@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   BaseDinosaur,
   createEmptyBaseDino,
@@ -27,6 +27,7 @@ import { Subject } from 'rxjs';
       </div>
     </dialog>
   `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./delete-dino-modal.component.scss']
 })
 export class DeleteDinoModalComponent {

@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'fullstack-dinos-sort-button',
@@ -48,6 +48,7 @@ import { Component, EventEmitter, input, Output } from '@angular/core';
     </button>
   `,
     styleUrls: ['./sort-button.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         class: 'inline-block',
     }
