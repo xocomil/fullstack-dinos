@@ -9,7 +9,8 @@
     "angular-developer": {
       "source": "angular/skills",
       "sourceType": "github",
-      "computedHash": "13f864392379685bb8935f93989ac3c08c74e36391499d2748e8e0657ef0ee90"
+      "skillPath": "angular-developer/SKILL.md",
+      "computedHash": "bda1b480a934095b6000dd9e5648bc8760fe2684fc69cea2d20ae967b69e50b9"
     },
     "angular-di": {
       "source": "analogjs/angular-skills",
