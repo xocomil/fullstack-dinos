@@ -9,11 +9,11 @@ export class Dinosaur implements IDinosaur {
   id: string;
   @Field()
   name: string;
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   genus: string | null;
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   species: string | null;
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   description: string | null;
   @Field()
   hasFeathers: boolean;
@@ -21,7 +21,7 @@ export class Dinosaur implements IDinosaur {
   weightInKilos: number;
   @Field(() => Float)
   heightInMeters: number;
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   imageUrl: string | null;
   @Field(() => [String], { nullable: true })
   trivia: string[];
