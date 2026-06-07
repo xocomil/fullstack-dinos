@@ -42,7 +42,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build:dev-server",
+      "executor": "@angular-devkit/build-angular:dev-server",
       "syncGenerators": ["@juristr/nx-tailwind-sync:source-directives"],
       "configurations": {
         "production": {
