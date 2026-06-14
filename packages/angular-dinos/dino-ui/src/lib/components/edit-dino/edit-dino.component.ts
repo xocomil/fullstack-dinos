@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import {
   applyWhen,
   disabled,
@@ -26,6 +26,11 @@ import { ToastComponent } from '../toast/toast.component';
       <fullstack-dinos-dino-errors
         class="hidden lg:block"
         [errors]="[detailsStore.networkError()!]"
+      />
+    }
+    @if (dinoForm().invalid() && dinoForm().touched()) {
+      <fullstack-dinos-dino-errors
+        [errors]="formErrors()"
       />
     }
     <form (submit)="onSubmit(); $event.preventDefault()">
@@ -156,7 +161,7 @@ import { ToastComponent } from '../toast/toast.component';
       <button
         type="submit"
         class="btn btn-primary"
-        [disabled]="detailsStore.loading() || dinoForm().invalid()"
+        [disabled]="detailsStore.loading()"
       >
         @if (detailsStore.loading()) {
           <span class="loading loading-infinity loading-sm"></span>
@@ -213,6 +218,12 @@ export class EditDinoComponent {
     disabled(s.dinoName, () => this.detailsStore.editMode());
     disabled(s.genus, () => this.detailsStore.editMode());
     disabled(s.species, () => this.detailsStore.editMode());
+  });
+
+  protected readonly formErrors = computed(() => {
+    return this.dinoForm().errorSummary()
+      .map((e) => e.message)
+      .filter((m): m is string => !!m);
   });
 
   constructor() {

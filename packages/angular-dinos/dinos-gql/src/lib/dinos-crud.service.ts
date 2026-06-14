@@ -147,6 +147,7 @@ function convertGqlDinoToDinosaur({
     imageUrl: imageUrl ?? '',
     dinoName: name ?? '',
     trivia: trivia ?? [],
+    updatedAt: new Date(),
   };
 }
 

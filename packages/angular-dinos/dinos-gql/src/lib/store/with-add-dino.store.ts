@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { logObservable } from '@fullstack-dinos/rxjs-operators';
 import {
   patchState,
   signalStoreFeature,
@@ -32,6 +33,7 @@ export function withAddDino() {
       return {
         save: rxMethod<Dinosaur>((dino$) =>
           dino$.pipe(
+            logObservable('saving added dino'),
             switchMap((dino) => {
               const errors = validateDino(dino);
 
