@@ -7,6 +7,7 @@ import {
   DeleteDinoGQL,
   DinoGQL,
   DinosaurCreateInput,
+  DinosaurUpdateInput,
   UpdateDinoGQL,
 } from './graphql/generated';
 import { BaseDinosaur, Dinosaur, UpdateDinosaur } from './models/dinosaur';
@@ -71,7 +72,7 @@ export class DinosCrudService {
     return this.#updateDinoGql
       .mutate({
         variables: {
-          data: dino,
+          data: convertDinosaurToUpdateDino(dino),
           where: { id },
         },
         update(cache) {
@@ -168,4 +169,22 @@ function convertDinosaurToCreateDino({
   ...dino
 }: Dinosaur): DinosaurCreateInput {
   return { ...dino, name };
+}
+
+function convertDinosaurToUpdateDino({
+  description,
+  hasFeathers,
+  heightInMeters,
+  imageUrl,
+  trivia,
+  weightInKilos,
+}: UpdateDinosaur): DinosaurUpdateInput {
+  return {
+    description,
+    hasFeathers,
+    heightInMeters,
+    imageUrl,
+    trivia,
+    weightInKilos,
+  };
 }
