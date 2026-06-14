@@ -1,8 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Injector,
-  OnInit,
   ViewChild,
   inject,
 } from '@angular/core';
@@ -66,7 +64,7 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
         }
       </tbody>
     </table>
-    <fullstack-dinos-delete-dino-modal />
+    <fullstack-dinos-delete-dino-modal (confirmDelete)="dinosStore.deleteDino($event)" />
   `,
   styles: [
     `
@@ -84,17 +82,10 @@ import { YesNoComponent } from '../yes-no/yes-no.component';
     YesNoComponent,
   ],
 })
-export class DinosTableComponent implements OnInit {
+export class DinosTableComponent {
   @ViewChild(DeleteDinoModalComponent, { static: true })
   deleteDinoModal!: DeleteDinoModalComponent;
   protected readonly dinosStore = inject(DinosCrudStore);
-  readonly #injector = inject(Injector);
-
-  ngOnInit(): void {
-    this.dinosStore.deleteDino(this.deleteDinoModal.confirmDelete$, {
-      injector: this.#injector,
-    });
-  }
 
   protected deleteDino(event: MouseEvent, dinosaur: BaseDinosaur) {
     event.stopPropagation();

@@ -1,9 +1,8 @@
-import { Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal, output } from '@angular/core';
 import {
   BaseDinosaur,
   createEmptyBaseDino,
 } from '@fullstack-dinos/angular-dinos/dinos-gql';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'fullstack-dinos-delete-dino-modal',
@@ -31,8 +30,7 @@ import { Subject } from 'rxjs';
 export class DeleteDinoModalComponent {
   @ViewChild('dialog', { static: true }) dialog!: ElementRef<HTMLDialogElement>;
 
-  readonly #confirmDelete$ = new Subject<BaseDinosaur>();
-  readonly confirmDelete$ = this.#confirmDelete$.asObservable();
+  readonly confirmDelete = output<BaseDinosaur>();
 
   protected dinoToDelete = signal(createEmptyBaseDino());
 
@@ -42,6 +40,6 @@ export class DeleteDinoModalComponent {
   }
 
   protected onClick() {
-    this.#confirmDelete$.next(this.dinoToDelete());
+    this.confirmDelete.emit(this.dinoToDelete());
   }
 }

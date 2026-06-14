@@ -1,5 +1,6 @@
 import {
   patchState,
+  signalMethod,
   signalStore,
   withComputed,
   withHooks,
@@ -15,9 +16,8 @@ import { emptyDinosCrudState } from '../models/crud.state';
 import { effect, inject, untracked } from '@angular/core';
 import { BaseDinosaur } from '../models/dinosaur';
 import { DinosCrudService } from '../dinos-crud.service';
-import { EMPTY, pipe, tap } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { z } from 'zod';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 export const DinosCrudStore = signalStore(
   withImmutableState(emptyDinosCrudState()),
@@ -95,13 +95,9 @@ export const DinosCrudStore = signalStore(
     };
   }),
   withMethods((state) => ({
-    deleteDino: rxMethod<BaseDinosaur>(
-      pipe(
-        tap((dino) => {
-          state.deleteDinoMutation(dino);
-        }),
-      ),
-    ),
+    deleteDino: signalMethod<BaseDinosaur>((dino) => {
+      state.deleteDinoMutation(dino);
+    }),
   })),
   withHooks({
     onInit(store) {
