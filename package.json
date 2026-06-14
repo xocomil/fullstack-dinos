@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@angular-devkit/build-angular": "22.0.1",
+    "@angular/build": "22.0.1",
     "@angular-devkit/core": "22.0.1",
     "@angular-devkit/schematics": "22.0.1",
     "@angular-eslint/eslint-plugin": "22.0.0",
