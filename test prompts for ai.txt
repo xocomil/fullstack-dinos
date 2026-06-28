@@ -1,0 +1,3 @@
+describe this project for me. tell me about the libraries used and also tell me how modern it is.
+
+are there any components that could be changed to signal forms components in the project?
