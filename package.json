@@ -58,7 +58,7 @@
     "jest-preset-angular": "16.0.0",
     "jest-util": "30.2.0",
     "jsonc-eslint-parser": "^2.4.2",
-    "ng-mocks": "14.15.2",
+    "ng-mocks": "14.16.1",
     "nx": "22.7.5",
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
