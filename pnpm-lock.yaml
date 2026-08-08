@@ -277,8 +277,8 @@ importers:
         specifier: 10.1.8
         version: 10.1.8(eslint@9.39.3(jiti@2.6.1))
       eslint-plugin-cypress:
-        specifier: 2.15.1
-        version: 2.15.1(eslint@9.39.3(jiti@2.6.1))
+        specifier: 2.15.2
+        version: 2.15.2(eslint@9.39.3(jiti@2.6.1))
       jest:
         specifier: 30.2.0
         version: 30.2.0(@types/node@18.19.130)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.15.21(@swc/helpers@0.5.23))(@types/node@18.19.130)(typescript@6.0.3))
@@ -540,6 +540,7 @@ packages:
   '@angular/animations@22.0.0':
     resolution: {integrity: sha512-Klo9ZiRj5ykXPliUmwy0eXvDad079YMy+Ob4EITSFSXVLRy55qv64/8SvWNtKEQPelF50H9O2vULoqpIvdWoAw==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    deprecated: '@angular/animations is deprecated. Use `animate.enter` and `animate.leave` instead. For more information see: https://v22.angular.dev/guide/animations.'
     peerDependencies:
       '@angular/core': 22.0.0
 
@@ -656,6 +657,7 @@ packages:
   '@angular/platform-browser-dynamic@22.0.0':
     resolution: {integrity: sha512-xGOk/XLg+XiuuFa5FEMsrYSdkuKIdx2Xqo1kAGpIdjnI0o7qV8pVmW7S/1NMmEULnbmjzxjFUtNX5RPZ17iA/Q==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0}
+    deprecated: '@angular/platform-browser-dynamic is deprecated. Use `@angular/platform-browser` instead.'
     peerDependencies:
       '@angular/common': 22.0.0
       '@angular/compiler': 22.0.0
@@ -3557,6 +3559,7 @@ packages:
   '@ngtools/webpack@22.0.0':
     resolution: {integrity: sha512-ygMRpREJ1/C73JdIFeVlwj/fkSo/hUwlKfrh34Nst3slybMOQPQInCHJEPi6jd/tfiT3eFOBugPSgKzEHTtBsg==}
     engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
+    deprecated: Angular's Webpack support is deprecated. Use the esbuild and Vite-based "@angular/build" package instead.
     peerDependencies:
       '@angular/compiler-cli': ^22.0.0
       typescript: '>=6.0 <6.1'
@@ -6170,6 +6173,7 @@ packages:
   cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
+    deprecated: v4 is no longer maintained, upgrade to v5
 
   cross-inspect@1.0.0:
     resolution: {integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==}
@@ -6728,8 +6732,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-cypress@2.15.1:
-    resolution: {integrity: sha512-eLHLWP5Q+I4j2AWepYq0PgFEei9/s5LvjuSqWrxurkg1YZ8ltxdvMNmdSf0drnsNo57CTgYY/NIHHLRSWejR7w==}
+  eslint-plugin-cypress@2.15.2:
+    resolution: {integrity: sha512-CtcFEQTDKyftpI22FVGpx8bkpKyYXBlNge6zSo0pl5/qJvBAnzaD76Vu2AsP16d6mTj478Ldn2mhgrWV+Xr0vQ==}
     peerDependencies:
       eslint: '>= 3.2.1'
 
@@ -18964,7 +18968,7 @@ snapshots:
     dependencies:
       eslint: 9.39.3(jiti@2.6.1)
 
-  eslint-plugin-cypress@2.15.1(eslint@9.39.3(jiti@2.6.1)):
+  eslint-plugin-cypress@2.15.2(eslint@9.39.3(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.3(jiti@2.6.1)
       globals: 13.20.0
